@@ -45,10 +45,18 @@ export function MapScreen({ onSelectSpecies, onGoScan }: MapScreenProps) {
   }, []);
 
   // 有 GPS 的捕捉紀錄
+  type MapPin = {
+    capture: (typeof captures)[number];
+    bird: NonNullable<ReturnType<typeof getBirdById>>;
+    lat: number;
+    lng: number;
+    stats: ReturnType<typeof getBirdById> extends any ? any : never;
+  };
+
   const pins = useMemo(() => {
     return captures
       .filter(c => c.location && typeof c.location.lat === 'number')
-      .map(c => {
+      .map((c): MapPin | null => {
         const bird = getBirdById(c.speciesId);
         if (!bird) return null;
         const stats = c.bestStats ?? c.stats;
@@ -60,7 +68,7 @@ export function MapScreen({ onSelectSpecies, onGoScan }: MapScreenProps) {
           stats,
         };
       })
-      .filter(Boolean) as NonNullable<ReturnType<typeof getBirdById> extends infer T ? any : never>[];
+      .filter((p): p is MapPin => p !== null);
   }, [captures]);
 
   const center: [number, number] = loc ?? (pins[0] ? [pins[0].lat, pins[0].lng] : [22.352, 114.13]);

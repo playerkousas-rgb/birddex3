@@ -17,7 +17,7 @@ export function ScannerScreen({ onCapture, onStartThrow }: ScannerScreenProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
-  const trackRef = useRef<MediaTrack | null>(null);
+  const trackRef = useRef<MediaStreamTrack | null>(null);
   const pinchStartDist = useRef<number | null>(null);
   const pinchStartZoom = useRef(1);
 

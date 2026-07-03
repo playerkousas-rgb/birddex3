@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
 import { RARITY_META } from '../lib/theme';
-import { ArrowLeft, Share2, ExternalLink, Image as ImageIcon, Scissors, Download, Trash2, Star, Crown, RefreshCw } from 'lucide-react';
+import { ArrowLeft, Share2, ExternalLink, Image as ImageIcon, Scissors, Download, Trash2, Star, Crown, RefreshCcw } from 'lucide-react';
 import { makeSticker } from '../lib/stickerMaker';
 import { ivRankLabel, natureEffect } from '../lib/birdStats';
 
@@ -46,7 +46,6 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   };
 
   const altArtUnlocked = bird ? altArt.unlocked.includes(bird.id) : false;
-  const altArtExists   = bird ? altArt.existsOnR2.includes(bird.id) : false;
   const altArtMissing  = bird ? altArt.missingOnR2.includes(bird.id) : false;
 
   if (!bird) {

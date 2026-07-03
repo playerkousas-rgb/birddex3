@@ -1,7 +1,5 @@
 import { removeBackground } from '@imgly/background-removal';
 
-let _loadingPromise: Promise<void> | null = null;
-
 export async function makeSticker(
   imageSrc: string,
   onProgress?: (msg: string) => void

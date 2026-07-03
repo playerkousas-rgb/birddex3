@@ -1,7 +1,7 @@
 import { useMemo, useState, useRef } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
-import { Swords, Share2, RotateCcw, Download, Upload, Copy, QrCode, Clipboard } from 'lucide-react';
+import { Swords, Share2, RotateCcw, Download, Copy, Clipboard } from 'lucide-react';
 import { toPng } from 'html-to-image';
 import { QRCodeSVG } from 'qrcode.react';
 

@@ -56,7 +56,7 @@ function AppRouter() {
     setView('throw');
   };
 
-  const handleThrowComplete = (score: CaptureStats['catchScore'], stats: CaptureStats) => {
+  const handleThrowComplete = (_score: CaptureStats['catchScore'], stats: CaptureStats) => {
     if (!throwSession) return;
     const result = captureBird(throwSession.speciesId, {
       photoDataUrl: throwSession.photoDataUrl,

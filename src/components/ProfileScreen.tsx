@@ -299,7 +299,7 @@ export function ProfileScreen() {
       </div>
 
       <div className="text-center text-[10px] text-white/30 font-mono pb-8">
-        © 2026 SKWSCOUT
+        © 2026 Scout System
       </div>
 
       {/* Share Card Modal */}
