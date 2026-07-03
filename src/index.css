@@ -1,0 +1,145 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --bg: #0B0F19;
+  --surface: #111827;
+  --border: #1F2937;
+  --neon: #00F0FF;
+  --accent: #FF3366;
+  --gold: #FFD700;
+  --success: #10B981;
+  --text: #F3F4F6;
+  --muted: #9CA3AF;
+}
+
+html, body, #root {
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--bg); }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Card 3D */
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+.card-3d:hover {
+  transform: perspective(1000px) rotateY(8deg) rotateX(4deg) scale(1.02);
+}
+
+/* Shimmer foil effect for SSR/UR/LR */
+.foil-shimmer {
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255,255,255,0.25) 45%,
+    rgba(255,255,255,0.4) 50%,
+    rgba(255,255,255,0.25) 55%,
+    transparent 60%
+  );
+  background-size: 200% 200%;
+  animation: shimmer 2.5s linear infinite;
+  mix-blend-mode: overlay;
+  pointer-events: none;
+}
+
+@keyframes shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* Scan line */
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, var(--neon), transparent);
+  box-shadow: 0 0 12px var(--neon), 0 0 4px var(--neon);
+  animation: scanLine 2.2s ease-in-out infinite;
+  opacity: 0.8;
+}
+
+@keyframes scanLine {
+  0% { top: 0%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Corner brackets for scanner frame */
+.corner-bracket {
+  position: absolute;
+  width: 28px;
+  height: 28px;
+  border-color: var(--neon);
+}
+.corner-tl { top: -2px; left: -2px; border-top: 4px solid; border-left: 4px solid; }
+.corner-tr { top: -2px; right: -2px; border-top: 4px solid; border-right: 4px solid; }
+.corner-bl { bottom: -2px; left: -2px; border-bottom: 4px solid; border-left: 4px solid; }
+.corner-br { bottom: -2px; right: -2px; border-bottom: 4px solid; border-right: 4px solid; }
+
+/* Rarity glows */
+.glow-uc { box-shadow: 0 0 8px rgba(156,163,175,0.25); }
+.glow-c  { box-shadow: 0 0 10px rgba(229,231,235,0.3); }
+.glow-r  { box-shadow: 0 0 14px rgba(96,165,250,0.4); }
+.glow-sr { box-shadow: 0 0 18px rgba(167,139,250,0.45); }
+.glow-ssr { box-shadow: 0 0 24px rgba(251,191,36,0.55); }
+.glow-ur { box-shadow: 0 0 30px rgba(244,114,182,0.6); }
+.glow-lr { box-shadow: 0 0 40px rgba(255,215,0,0.7), inset 0 0 20px rgba(255,215,0,0.15); }
+
+/* CRT / retro text shadow */
+.crt-text {
+  text-shadow: 0 0 4px currentColor;
+}
+
+/* Floating particles */
+@keyframes floatParticle {
+  0%, 100% { transform: translateY(0) scale(1); opacity: 0.6; }
+  50% { transform: translateY(-20px) scale(1.2); opacity: 1; }
+}
+
+/* Card pack opening animation */
+@keyframes cardReveal {
+  0% { transform: scale(0.2) rotateY(180deg); opacity: 0; }
+  40% { transform: scale(1.1) rotateY(0deg); opacity: 1; }
+  60% { transform: scale(0.95) rotateY(0deg); }
+  100% { transform: scale(1) rotateY(0deg); }
+}
+.card-reveal {
+  animation: cardReveal 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+/* Pulse ring for capture button */
+@keyframes pulseRing {
+  0% { transform: scale(1); opacity: 0.6; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+.pulse-ring::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  border: 2px solid var(--neon);
+  animation: pulseRing 1.8s ease-out infinite;
+}
+
+/* Image fallback gradient art */
+.bird-art-bg {
+  background: radial-gradient(ellipse at 30% 20%, rgba(255,255,255,0.08) 0%, transparent 50%),
+              radial-gradient(ellipse at 70% 80%, rgba(0,240,255,0.06) 0%, transparent 50%),
+              linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
+}

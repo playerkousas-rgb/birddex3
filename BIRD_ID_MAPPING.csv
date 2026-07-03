@@ -1,0 +1,570 @@
+ID,中文名,英文名,預計圖片檔名,異圖檔名建議(放R2)
+1,珠頸斑鳩,Spotted Dove,0001.avif,0001_UR.avif
+2,黑鳶,Black Kite,0002.avif,0002_UR.avif
+3,原鴿,Rock Pigeon,0003.avif,0003_UR.avif
+4,小葵花鳳頭鸚鵡,Yellow-Crested Cockatoo,0004.avif,0004_UR.avif
+5,噪鵑,Asian Koel,0005.avif,0005_UR.avif
+6,紅耳鵯,Red-Whiskered Bulbul,0006.avif,0006_UR.avif
+7,白頭鵯,Light-Vented Bulbul,0007.avif,0007_UR.avif
+8,鵲鴝,Oriental Magpie-Robin,0008.avif,0008_UR.avif
+9,黑臉噪眉,Unknown Species,0009.avif,0009_UR.avif
+10,白腰文鳥,Slaty-Breasted Rail,0010.avif,0010_UR.avif
+11,麻雀,Eurasian Tree Sparrow,0011.avif,0011_UR.avif
+12,黑領椋鳥,Unknown Species,0012.avif,0012_UR.avif
+13,八哥,Crested Myna,0013.avif,0013_UR.avif
+14,喜鵲,Eurasian Magpie,0014.avif,0014_UR.avif
+15,紅嘴藍鵲,Red-Billed Blue Magpie,0015.avif,0015_UR.avif
+16,大山雀,Unknown Species,0016.avif,0016_UR.avif
+17,暗綠繡眼鳥,Eastern Buzzard,0017.avif,0017_UR.avif
+18,畫眉,Chinese Hwamei,0018.avif,0018_UR.avif
+19,叉尾太陽鳥,Fork-Tailed Sunbird,0019.avif,0019_UR.avif
+20,長尾縫葉鶯,Common Tailorbird,0020.avif,0020_UR.avif
+21,亞歷山大鸚鵡,Unknown Species,0021.avif,0021_UR.avif
+22,栗樹鴨,Lesser Whistling-Duck,0022.avif,0022_UR.avif
+23,灰雁,Graylag Goose,0023.avif,0023_UR.avif
+24,白額雁,Greater White-Fronted Goose,0024.avif,0024_UR.avif
+25,小白額雁,Lesser White-Fronted Goose,0025.avif,0025_UR.avif
+26,寒林豆雁,Taiga Bean Goose,0026.avif,0026_UR.avif
+27,凍原豆雁,Tundra Bean Goose,0027.avif,0027_UR.avif
+28,大天鵝,Whooper Swan,0028.avif,0028_UR.avif
+29,赤麻鴨,Ruddy Shelduck,0029.avif,0029_UR.avif
+30,翹鼻麻鴨,Common Shelduck,0030.avif,0030_UR.avif
+31,棉鳧,Cotton Pygmy-Goose,0031.avif,0031_UR.avif
+32,鴛鴦,Mandarin Duck,0032.avif,0032_UR.avif
+33,花臉鴨,Baikal Teal,0033.avif,0033_UR.avif
+34,白眉鴨,Garganey,0034.avif,0034_UR.avif
+35,琵嘴鴨,Northern Shoveler,0035.avif,0035_UR.avif
+36,赤膀鴨,Gadwall,0036.avif,0036_UR.avif
+37,羅紋鴨,Falcated Duck,0037.avif,0037_UR.avif
+38,赤頸鴨,Eurasian Wigeon,0038.avif,0038_UR.avif
+39,美洲黑海番鴨,American Wigeon,0039.avif,0039_UR.avif
+40,棕頸鴨,Philippine Duck,0040.avif,0040_UR.avif
+41,印缅斑嘴鴨,Indian Spot-Billed Duck,0041.avif,0041_UR.avif
+42,中華斑嘴鴨,Eastern Spot-Billed Duck,0042.avif,0042_UR.avif
+43,綠頭鴨,Mallard,0043.avif,0043_UR.avif
+44,針尾鴨,Northern Pintail,0044.avif,0044_UR.avif
+45,綠翅鴨,Green-Winged Teal,0045.avif,0045_UR.avif
+46,赤嘴潛鴨,Red-Crested Pochard,0046.avif,0046_UR.avif
+47,紅頭潛鴨,Common Pochard,0047.avif,0047_UR.avif
+48,白眼潛鴨,Ferruginous Duck,0048.avif,0048_UR.avif
+49,青頭潛鴨,Aythya Baeri,0049.avif,0049_UR.avif
+50,鳳頭潛鴨,Tufted Duck,0050.avif,0050_UR.avif
+51,斑背潛鴨,Greater Scaup,0051.avif,0051_UR.avif
+52,紅胸田雞,Velvet Scoter,0052.avif,0052_UR.avif
+53,White-winged scoter,White-Winged Scoter,0053.avif,0053_UR.avif
+54,斑臉海番鴨,Melanitta Stejnegeri,0054.avif,0054_UR.avif
+55,鵲鴨,Common Goldeneye,0055.avif,0055_UR.avif
+56,斑頭秋沙鴨,Smew,0056.avif,0056_UR.avif
+57,紅胸秋沙鴨,Red-Breasted Merganser,0057.avif,0057_UR.avif
+58,Scaly-sided merganser,Scaly-Sided Merganser,0058.avif,0058_UR.avif
+59,Chinese bamboo-partridge,Chinese Bamboo-Partridge,0059.avif,0059_UR.avif
+60,中華鷓鴣,Chinese Francolin,0060.avif,0060_UR.avif
+61,鵪鶉,Japanese Quail,0061.avif,0061_UR.avif
+62,小鸊鷉,Little Grebe,0062.avif,0062_UR.avif
+63,角鸊鷉,Horned Grebe,0063.avif,0063_UR.avif
+64,鳳頭鸊鷉,Great Crested Grebe,0064.avif,0064_UR.avif
+65,黑頸鸊鷉,Eared Grebe,0065.avif,0065_UR.avif
+66,山斑鳩,Oriental Turtle-Dove,0066.avif,0066_UR.avif
+67,灰斑鳩,Eurasian Collared-Dove,0067.avif,0067_UR.avif
+68,火斑鳩,Red Collared-Dove,0068.avif,0068_UR.avif
+69,斑尾鵑鳩,Barred Cuckoo-Dove,0069.avif,0069_UR.avif
+70,綠翅金鳩,Asian Emerald Dove,0070.avif,0070_UR.avif
+71,橙胸綠鳩,Orange-Breasted Green-Pigeon,0071.avif,0071_UR.avif
+72,厚嘴綠鳩,Thick-Billed Green-Pigeon,0072.avif,0072_UR.avif
+73,Wedge-tailed green-pigeon,Wedge-Tailed Green-Pigeon,0073.avif,0073_UR.avif
+74,紅翅綠鳩,White-Bellied Green-Pigeon,0074.avif,0074_UR.avif
+75,灰樹鵲,Whistling Green-Pigeon,0075.avif,0075_UR.avif
+76,褐翅鴉鵑,Greater Coucal,0076.avif,0076_UR.avif
+77,小鴉鵑,Lesser Coucal,0077.avif,0077_UR.avif
+78,紅翅鳳頭鵑,Chestnut-Winged Cuckoo,0078.avif,0078_UR.avif
+79,八聲杜鵑,Plaintive Cuckoo,0079.avif,0079_UR.avif
+80,烏鵑,Square-Tailed Drongo-Cuckoo,0080.avif,0080_UR.avif
+81,鷹鵑,Large Hawk-Cuckoo,0081.avif,0081_UR.avif
+82,北鷹鵑,Northern Hawk-Cuckoo,0082.avif,0082_UR.avif
+83,棕腹杜鵑,Hierococcyx Nisicolor,0083.avif,0083_UR.avif
+84,Malaysian hawk-cuckoo,Malaysian Hawk-Cuckoo,0084.avif,0084_UR.avif
+85,小杜鵑,Lesser Cuckoo,0085.avif,0085_UR.avif
+86,四聲杜鵑,Indian Cuckoo,0086.avif,0086_UR.avif
+87,大杜鵑,Common Cuckoo,0087.avif,0087_UR.avif
+88,中杜鵑,Oriental Cuckoo,0088.avif,0088_UR.avif
+89,普通夜鷹,Gray Nightjar,0089.avif,0089_UR.avif
+90,林夜鷹,Savanna Nightjar,0090.avif,0090_UR.avif
+91,白喉針尾雨燕,White-Throated Needletail,0091.avif,0091_UR.avif
+92,白背針尾雨燕,Silver-Backed Needletail,0092.avif,0092_UR.avif
+93,褐背針尾雨燕,Brown-Backed Needletail,0093.avif,0093_UR.avif
+94,短嘴金絲燕,Himalayan Swiftlet,0094.avif,0094_UR.avif
+95,樓燕,Common Swift,0095.avif,0095_UR.avif
+96,雨燕,Pacific Swift,0096.avif,0096_UR.avif
+97,草原鵰,House Swift,0097.avif,0097_UR.avif
+98,普通秧雞,Water Rail,0098.avif,0098_UR.avif
+99,灰面鷲,Brown-Cheeked Rail,0099.avif,0099_UR.avif
+100,黑水雞,Eurasian Moorhen,0100.avif,0100_UR.avif
+101,白骨頂,Eurasian Coot,0101.avif,0101_UR.avif
+102,灰頭麥雞,White-Browed Crake,0102.avif,0102_UR.avif
+103,董雞,Watercock,0103.avif,0103_UR.avif
+104,白胸苦惡鳥,White-Breasted Waterhen,0104.avif,0104_UR.avif
+105,白喉斑秧雞,Slaty-Legged Crake,0105.avif,0105_UR.avif
+106,斑脇田雞,Band-Bellied Crake,0106.avif,0106_UR.avif
+107,紅腳苦惡鳥,Brown Crake,0107.avif,0107_UR.avif
+108,小田雞,Zapornia Pusilla,0108.avif,0108_UR.avif
+109,白鶴,Siberian Crane,0109.avif,0109_UR.avif
+110,灰鶴,Common Crane,0110.avif,0110_UR.avif
+111,大石鴴,Great Thick-Knee,0111.avif,0111_UR.avif
+112,黑翅長腳鷸,Black-Winged Stilt,0112.avif,0112_UR.avif
+113,反嘴鷸,Pied Avocet,0113.avif,0113_UR.avif
+114,蠣鷸,Eurasian Oystercatcher,0114.avif,0114_UR.avif
+115,灰鴴,Black-Bellied Plover,0115.avif,0115_UR.avif
+116,European golden-plover,European Golden-Plover,0116.avif,0116_UR.avif
+117,American golden-plover,American Golden-Plover,0117.avif,0117_UR.avif
+118,金鴴,Pacific Golden-Plover,0118.avif,0118_UR.avif
+119,鳳頭麥雞,Northern Lapwing,0119.avif,0119_UR.avif
+120,蒙古沙鴴,Lesser Sand-Plover,0120.avif,0120_UR.avif
+121,鐵嘴沙鴴,Greater Sand-Plover,0121.avif,0121_UR.avif
+122,環頸鴴,Kentish Plover,0122.avif,0122_UR.avif
+123,White-faced plover,White-Faced Plover,0123.avif,0123_UR.avif
+124,Snowy plover,Snowy Plover,0124.avif,0124_UR.avif
+125,劍鴴,Common Ringed Plover,0125.avif,0125_UR.avif
+126,長嘴鴴,Long-Billed Plover,0126.avif,0126_UR.avif
+127,金眶鴴,Little Ringed Plover,0127.avif,0127_UR.avif
+128,東方鴴,Oriental Plover,0128.avif,0128_UR.avif
+129,彩鷸,Greater Painted-Snipe,0129.avif,0129_UR.avif
+130,水雉,Pheasant-Tailed Jacana,0130.avif,0130_UR.avif
+131,中杓鷸,Whimbrel,0131.avif,0131_UR.avif
+132,小杓鷸,Little Curlew,0132.avif,0132_UR.avif
+133,大杓鷸,Far Eastern Curlew,0133.avif,0133_UR.avif
+134,白腰杓鷸,Eurasian Curlew,0134.avif,0134_UR.avif
+135,斑尾塍鷸,Bar-Tailed Godwit,0135.avif,0135_UR.avif
+136,黑尾塍鷸,Black-Tailed Godwit,0136.avif,0136_UR.avif
+137,翻石鷸,Ruddy Turnstone,0137.avif,0137_UR.avif
+138,大濱鷸,Great Knot,0138.avif,0138_UR.avif
+139,紅腹濱鷸,Red Knot,0139.avif,0139_UR.avif
+140,流蘇鷸,Ruff,0140.avif,0140_UR.avif
+141,闊嘴鷸,Broad-Billed Sandpiper,0141.avif,0141_UR.avif
+142,尖尾濱鷸,Sharp-Tailed Sandpiper,0142.avif,0142_UR.avif
+143,彎嘴濱鷸,Curlew Sandpiper,0143.avif,0143_UR.avif
+144,青腳濱鷸,Calidris Temminckii,0144.avif,0144_UR.avif
+145,長趾濱鷸,Long-Toed Stint,0145.avif,0145_UR.avif
+146,勺嘴鷸,Spoon-Billed Sandpiper,0146.avif,0146_UR.avif
+147,紅頸濱鷸,Red-Necked Stint,0147.avif,0147_UR.avif
+148,三趾濱鷸,Sanderling,0148.avif,0148_UR.avif
+149,黑腹濱鷸,Dunlin,0149.avif,0149_UR.avif
+150,小濱鷸,Little Stint,0150.avif,0150_UR.avif
+151,Buff-breasted sandpiper,Buff-Breasted Sandpiper,0151.avif,0151_UR.avif
+152,斑胸濱鷸,Pectoral Sandpiper,0152.avif,0152_UR.avif
+153,半蹼鷸,Asian Dowitcher,0153.avif,0153_UR.avif
+154,長嘴半蹼鷸,Long-Billed Dowitcher,0154.avif,0154_UR.avif
+155,丘鷸,Eurasian Woodcock,0155.avif,0155_UR.avif
+156,橙腹葉鵯,Gallinago Hardwickii,0156.avif,0156_UR.avif
+157,扇尾沙錐,Common Snipe,0157.avif,0157_UR.avif
+158,針尾沙錐,Pin-Tailed Snipe,0158.avif,0158_UR.avif
+159,大沙錐,Gallinago Megala,0159.avif,0159_UR.avif
+160,翹嘴鷸,Terek Sandpiper,0160.avif,0160_UR.avif
+161,紅頸瓣蹼鷸,Red-Necked Phalarope,0161.avif,0161_UR.avif
+162,Red phalarope,Red Phalarope,0162.avif,0162_UR.avif
+163,磯鷸,Common Sandpiper,0163.avif,0163_UR.avif
+164,白腰草鷸,Green Sandpiper,0164.avif,0164_UR.avif
+165,灰尾鷸,Gray-Tailed Tattler,0165.avif,0165_UR.avif
+166,鶴鷸,Spotted Redshank,0166.avif,0166_UR.avif
+167,青腳鷸,Common Greenshank,0167.avif,0167_UR.avif
+168,小青腳鷸,Tringa Guttifer,0168.avif,0168_UR.avif
+169,小黃腳鷸,Lesser Yellowlegs,0169.avif,0169_UR.avif
+170,澤鷸,Marsh Sandpiper,0170.avif,0170_UR.avif
+171,林鷸,Wood Sandpiper,0171.avif,0171_UR.avif
+172,紅腳鷸,Common Redshank,0172.avif,0172_UR.avif
+173,Small buttonquail,Small Buttonquail,0173.avif,0173_UR.avif
+174,黃腳三趾鶉,Yellow-Legged Buttonquail,0174.avif,0174_UR.avif
+175,棕三趾鶉,Barred Buttonquail,0175.avif,0175_UR.avif
+176,普通燕鴴,Oriental Pratincole,0176.avif,0176_UR.avif
+177,Small pratincole,Small Pratincole,0177.avif,0177_UR.avif
+178,中賊鷗,Pomarine Jaeger,0178.avif,0178_UR.avif
+179,短尾賊鷗,Parasitic Jaeger,0179.avif,0179_UR.avif
+180,長尾賊鷗,Long-Tailed Jaeger,0180.avif,0180_UR.avif
+181,扁嘴海雀,Ancient Murrelet,0181.avif,0181_UR.avif
+182,冠海雀,Japanese Murrelet,0182.avif,0182_UR.avif
+183,三趾鷗,Black-Legged Kittiwake,0183.avif,0183_UR.avif
+184,黑嘴鷗,Saundersilarus Saundersi,0184.avif,0184_UR.avif
+185,細嘴鷗,Slender-Billed Gull,0185.avif,0185_UR.avif
+186,紅嘴鷗,Black-Headed Gull,0186.avif,0186_UR.avif
+187,棕頭鷗,Brown-Headed Gull,0187.avif,0187_UR.avif
+188,小鷗,Little Gull,0188.avif,0188_UR.avif
+189,Franklin's gull,Leucophaeus Pipixcan,0189.avif,0189_UR.avif
+190,遺鷗,Relict Gull,0190.avif,0190_UR.avif
+191,漁鷗,Ichthyaetus Ichthyaetus,0191.avif,0191_UR.avif
+192,黑尾鷗,Black-Tailed Gull,0192.avif,0192_UR.avif
+193,海鷗,Common Gull,0193.avif,0193_UR.avif
+194,Short-billed gull,Short-Billed Gull,0194.avif,0194_UR.avif
+195,Ring-billed gull,Ring-Billed Gull,0195.avif,0195_UR.avif
+196,Herring gull,Herring Gull,0196.avif,0196_UR.avif
+197,黃腿銀鷗,Caspian Gull,0197.avif,0197_UR.avif
+198,Iceland gull,Iceland Gull,0198.avif,0198_UR.avif
+199,灰燕鵙,Lesser Black-Backed Gull,0199.avif,0199_UR.avif
+200,灰背鷗,Slaty-Backed Gull,0200.avif,0200_UR.avif
+201,灰翅鷗,Glaucous-Winged Gull,0201.avif,0201_UR.avif
+202,北極鷗,Glaucous Gull,0202.avif,0202_UR.avif
+203,Brown noddy,Brown Noddy,0203.avif,0203_UR.avif
+204,褐柳鶯,Sooty Tern,0204.avif,0204_UR.avif
+205,褐翅燕鷗,Bridled Tern,0205.avif,0205_UR.avif
+206,Aleutian tern,Aleutian Tern,0206.avif,0206_UR.avif
+207,鷗嘴噪鷗,Gull-Billed Tern,0207.avif,0207_UR.avif
+208,紅嘴巨鷗,Caspian Tern,0208.avif,0208_UR.avif
+209,白翅浮鷗,White-Winged Tern,0209.avif,0209_UR.avif
+210,Whiskered tern,Whiskered Tern,0210.avif,0210_UR.avif
+211,粉紅燕鷗,Roseate Tern,0211.avif,0211_UR.avif
+212,黑枕燕鷗,Black-Naped Tern,0212.avif,0212_UR.avif
+213,普通燕鷗,Common Tern,0213.avif,0213_UR.avif
+214,大鳳頭燕鷗,Great Crested Tern,0214.avif,0214_UR.avif
+215,白尾鸏,White-Tailed Tropicbird,0215.avif,0215_UR.avif
+216,紅喉潛鳥,Red-Throated Loon,0216.avif,0216_UR.avif
+217,太平洋潛鳥,Pacific Loon,0217.avif,0217_UR.avif
+218,黃嘴潛鳥,Yellow-Billed Loon,0218.avif,0218_UR.avif
+219,褐燕鸌,Bulweria Bulwerii,0219.avif,0219_UR.avif
+220,白額鸌,Streaked Shearwater,0220.avif,0220_UR.avif
+221,Flesh-footed shearwater,Flesh-Footed Shearwater,0221.avif,0221_UR.avif
+222,楔尾鸌,Wedge-Tailed Shearwater,0222.avif,0222_UR.avif
+223,短尾鸌,Short-Tailed Shearwater,0223.avif,0223_UR.avif
+224,黑鸛,Black Stork,0224.avif,0224_UR.avif
+225,東方白鸛,Oriental Stork,0225.avif,0225_UR.avif
+226,白斑軍艦鳥,Lesser Frigatebird,0226.avif,0226_UR.avif
+227,白腹軍艦鳥,Christmas Island Frigatebird,0227.avif,0227_UR.avif
+228,黑腹軍艦鳥,Great Frigatebird,0228.avif,0228_UR.avif
+229,藍臉鰹鳥,Masked Booby,0229.avif,0229_UR.avif
+230,褐鰹鳥,Brown Booby,0230.avif,0230_UR.avif
+231,紅腳鰹鳥,Red-Footed Booby,0231.avif,0231_UR.avif
+232,普通鸕鷀,Great Cormorant,0232.avif,0232_UR.avif
+233,綠背鸕鷀,Japanese Cormorant,0233.avif,0233_UR.avif
+234,卷羽鵜鶘,Dalmatian Pelican,0234.avif,0234_UR.avif
+235,大麻鳽,Great Bittern,0235.avif,0235_UR.avif
+236,黃斑葦鳽,Yellow Bittern,0236.avif,0236_UR.avif
+237,紫背葦鳽,Ixobrychus Eurhythmus,0237.avif,0237_UR.avif
+238,栗葦鳽,Cinnamon Bittern,0238.avif,0238_UR.avif
+239,黑鳽,Black Bittern,0239.avif,0239_UR.avif
+240,蒼鷺,Gray Heron,0240.avif,0240_UR.avif
+241,草鷺,Purple Heron,0241.avif,0241_UR.avif
+242,大白鷺,Great Egret,0242.avif,0242_UR.avif
+243,中白鷺,Intermediate Egret,0243.avif,0243_UR.avif
+244,黃嘴白鷺,Chinese Egret,0244.avif,0244_UR.avif
+245,小白鷺,Little Egret,0245.avif,0245_UR.avif
+246,岩鷺,Pacific Reef-Heron,0246.avif,0246_UR.avif
+247,牛背鷺,Cattle Egret,0247.avif,0247_UR.avif
+248,池鷺,Chinese Pond-Heron,0248.avif,0248_UR.avif
+249,夜鷺,Black-Crowned Night-Heron,0249.avif,0249_UR.avif
+250,栗頭鳽,Japanese Night-Heron,0250.avif,0250_UR.avif
+251,黑冠鳽,Malayan Night-Heron,0251.avif,0251_UR.avif
+252,Black-headed ibis,Black-Headed Ibis,0252.avif,0252_UR.avif
+253,白琵鷺,Eurasian Spoonbill,0253.avif,0253_UR.avif
+254,黑臉琵鷺,Black-Faced Spoonbill,0254.avif,0254_UR.avif
+255,魚鷹,Osprey,0255.avif,0255_UR.avif
+256,黑翅鳶,Black-Winged Kite,0256.avif,0256_UR.avif
+257,Oriental honey-buzzard,Oriental Honey-Buzzard,0257.avif,0257_UR.avif
+258,黑冠鵑隼,Black Baza,0258.avif,0258_UR.avif
+259,禿鷲,Cinereous Vulture,0259.avif,0259_UR.avif
+260,蛇鵰,Crested Serpent-Eagle,0260.avif,0260_UR.avif
+261,烏鵰,Greater Spotted Eagle,0261.avif,0261_UR.avif
+262,白肩鵰,Imperial Eagle,0262.avif,0262_UR.avif
+263,Bonelli's eagle,Aquila Fasciata,0263.avif,0263_UR.avif
+264,白腹鷂,Eastern Marsh-Harrier,0264.avif,0264_UR.avif
+265,Hen harrier,Hen Harrier,0265.avif,0265_UR.avif
+266,鵲鷂,Pied Harrier,0266.avif,0266_UR.avif
+267,鳳頭鷹,Crested Goshawk,0267.avif,0267_UR.avif
+268,赤腹鷹,Chinese Sparrowhawk,0268.avif,0268_UR.avif
+269,日本松雀鷹,Japanese Sparrowhawk,0269.avif,0269_UR.avif
+270,松雀鷹,Besra,0270.avif,0270_UR.avif
+271,雀鷹,Eurasian Sparrowhawk,0271.avif,0271_UR.avif
+272,蒼鷹,Northern Goshawk,0272.avif,0272_UR.avif
+273,栗鳶,Brahminy Kite,0273.avif,0273_UR.avif
+274,白腹海鵰,White-Bellied Sea-Eagle,0274.avif,0274_UR.avif
+275,普通鵟,Common Buzzard,0275.avif,0275_UR.avif
+276,Australasian grass-owl,Australasian Grass-Owl,0276.avif,0276_UR.avif
+277,Collared scops-owl,Collared Scops-Owl,0277.avif,0277_UR.avif
+278,Sunda scops-owl,Sunda Scops-Owl,0278.avif,0278_UR.avif
+279,紅角鴞,Oriental Scops-Owl,0279.avif,0279_UR.avif
+280,Mountain scops owl,Mountain Scops Owl,0280.avif,0280_UR.avif
+281,鵰鴞,Eurasian Eagle-Owl,0281.avif,0281_UR.avif
+282,褐魚鴞,Brown Fish-Owl,0282.avif,0282_UR.avif
+283,斑頭鵂鶹,Asian Barred Owlet,0283.avif,0283_UR.avif
+284,Collared owlet,Collared Owlet,0284.avif,0284_UR.avif
+285,褐林鴞,Brown Wood-Owl,0285.avif,0285_UR.avif
+286,短耳鴞,Short-Eared Owl,0286.avif,0286_UR.avif
+287,鷹鴞,Brown Boobook,0287.avif,0287_UR.avif
+288,戴勝,Eurasian Hoopoe,0288.avif,0288_UR.avif
+289,普通翠鳥,Common Kingfisher,0289.avif,0289_UR.avif
+290,Black-backed dwarf-kingfisher,Black-Backed Dwarf-Kingfisher,0290.avif,0290_UR.avif
+291,赤翡翠,Ruddy Kingfisher,0291.avif,0291_UR.avif
+292,白胸翡翠,White-Throated Kingfisher,0292.avif,0292_UR.avif
+293,藍翡翠,Black-Capped Kingfisher,0293.avif,0293_UR.avif
+294,白領翡翠,Collared Kingfisher,0294.avif,0294_UR.avif
+295,斑魚狗,Pied Kingfisher,0295.avif,0295_UR.avif
+296,藍喉蜂虎,Blue-Throated Bee-Eater,0296.avif,0296_UR.avif
+297,栗喉蜂虎,Blue-Tailed Bee-Eater,0297.avif,0297_UR.avif
+298,藍胸佛法僧,European Roller,0298.avif,0298_UR.avif
+299,三寶鳥,Dollarbird,0299.avif,0299_UR.avif
+300,大擬鴷,Great Barbet,0300.avif,0300_UR.avif
+301,Chinese barbet,Chinese Barbet,0301.avif,0301_UR.avif
+302,蟻鴷,Eurasian Wryneck,0302.avif,0302_UR.avif
+303,斑姬啄木鳥,Speckled Piculet,0303.avif,0303_UR.avif
+304,棕腹啄木鳥,Rufous-Bellied Woodpecker,0304.avif,0304_UR.avif
+305,黃嘴栗啄木鳥,Bay Woodpecker,0305.avif,0305_UR.avif
+306,栗啄木鳥,Rufous Woodpecker,0306.avif,0306_UR.avif
+307,灰頭綠啄木鳥,Gray-Headed Woodpecker,0307.avif,0307_UR.avif
+308,紅隼,Eurasian Kestrel,0308.avif,0308_UR.avif
+309,Amur falcon,Amur Falcon,0309.avif,0309_UR.avif
+310,燕隼,Eurasian Hobby,0310.avif,0310_UR.avif
+311,遊隼,Peregrine Falcon,0311.avif,0311_UR.avif
+312,Alexandrine parakeet,Alexandrine Parakeet,0312.avif,0312_UR.avif
+313,紅領綠鸚鵡,Rose-Ringed Parakeet,0313.avif,0313_UR.avif
+314,藍翅八色鶇,Blue-Winged Pitta,0314.avif,0314_UR.avif
+315,仙八色鶇,Fairy Pitta,0315.avif,0315_UR.avif
+316,灰喉山椒鳥,Gray-Chinned Minivet,0316.avif,0316_UR.avif
+317,Scarlet minivet,Scarlet Minivet,0317.avif,0317_UR.avif
+318,Ryukyu minivet,Ryukyu Minivet,0318.avif,0318_UR.avif
+319,灰山椒鳥,Ashy Minivet,0319.avif,0319_UR.avif
+320,小灰山椒鳥,Brown-Rumped Minivet,0320.avif,0320_UR.avif
+321,粉紅椋鳥,Rosy Minivet,0321.avif,0321_UR.avif
+322,暗灰鵑鵙,Black-Winged Cuckooshrike,0322.avif,0322_UR.avif
+323,白腹鳳鶥,White-Bellied Erpornis,0323.avif,0323_UR.avif
+324,黑枕黃鸝,Black-Naped Oriole,0324.avif,0324_UR.avif
+325,Maroon oriole,Maroon Oriole,0325.avif,0325_UR.avif
+326,Silver oriole,Silver Oriole,0326.avif,0326_UR.avif
+327,黑卷尾,Black Drongo,0327.avif,0327_UR.avif
+328,灰卷尾,Ashy Drongo,0328.avif,0328_UR.avif
+329,Crow-billed drongo,Crow-Billed Drongo,0329.avif,0329_UR.avif
+330,髮冠卷尾,Hair-Crested Drongo,0330.avif,0330_UR.avif
+331,黑枕王鶲,Black-Naped Monarch,0331.avif,0331_UR.avif
+332,紫壽帶,Japanese Paradise-Flycatcher,0332.avif,0332_UR.avif
+333,Amur paradise-flycatcher,Amur Paradise-Flycatcher,0333.avif,0333_UR.avif
+334,虎紋伯勞,Tiger Shrike,0334.avif,0334_UR.avif
+335,牛頭伯勞,Bull-Headed Shrike,0335.avif,0335_UR.avif
+336,紅背伯勞,Red-Backed Shrike,0336.avif,0336_UR.avif
+337,紅尾伯勞,Brown Shrike,0337.avif,0337_UR.avif
+338,棕背伯勞,Long-Tailed Shrike,0338.avif,0338_UR.avif
+339,Gray-backed shrike,Gray-Backed Shrike,0339.avif,0339_UR.avif
+340,Chinese gray shrike,Chinese Gray Shrike,0340.avif,0340_UR.avif
+341,松鴉,Eurasian Jay,0341.avif,0341_UR.avif
+342,Azure-winged magpie,Azure-Winged Magpie,0342.avif,0342_UR.avif
+343,Indochinese green-magpie,Indochinese Green-Magpie,0343.avif,0343_UR.avif
+344,Oriental magpie,Oriental Magpie,0344.avif,0344_UR.avif
+345,達烏里寒鴉,Daurian Jackdaw,0345.avif,0345_UR.avif
+346,House crow,House Crow,0346.avif,0346_UR.avif
+347,Rook,Rook,0347.avif,0347_UR.avif
+348,小嘴烏鴉,Carrion Crow,0348.avif,0348_UR.avif
+349,大嘴烏鴉,Large-Billed Crow,0349.avif,0349_UR.avif
+350,白頸鴉,Collared Crow,0350.avif,0350_UR.avif
+351,方尾鶲,Gray-Headed Canary-Flycatcher,0351.avif,0351_UR.avif
+352,Fire-capped tit,Fire-Capped Tit,0352.avif,0352_UR.avif
+353,黃腹山雀,Yellow-Bellied Tit,0353.avif,0353_UR.avif
+354,雜色山雀,Varied Tit,0354.avif,0354_UR.avif
+355,攀雀,Chinese Penduline-Tit,0355.avif,0355_UR.avif
+356,Mongolian short-toed lark,Mongolian Short-Toed Lark,0356.avif,0356_UR.avif
+357,雲雀,Eurasian Skylark,0357.avif,0357_UR.avif
+358,小雲雀,Oriental Skylark,0358.avif,0358_UR.avif
+359,黃腹山鷦鶯,Yellow-Bellied Prinia,0359.avif,0359_UR.avif
+360,純色山鷦鶯,Plain Prinia,0360.avif,0360_UR.avif
+361,棕扇尾鶯,Zitting Cisticola,0361.avif,0361_UR.avif
+362,金頭扇尾鶯,Golden-Headed Cisticola,0362.avif,0362_UR.avif
+363,厚嘴葦鶯,Thick-Billed Warbler,0363.avif,0363_UR.avif
+364,Booted warbler,Booted Warbler,0364.avif,0364_UR.avif
+365,賽氏篱鶯,Iduna Rama,0365.avif,0365_UR.avif
+366,黑眉葦鶯,Black-Browed Reed Warbler,0366.avif,0366_UR.avif
+367,稻田葦鶯,Paddyfield Warbler,0367.avif,0367_UR.avif
+368,鈍翅葦鶯,Blunt-Winged Warbler,0368.avif,0368_UR.avif
+369,遠東葦鶯,Manchurian Reed Warbler,0369.avif,0369_UR.avif
+370,布氏葦鶯,Acrocephalus Dumetorum,0370.avif,0370_UR.avif
+371,東方大葦鶯,Oriental Reed Warbler,0371.avif,0371_UR.avif
+372,Gray's grasshopper warbler,Helopsaltes Fasciolatus,0372.avif,0372_UR.avif
+373,斑背大尾鶯,Marsh Grassbird,0373.avif,0373_UR.avif
+374,小蝗鶯,Helopsaltes Certhiola,0374.avif,0374_UR.avif
+375,北蝗鶯,Helopsaltes Ochotensis,0375.avif,0375_UR.avif
+376,史氏蝗鶯,Helopsaltes Pleskei,0376.avif,0376_UR.avif
+377,矛紋蝗鶯,Lanceolated Warbler,0377.avif,0377_UR.avif
+378,棕褐短翅鶯,Brown Bush Warbler,0378.avif,0378_UR.avif
+379,Chinese bush warbler,Chinese Bush Warbler,0379.avif,0379_UR.avif
+380,北短翅鶯,Baikal Bush Warbler,0380.avif,0380_UR.avif
+381,高山短翅鶯,Russet Bush Warbler,0381.avif,0381_UR.avif
+382,Benguet bush warbler,Benguet Bush Warbler,0382.avif,0382_UR.avif
+383,小鷦鶥,Pygmy Cupwing,0383.avif,0383_UR.avif
+384,灰喉沙燕,Gray-Throated Martin,0384.avif,0384_UR.avif
+385,Bank swallow,Bank Swallow,0385.avif,0385_UR.avif
+386,淡色沙燕,Pale Sand Martin,0386.avif,0386_UR.avif
+387,家燕,Barn Swallow,0387.avif,0387_UR.avif
+388,金腰燕,Red-Rumped Swallow,0388.avif,0388_UR.avif
+389,白腹毛腳燕,Common House-Martin,0389.avif,0389_UR.avif
+390,煙腹毛腳燕,Asian House-Martin,0390.avif,0390_UR.avif
+391,白喉紅臀鵯,Sooty-Headed Bulbul,0391.avif,0391_UR.avif
+392,黑短腳鵯,Black Bulbul,0392.avif,0392_UR.avif
+393,Brown-eared bulbul,Brown-Eared Bulbul,0393.avif,0393_UR.avif
+394,栗背短腳鵯,Chestnut Bulbul,0394.avif,0394_UR.avif
+395,綠翅短腳鵯,Mountain Bulbul,0395.avif,0395_UR.avif
+396,Wood warbler,Wood Warbler,0396.avif,0396_UR.avif
+397,黃眉柳鶯,Yellow-Browed Warbler,0397.avif,0397_UR.avif
+398,淡眉柳鶯,Phylloscopus Humei,0398.avif,0398_UR.avif
+399,雲南柳鶯,Chinese Leaf Warbler,0399.avif,0399_UR.avif
+400,黃腰柳鶯,Phylloscopus Proregulus,0400.avif,0400_UR.avif
+401,巨嘴柳鶯,Phylloscopus Schwarzi,0401.avif,0401_UR.avif
+402,棕眉柳鶯,Yellow-Streaked Warbler,0402.avif,0402_UR.avif
+403,歐柳鶯,Willow Warbler,0403.avif,0403_UR.avif
+404,Mountain chiffchaff,Mountain Chiffchaff,0404.avif,0404_UR.avif
+405,嘰喳柳鶯,Common Chiffchaff,0405.avif,0405_UR.avif
+406,冕柳鶯,Eastern Crowned Warbler,0406.avif,0406_UR.avif
+407,Ijima's leaf warbler,Phylloscopus Ijimae,0407.avif,0407_UR.avif
+408,灰冠鶲鶯,Gray-Crowned Warbler,0408.avif,0408_UR.avif
+409,比氏鶲鶯,Phylloscopus Valentini,0409.avif,0409_UR.avif
+410,Martens's warbler,Phylloscopus Omeiensis,0410.avif,0410_UR.avif
+411,純色尾鶲鶯,Phylloscopus Soror,0411.avif,0411_UR.avif
+412,暗綠柳鶯,Greenish Warbler,0412.avif,0412_UR.avif
+413,Emei leaf warbler,Emei Leaf Warbler,0413.avif,0413_UR.avif
+414,淡腳柳鶯,Pale-Legged Leaf Warbler,0414.avif,0414_UR.avif
+415,日本淡腳柳鶯,Sakhalin Leaf Warbler,0415.avif,0415_UR.avif
+416,Japanese leaf warbler,Japanese Leaf Warbler,0416.avif,0416_UR.avif
+417,極北柳鶯,Arctic Warbler,0417.avif,0417_UR.avif
+418,栗耳鳳鶥,Chestnut-Crowned Warbler,0418.avif,0418_UR.avif
+419,黑眉柳鶯,Sulphur-Breasted Warbler,0419.avif,0419_UR.avif
+420,Claudia's leaf warbler,Phylloscopus Claudiae,0420.avif,0420_UR.avif
+421,Hartert's leaf warbler,Phylloscopus Goodsoni,0421.avif,0421_UR.avif
+422,Kloss's leaf warbler,Phylloscopus Ogilviegranti,0422.avif,0422_UR.avif
+423,淡腳樹鶯,Pale-Footed Bush Warbler,0423.avif,0423_UR.avif
+424,鱗頭樹鶯,Asian Stubtail,0424.avif,0424_UR.avif
+425,棕臉鶲鶯,Rufous-Faced Warbler,0425.avif,0425_UR.avif
+426,栗頭縫葉鶯,Mountain Tailorbird,0426.avif,0426_UR.avif
+427,遠東樹鶯,Manchurian Bush Warbler,0427.avif,0427_UR.avif
+428,強腳樹鶯,Brownish-Flanked Bush Warbler,0428.avif,0428_UR.avif
+429,Black-throated tit,Black-Throated Tit,0429.avif,0429_UR.avif
+430,白喉林鶯,Lesser Whitethroat,0430.avif,0430_UR.avif
+431,Spot-breasted parrotbill,Spot-Breasted Parrotbill,0431.avif,0431_UR.avif
+432,Vinous-throated parrotbill,Vinous-Throated Parrotbill,0432.avif,0432_UR.avif
+433,Indochinese yuhina,Indochinese Yuhina,0433.avif,0433_UR.avif
+434,Black-chinned yuhina,Black-Chinned Yuhina,0434.avif,0434_UR.avif
+435,紅脇繡眼鳥,Chestnut-Flanked White-Eye,0435.avif,0435_UR.avif
+436,Swinhoe's white-eye,Zosterops Simplex,0436.avif,0436_UR.avif
+437,紅頭穗鶥,Rufous-Capped Babbler,0437.avif,0437_UR.avif
+438,棕頸鈎嘴鶥,Streak-Breasted Scimitar-Babbler,0438.avif,0438_UR.avif
+439,綠鷺,Chinese Grassbird,0439.avif,0439_UR.avif
+440,黑眉雀鶥,Alcippe Hueti,0440.avif,0440_UR.avif
+441,藍翅希鶥,Blue-Winged Minla,0441.avif,0441_UR.avif
+442,紅嘴相思鳥,Red-Billed Leiothrix,0442.avif,0442_UR.avif
+443,銀耳相思鳥,Silver-Eared Mesia,0443.avif,0443_UR.avif
+444,白頰噪鶥,White-Browed Laughingthrush,0444.avif,0444_UR.avif
+445,黑臉噪鶥,Masked Laughingthrush,0445.avif,0445_UR.avif
+446,黑領噪鶥,Greater Necklaced Laughingthrush,0446.avif,0446_UR.avif
+447,矛紋草鶥,Chinese Babax,0447.avif,0447_UR.avif
+448,絨額鳾,Velvet-Fronted Nuthatch,0448.avif,0448_UR.avif
+449,紫翅椋鳥,European Starling,0449.avif,0449_UR.avif
+450,北椋鳥,Daurian Starling,0450.avif,0450_UR.avif
+451,紫背椋鳥,Chestnut-Cheeked Starling,0451.avif,0451_UR.avif
+452,Chestnut-tailed starling,Chestnut-Tailed Starling,0452.avif,0452_UR.avif
+453,絲光椋鳥,Red-Billed Starling,0453.avif,0453_UR.avif
+454,灰椋鳥,White-Cheeked Starling,0454.avif,0454_UR.avif
+455,家八哥,Common Myna,0455.avif,0455_UR.avif
+456,White's thrush,Zoothera Aurea,0456.avif,0456_UR.avif
+457,虎斑地鶇,Scaly Thrush,0457.avif,0457_UR.avif
+458,白眉地鶇,Siberian Thrush,0458.avif,0458_UR.avif
+459,橙頭地鶇,Orange-Headed Thrush,0459.avif,0459_UR.avif
+460,寶興歌鶇,Chinese Thrush,0460.avif,0460_UR.avif
+461,烏鶇,Eurasian Blackbird,0461.avif,0461_UR.avif
+462,Chinese blackbird,Chinese Blackbird,0462.avif,0462_UR.avif
+463,烏灰鶇,Japanese Thrush,0463.avif,0463_UR.avif
+464,灰背鶇,Gray-Backed Thrush,0464.avif,0464_UR.avif
+465,白眉鶇,Eyebrowed Thrush,0465.avif,0465_UR.avif
+466,赤胸鶇,Brown-Headed Thrush,0466.avif,0466_UR.avif
+467,白腹鶇,Pale Thrush,0467.avif,0467_UR.avif
+468,Black-throated thrush,Black-Throated Thrush,0468.avif,0468_UR.avif
+469,赤頸鶇,Red-Throated Thrush,0469.avif,0469_UR.avif
+470,Dusky thrush,Dusky Thrush,0470.avif,0470_UR.avif
+471,斑鶇,Turdus Naumanni,0471.avif,0471_UR.avif
+472,灰紋鶲,Gray-Streaked Flycatcher,0472.avif,0472_UR.avif
+473,烏鶲,Dark-Sided Flycatcher,0473.avif,0473_UR.avif
+474,棕尾褐鶲,Ferruginous Flycatcher,0474.avif,0474_UR.avif
+475,北灰鶲,Asian Brown Flycatcher,0475.avif,0475_UR.avif
+476,褐胸鶲,Brown-Breasted Flycatcher,0476.avif,0476_UR.avif
+477,灰頭椋鳥,White-Rumped Shama,0477.avif,0477_UR.avif
+478,海南藍仙鶲,Hainan Blue Flycatcher,0478.avif,0478_UR.avif
+479,中華仙鶲,Chinese Blue Flycatcher,0479.avif,0479_UR.avif
+480,Hill blue flycatcher,Hill Blue Flycatcher,0480.avif,0480_UR.avif
+481,Brown-chested jungle flycatcher,Brown-Chested Jungle Flycatcher,0481.avif,0481_UR.avif
+482,小仙鶲,Small Niltava,0482.avif,0482_UR.avif
+483,棕腹大仙鶲,Fujian Niltava,0483.avif,0483_UR.avif
+484,白腹藍姬鶲,Blue-And-White Flycatcher,0484.avif,0484_UR.avif
+485,琉璃藍鶲,Cyanoptila Cumatilis,0485.avif,0485_UR.avif
+486,Verditer flycatcher,Verditer Flycatcher,0486.avif,0486_UR.avif
+487,Lesser shortwing,Lesser Shortwing,0487.avif,0487_UR.avif
+488,紅尾歌鴝,Rufous-Tailed Robin,0488.avif,0488_UR.avif
+489,日本歌鴝,Japanese Robin,0489.avif,0489_UR.avif
+490,藍歌鴝,Siberian Blue Robin,0490.avif,0490_UR.avif
+491,藍喉歌鴝,Bluethroat,0491.avif,0491_UR.avif
+492,紫嘯鶇,Blue Whistling-Thrush,0492.avif,0492_UR.avif
+493,White-crowned forktail,White-Crowned Forktail,0493.avif,0493_UR.avif
+494,灰背燕尾,Slaty-Backed Forktail,0494.avif,0494_UR.avif
+495,紅喉歌鴝,Siberian Rubythroat,0495.avif,0495_UR.avif
+496,White-tailed robin,White-Tailed Robin,0496.avif,0496_UR.avif
+497,紅脇藍尾鴝,Red-Flanked Bluetail,0497.avif,0497_UR.avif
+498,白眉姬鶲,Yellow-Rumped Flycatcher,0498.avif,0498_UR.avif
+499,綠背姬鶲,Green-Backed Flycatcher,0499.avif,0499_UR.avif
+500,黃眉姬鶲,Narcissus Flycatcher,0500.avif,0500_UR.avif
+501,Ryuku flycatcher,Ryuku Flycatcher,0501.avif,0501_UR.avif
+502,鴝姬鶲,Mugimaki Flycatcher,0502.avif,0502_UR.avif
+503,Slaty-backed flycatcher,Slaty-Backed Flycatcher,0503.avif,0503_UR.avif
+504,橙胸姬鶲,Rufous-Gorgeted Flycatcher,0504.avif,0504_UR.avif
+505,Ultramarine flycatcher,Ultramarine Flycatcher,0505.avif,0505_UR.avif
+506,紅喉姬鶲,Taiga Flycatcher,0506.avif,0506_UR.avif
+507,紅胸姬鶲,Red-Breasted Flycatcher,0507.avif,0507_UR.avif
+508,紅尾水鴝,Plumbeous Redstart,0508.avif,0508_UR.avif
+509,黑喉紅尾鴝,Phoenicurus Hodgsoni,0509.avif,0509_UR.avif
+510,赭紅尾鴝,Black Redstart,0510.avif,0510_UR.avif
+511,北紅尾鴝,Daurian Redstart,0511.avif,0511_UR.avif
+512,栗腹磯鶇,Chestnut-Bellied Rock-Thrush,0512.avif,0512_UR.avif
+513,白喉磯鶇,White-Throated Rock-Thrush,0513.avif,0513_UR.avif
+514,藍磯鶇,Blue Rock-Thrush,0514.avif,0514_UR.avif
+515,Siberian stonechat,Siberian Stonechat,0515.avif,0515_UR.avif
+516,Gray bushchat,Gray Bushchat,0516.avif,0516_UR.avif
+517,Pied wheatear,Pied Wheatear,0517.avif,0517_UR.avif
+518,小太平鳥,Japanese Waxwing,0518.avif,0518_UR.avif
+519,Plain flowerpecker,Plain Flowerpecker,0519.avif,0519_UR.avif
+520,紅胸啄花鳥,Fire-Breasted Flowerpecker,0520.avif,0520_UR.avif
+521,朱背啄花鳥,Scarlet-Backed Flowerpecker,0521.avif,0521_UR.avif
+522,藍喉太陽鳥,Aethopyga Gouldiae,0522.avif,0522_UR.avif
+523,黃胸織雀,Baya Weaver,0523.avif,0523_UR.avif
+524,斑文鳥,Scaly-Breasted Munia,0524.avif,0524_UR.avif
+525,栗腹文鳥,Chestnut Munia,0525.avif,0525_UR.avif
+526,House sparrow,House Sparrow,0526.avif,0526_UR.avif
+527,山鶺鴒,Forest Wagtail,0527.avif,0527_UR.avif
+528,灰鶺鴒,Gray Wagtail,0528.avif,0528_UR.avif
+529,黃鶺鴒,Western Yellow Wagtail,0529.avif,0529_UR.avif
+530,Eastern yellow wagtail,Eastern Yellow Wagtail,0530.avif,0530_UR.avif
+531,黃頭鶺鴒,Citrine Wagtail,0531.avif,0531_UR.avif
+532,白鶺鴒,White Wagtail,0532.avif,0532_UR.avif
+533,田鷚,Anthus Richardi,0533.avif,0533_UR.avif
+534,布氏鷚,Anthus Godlewskii,0534.avif,0534_UR.avif
+535,山鷚,Upland Pipit,0535.avif,0535_UR.avif
+536,粉紅胸鷚,Rosy Pipit,0536.avif,0536_UR.avif
+537,Tree pipit,Tree Pipit,0537.avif,0537_UR.avif
+538,樹鷚,Olive-Backed Pipit,0538.avif,0538_UR.avif
+539,北鷚,Pechora Pipit,0539.avif,0539_UR.avif
+540,紅喉鷚,Red-Throated Pipit,0540.avif,0540_UR.avif
+541,水鷚,Water Pipit,0541.avif,0541_UR.avif
+542,黃腹鷚,American Pipit,0542.avif,0542_UR.avif
+543,燕雀,Brambling,0543.avif,0543_UR.avif
+544,錫嘴雀,Hawfinch,0544.avif,0544_UR.avif
+545,黑尾蠟嘴雀,Yellow-Billed Grosbeak,0545.avif,0545_UR.avif
+546,黑頭蠟嘴雀,Japanese Grosbeak,0546.avif,0546_UR.avif
+547,普通朱雀,Common Rosefinch,0547.avif,0547_UR.avif
+548,金翅雀,Oriental Greenfinch,0548.avif,0548_UR.avif
+549,黃雀,Eurasian Siskin,0549.avif,0549_UR.avif
+550,Lapland longspur,Lapland Longspur,0550.avif,0550_UR.avif
+551,鳳頭鵐,Crested Bunting,0551.avif,0551_UR.avif
+552,黑頭鵐,Black-Headed Bunting,0552.avif,0552_UR.avif
+553,褐頭鵐,Red-Headed Bunting,0553.avif,0553_UR.avif
+554,栗耳鵐,Chestnut-Eared Bunting,0554.avif,0554_UR.avif
+555,Pine bunting,Pine Bunting,0555.avif,0555_UR.avif
+556,圃鵐,Ortolan Bunting,0556.avif,0556_UR.avif
+557,藍鵐,Slaty Bunting,0557.avif,0557_UR.avif
+558,黃喉鵐,Yellow-Throated Bunting,0558.avif,0558_UR.avif
+559,紅頸葦鵐,Ochre-Rumped Bunting,0559.avif,0559_UR.avif
+560,葦鵐,Emberiza Pallasi,0560.avif,0560_UR.avif
+561,蘆鵐,Reed Bunting,0561.avif,0561_UR.avif
+562,黃胸鵐,Yellow-Breasted Bunting,0562.avif,0562_UR.avif
+563,小鵐,Little Bunting,0563.avif,0563_UR.avif
+564,田鵐,Rustic Bunting,0564.avif,0564_UR.avif
+565,硫黃鵐,Yellow Bunting,0565.avif,0565_UR.avif
+566,灰頭鵐,Black-Faced Bunting,0566.avif,0566_UR.avif
+567,栗鵐,Chestnut Bunting,0567.avif,0567_UR.avif
+568,黃眉鵐,Yellow-Browed Bunting,0568.avif,0568_UR.avif
+569,白眉鵐,Emberiza Tristrami,0569.avif,0569_UR.avif

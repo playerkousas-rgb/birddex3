@@ -1,0 +1,4830 @@
+[
+  {
+    "speciesId": 1,
+    "aliases": [
+      "spotted dove",
+      "spilopelia chinensis",
+      "珠頸斑鳩",
+      "珠頸斑鸠",
+      "black-throated laughingthrush",
+      "pterorhinus chinensis"
+    ]
+  },
+  {
+    "speciesId": 2,
+    "aliases": [
+      "black kite",
+      "milvus migrans",
+      "黑鳶",
+      "黑鸢"
+    ]
+  },
+  {
+    "speciesId": 3,
+    "aliases": [
+      "rock pigeon",
+      "columba livia",
+      "原鴿",
+      "原鸽"
+    ]
+  },
+  {
+    "speciesId": 4,
+    "aliases": [
+      "yellow-crested cockatoo",
+      "cacatua sulphurea",
+      "小葵花鳳頭鸚鵡",
+      "小葵花鳳頭鹦鹉"
+    ]
+  },
+  {
+    "speciesId": 5,
+    "aliases": [
+      "asian koel",
+      "eudynamys scolopacea",
+      "噪鵑",
+      "噪鹃"
+    ]
+  },
+  {
+    "speciesId": 6,
+    "aliases": [
+      "red-whiskered bulbul",
+      "pycnonotus jocosus",
+      "紅耳鵯",
+      "紅耳鹎"
+    ]
+  },
+  {
+    "speciesId": 7,
+    "aliases": [
+      "light-vented bulbul",
+      "pycnonotus sinensis",
+      "白頭鵯",
+      "白頭鹎"
+    ]
+  },
+  {
+    "speciesId": 8,
+    "aliases": [
+      "oriental magpie-robin",
+      "copsychus saularis",
+      "鵲鴝",
+      "鹊鴝"
+    ]
+  },
+  {
+    "speciesId": 10,
+    "aliases": [
+      "slaty-breasted rail",
+      "lewinia striata",
+      "白腰文鳥",
+      "白腰文鸟",
+      "striated heron",
+      "butorides striata",
+      "white-rumped munia",
+      "lonchura striata"
+    ]
+  },
+  {
+    "speciesId": 11,
+    "aliases": [
+      "eurasian tree sparrow",
+      "passer montanus",
+      "麻雀"
+    ]
+  },
+  {
+    "speciesId": 13,
+    "aliases": [
+      "crested myna",
+      "acridotheres cristatellus",
+      "八哥"
+    ]
+  },
+  {
+    "speciesId": 14,
+    "aliases": [
+      "eurasian magpie",
+      "pica pica",
+      "喜鵲",
+      "喜鹊"
+    ]
+  },
+  {
+    "speciesId": 15,
+    "aliases": [
+      "red-billed blue magpie",
+      "urocissa erythrorhyncha",
+      "紅嘴藍鵲",
+      "紅嘴藍鹊"
+    ]
+  },
+  {
+    "speciesId": 17,
+    "aliases": [
+      "eastern buzzard",
+      "buteo japonicus",
+      "暗綠繡眼鳥",
+      "暗綠繡眼鸟"
+    ]
+  },
+  {
+    "speciesId": 18,
+    "aliases": [
+      "chinese hwamei",
+      "garrulax canorus",
+      "畫眉"
+    ]
+  },
+  {
+    "speciesId": 19,
+    "aliases": [
+      "fork-tailed sunbird",
+      "aethopyga christinae",
+      "叉尾太陽鳥",
+      "叉尾太陽鸟"
+    ]
+  },
+  {
+    "speciesId": 20,
+    "aliases": [
+      "common tailorbird",
+      "orthotomus sutorius",
+      "長尾縫葉鶯",
+      "長尾縫葉莺"
+    ]
+  },
+  {
+    "speciesId": 22,
+    "aliases": [
+      "lesser whistling-duck",
+      "dendrocygna javanica",
+      "栗樹鴨",
+      "栗樹鸭"
+    ]
+  },
+  {
+    "speciesId": 23,
+    "aliases": [
+      "graylag goose",
+      "anser anser",
+      "灰雁"
+    ]
+  },
+  {
+    "speciesId": 24,
+    "aliases": [
+      "greater white-fronted goose",
+      "anser albifrons",
+      "白額雁",
+      "little tern",
+      "sternula albifrons"
+    ]
+  },
+  {
+    "speciesId": 25,
+    "aliases": [
+      "lesser white-fronted goose",
+      "anser erythropus",
+      "小白額雁"
+    ]
+  },
+  {
+    "speciesId": 26,
+    "aliases": [
+      "taiga bean goose",
+      "anser fabalis",
+      "寒林豆雁"
+    ]
+  },
+  {
+    "speciesId": 27,
+    "aliases": [
+      "tundra bean goose",
+      "anser serrirostris",
+      "凍原豆雁"
+    ]
+  },
+  {
+    "speciesId": 28,
+    "aliases": [
+      "whooper swan",
+      "cygnus cygnus",
+      "大天鵝",
+      "大天鹅"
+    ]
+  },
+  {
+    "speciesId": 29,
+    "aliases": [
+      "ruddy shelduck",
+      "tadorna ferruginea",
+      "赤麻鴨",
+      "赤麻鸭"
+    ]
+  },
+  {
+    "speciesId": 30,
+    "aliases": [
+      "common shelduck",
+      "tadorna tadorna",
+      "翹鼻麻鴨",
+      "翹鼻麻鸭"
+    ]
+  },
+  {
+    "speciesId": 31,
+    "aliases": [
+      "cotton pygmy-goose",
+      "nettapus coromandelianus",
+      "棉鳧"
+    ]
+  },
+  {
+    "speciesId": 32,
+    "aliases": [
+      "mandarin duck",
+      "aix galericulata",
+      "鴛鴦"
+    ]
+  },
+  {
+    "speciesId": 33,
+    "aliases": [
+      "baikal teal",
+      "sibirionetta formosa",
+      "花臉鴨",
+      "花臉鸭"
+    ]
+  },
+  {
+    "speciesId": 34,
+    "aliases": [
+      "garganey",
+      "spatula querquedula",
+      "白眉鴨",
+      "白眉鸭"
+    ]
+  },
+  {
+    "speciesId": 35,
+    "aliases": [
+      "northern shoveler",
+      "spatula clypeata",
+      "琵嘴鴨",
+      "琵嘴鸭"
+    ]
+  },
+  {
+    "speciesId": 36,
+    "aliases": [
+      "gadwall",
+      "mareca strepera",
+      "赤膀鴨",
+      "赤膀鸭"
+    ]
+  },
+  {
+    "speciesId": 37,
+    "aliases": [
+      "falcated duck",
+      "mareca falcata",
+      "羅紋鴨",
+      "羅紋鸭"
+    ]
+  },
+  {
+    "speciesId": 38,
+    "aliases": [
+      "eurasian wigeon",
+      "mareca penelope",
+      "赤頸鴨",
+      "赤頸鸭"
+    ]
+  },
+  {
+    "speciesId": 39,
+    "aliases": [
+      "american wigeon",
+      "mareca americana",
+      "美洲黑海番鴨",
+      "美洲黑海番鸭",
+      "black scoter",
+      "melanitta americana"
+    ]
+  },
+  {
+    "speciesId": 40,
+    "aliases": [
+      "philippine duck",
+      "anas luzonica",
+      "棕頸鴨",
+      "棕頸鸭"
+    ]
+  },
+  {
+    "speciesId": 41,
+    "aliases": [
+      "indian spot-billed duck",
+      "anas poecilorhyncha",
+      "印缅斑嘴鴨",
+      "印缅斑嘴鸭"
+    ]
+  },
+  {
+    "speciesId": 42,
+    "aliases": [
+      "eastern spot-billed duck",
+      "anas zonorhyncha",
+      "中華斑嘴鴨",
+      "中華斑嘴鸭"
+    ]
+  },
+  {
+    "speciesId": 43,
+    "aliases": [
+      "mallard",
+      "anas platyrhynchos",
+      "綠頭鴨",
+      "綠頭鸭"
+    ]
+  },
+  {
+    "speciesId": 44,
+    "aliases": [
+      "northern pintail",
+      "anas acuta",
+      "針尾鴨",
+      "針尾鸭"
+    ]
+  },
+  {
+    "speciesId": 45,
+    "aliases": [
+      "green-winged teal",
+      "anas crecca",
+      "綠翅鴨",
+      "綠翅鸭"
+    ]
+  },
+  {
+    "speciesId": 46,
+    "aliases": [
+      "red-crested pochard",
+      "netta rufina",
+      "赤嘴潛鴨",
+      "赤嘴潛鸭"
+    ]
+  },
+  {
+    "speciesId": 47,
+    "aliases": [
+      "common pochard",
+      "aythya ferina",
+      "紅頭潛鴨",
+      "紅頭潛鸭"
+    ]
+  },
+  {
+    "speciesId": 48,
+    "aliases": [
+      "ferruginous duck",
+      "aythya nyroca",
+      "白眼潛鴨",
+      "白眼潛鸭"
+    ]
+  },
+  {
+    "speciesId": 49,
+    "aliases": [
+      "baer's pochard",
+      "aythya baeri",
+      "青頭潛鴨",
+      "青頭潛鸭"
+    ]
+  },
+  {
+    "speciesId": 50,
+    "aliases": [
+      "tufted duck",
+      "aythya fuligula",
+      "鳳頭潛鴨",
+      "鳳頭潛鸭"
+    ]
+  },
+  {
+    "speciesId": 51,
+    "aliases": [
+      "greater scaup",
+      "aythya marila",
+      "斑背潛鴨",
+      "斑背潛鸭"
+    ]
+  },
+  {
+    "speciesId": 52,
+    "aliases": [
+      "velvet scoter",
+      "melanitta fusca",
+      "紅胸田雞",
+      "ruddy-breasted crake",
+      "zapornia fusca"
+    ]
+  },
+  {
+    "speciesId": 53,
+    "aliases": [
+      "white-winged scoter",
+      "melanitta deglandi"
+    ]
+  },
+  {
+    "speciesId": 54,
+    "aliases": [
+      "stejneger's scoter",
+      "melanitta stejnegeri",
+      "斑臉海番鴨",
+      "斑臉海番鸭",
+      "amur stonechat",
+      "saxicola stejnegeri"
+    ]
+  },
+  {
+    "speciesId": 55,
+    "aliases": [
+      "common goldeneye",
+      "bucephala clangula",
+      "鵲鴨",
+      "鹊鸭"
+    ]
+  },
+  {
+    "speciesId": 56,
+    "aliases": [
+      "smew",
+      "mergellus albellus",
+      "斑頭秋沙鴨",
+      "斑頭秋沙鸭"
+    ]
+  },
+  {
+    "speciesId": 57,
+    "aliases": [
+      "red-breasted merganser",
+      "mergus serrator",
+      "紅胸秋沙鴨",
+      "紅胸秋沙鸭"
+    ]
+  },
+  {
+    "speciesId": 58,
+    "aliases": [
+      "scaly-sided merganser",
+      "mergus squamatus"
+    ]
+  },
+  {
+    "speciesId": 59,
+    "aliases": [
+      "chinese bamboo-partridge",
+      "bambusicola thoracicus"
+    ]
+  },
+  {
+    "speciesId": 60,
+    "aliases": [
+      "chinese francolin",
+      "francolinus pintadeanus",
+      "中華鷓鴣",
+      "中華鷓鸪"
+    ]
+  },
+  {
+    "speciesId": 61,
+    "aliases": [
+      "japanese quail",
+      "coturnix japonica",
+      "鵪鶉",
+      "鹌鹑",
+      "northern boobook",
+      "ninox japonica"
+    ]
+  },
+  {
+    "speciesId": 62,
+    "aliases": [
+      "little grebe",
+      "tachybaptus ruficollis",
+      "小鸊鷉",
+      "小䴙鷉"
+    ]
+  },
+  {
+    "speciesId": 63,
+    "aliases": [
+      "horned grebe",
+      "podiceps auritus",
+      "角鸊鷉",
+      "角䴙鷉"
+    ]
+  },
+  {
+    "speciesId": 64,
+    "aliases": [
+      "great crested grebe",
+      "podiceps cristatus",
+      "鳳頭鸊鷉",
+      "鳳頭䴙鷉"
+    ]
+  },
+  {
+    "speciesId": 65,
+    "aliases": [
+      "eared grebe",
+      "podiceps nigricollis",
+      "黑頸鸊鷉",
+      "黑頸䴙鷉",
+      "black-collared starling",
+      "gracupica nigricollis"
+    ]
+  },
+  {
+    "speciesId": 66,
+    "aliases": [
+      "oriental turtle-dove",
+      "streptopelia orientalis",
+      "山斑鳩",
+      "山斑鸠"
+    ]
+  },
+  {
+    "speciesId": 67,
+    "aliases": [
+      "eurasian collared-dove",
+      "streptopelia decaocto",
+      "灰斑鳩",
+      "灰斑鸠"
+    ]
+  },
+  {
+    "speciesId": 68,
+    "aliases": [
+      "red collared-dove",
+      "streptopelia tranquebarica",
+      "火斑鳩",
+      "火斑鸠"
+    ]
+  },
+  {
+    "speciesId": 69,
+    "aliases": [
+      "barred cuckoo-dove",
+      "macropygia unchall",
+      "斑尾鵑鳩",
+      "斑尾鹃鸠"
+    ]
+  },
+  {
+    "speciesId": 70,
+    "aliases": [
+      "asian emerald dove",
+      "chalcophaps indica",
+      "綠翅金鳩",
+      "綠翅金鸠"
+    ]
+  },
+  {
+    "speciesId": 71,
+    "aliases": [
+      "orange-breasted green-pigeon",
+      "treron bicinctus",
+      "橙胸綠鳩",
+      "橙胸綠鸠"
+    ]
+  },
+  {
+    "speciesId": 72,
+    "aliases": [
+      "thick-billed green-pigeon",
+      "treron curvirostra",
+      "厚嘴綠鳩",
+      "厚嘴綠鸠"
+    ]
+  },
+  {
+    "speciesId": 73,
+    "aliases": [
+      "wedge-tailed green-pigeon",
+      "treron sphenurus"
+    ]
+  },
+  {
+    "speciesId": 74,
+    "aliases": [
+      "white-bellied green-pigeon",
+      "treron sieboldii",
+      "紅翅綠鳩",
+      "紅翅綠鸠"
+    ]
+  },
+  {
+    "speciesId": 75,
+    "aliases": [
+      "whistling green-pigeon",
+      "treron formosae",
+      "灰樹鵲",
+      "灰樹鹊",
+      "gray treepie",
+      "dendrocitta formosae"
+    ]
+  },
+  {
+    "speciesId": 76,
+    "aliases": [
+      "greater coucal",
+      "centropus sinensis",
+      "褐翅鴉鵑",
+      "褐翅鸦鹃"
+    ]
+  },
+  {
+    "speciesId": 77,
+    "aliases": [
+      "lesser coucal",
+      "centropus bengalensis",
+      "小鴉鵑",
+      "小鸦鹃"
+    ]
+  },
+  {
+    "speciesId": 78,
+    "aliases": [
+      "chestnut-winged cuckoo",
+      "clamator coromandus",
+      "紅翅鳳頭鵑",
+      "紅翅鳳頭鹃"
+    ]
+  },
+  {
+    "speciesId": 79,
+    "aliases": [
+      "plaintive cuckoo",
+      "cacomantis merulinus",
+      "八聲杜鵑",
+      "八聲杜鹃"
+    ]
+  },
+  {
+    "speciesId": 80,
+    "aliases": [
+      "square-tailed drongo-cuckoo",
+      "surniculus lugubris",
+      "烏鵑",
+      "烏鹃",
+      "crested kingfisher",
+      "megaceryle lugubris"
+    ]
+  },
+  {
+    "speciesId": 81,
+    "aliases": [
+      "large hawk-cuckoo",
+      "hierococcyx sparverioides",
+      "鷹鵑",
+      "鹰鹃"
+    ]
+  },
+  {
+    "speciesId": 82,
+    "aliases": [
+      "northern hawk-cuckoo",
+      "hierococcyx hyperythrus",
+      "北鷹鵑",
+      "北鹰鹃"
+    ]
+  },
+  {
+    "speciesId": 83,
+    "aliases": [
+      "hodgson's hawk-cuckoo",
+      "hierococcyx nisicolor",
+      "棕腹杜鵑",
+      "棕腹杜鹃"
+    ]
+  },
+  {
+    "speciesId": 84,
+    "aliases": [
+      "malaysian hawk-cuckoo",
+      "hierococcyx fugax"
+    ]
+  },
+  {
+    "speciesId": 85,
+    "aliases": [
+      "lesser cuckoo",
+      "cuculus poliocephalus",
+      "小杜鵑",
+      "小杜鹃",
+      "gray-headed swamphen",
+      "porphyrio poliocephalus"
+    ]
+  },
+  {
+    "speciesId": 86,
+    "aliases": [
+      "indian cuckoo",
+      "cuculus micropterus",
+      "四聲杜鵑",
+      "四聲杜鹃"
+    ]
+  },
+  {
+    "speciesId": 87,
+    "aliases": [
+      "common cuckoo",
+      "cuculus canorus",
+      "大杜鵑",
+      "大杜鹃"
+    ]
+  },
+  {
+    "speciesId": 88,
+    "aliases": [
+      "oriental cuckoo",
+      "cuculus optatus",
+      "中杜鵑",
+      "中杜鹃"
+    ]
+  },
+  {
+    "speciesId": 89,
+    "aliases": [
+      "gray nightjar",
+      "caprimulgus jotaka",
+      "普通夜鷹",
+      "普通夜鹰"
+    ]
+  },
+  {
+    "speciesId": 90,
+    "aliases": [
+      "savanna nightjar",
+      "caprimulgus affinis",
+      "林夜鷹",
+      "林夜鹰",
+      "white-spectacled warbler",
+      "phylloscopus affinis"
+    ]
+  },
+  {
+    "speciesId": 91,
+    "aliases": [
+      "white-throated needletail",
+      "hirundapus caudacutus",
+      "白喉針尾雨燕"
+    ]
+  },
+  {
+    "speciesId": 92,
+    "aliases": [
+      "silver-backed needletail",
+      "hirundapus cochinchinensis",
+      "白背針尾雨燕",
+      "blue-winged leafbird",
+      "chloropsis cochinchinensis"
+    ]
+  },
+  {
+    "speciesId": 93,
+    "aliases": [
+      "brown-backed needletail",
+      "hirundapus giganteus",
+      "褐背針尾雨燕"
+    ]
+  },
+  {
+    "speciesId": 94,
+    "aliases": [
+      "himalayan swiftlet",
+      "aerodramus brevirostris",
+      "短嘴金絲燕"
+    ]
+  },
+  {
+    "speciesId": 95,
+    "aliases": [
+      "common swift",
+      "apus apus",
+      "樓燕"
+    ]
+  },
+  {
+    "speciesId": 96,
+    "aliases": [
+      "pacific swift",
+      "apus pacificus",
+      "雨燕"
+    ]
+  },
+  {
+    "speciesId": 97,
+    "aliases": [
+      "house swift",
+      "apus nipalensis",
+      "草原鵰",
+      "草原雕",
+      "mountain hawk-eagle",
+      "nisaetus nipalensis",
+      "steppe eagle",
+      "aquila nipalensis"
+    ]
+  },
+  {
+    "speciesId": 98,
+    "aliases": [
+      "water rail",
+      "rallus aquaticus",
+      "普通秧雞"
+    ]
+  },
+  {
+    "speciesId": 99,
+    "aliases": [
+      "brown-cheeked rail",
+      "rallus indicus",
+      "灰面鷲",
+      "灰面鹫",
+      "gray-faced buzzard",
+      "butastur indicus"
+    ]
+  },
+  {
+    "speciesId": 100,
+    "aliases": [
+      "eurasian moorhen",
+      "gallinula chloropus",
+      "黑水雞"
+    ]
+  },
+  {
+    "speciesId": 101,
+    "aliases": [
+      "eurasian coot",
+      "fulica atra",
+      "白骨頂"
+    ]
+  },
+  {
+    "speciesId": 102,
+    "aliases": [
+      "white-browed crake",
+      "poliolimnas cinereus",
+      "灰頭麥雞",
+      "gray-headed lapwing",
+      "vanellus cinereus"
+    ]
+  },
+  {
+    "speciesId": 103,
+    "aliases": [
+      "watercock",
+      "gallicrex cinerea",
+      "董雞"
+    ]
+  },
+  {
+    "speciesId": 104,
+    "aliases": [
+      "white-breasted waterhen",
+      "amaurornis phoenicurus",
+      "白胸苦惡鳥",
+      "白胸苦惡鸟"
+    ]
+  },
+  {
+    "speciesId": 105,
+    "aliases": [
+      "slaty-legged crake",
+      "rallina eurizonoides",
+      "白喉斑秧雞"
+    ]
+  },
+  {
+    "speciesId": 106,
+    "aliases": [
+      "band-bellied crake",
+      "zapornia paykullii",
+      "斑脇田雞"
+    ]
+  },
+  {
+    "speciesId": 107,
+    "aliases": [
+      "brown crake",
+      "zapornia akool",
+      "紅腳苦惡鳥",
+      "紅腳苦惡鸟"
+    ]
+  },
+  {
+    "speciesId": 108,
+    "aliases": [
+      "baillon's crake",
+      "zapornia pusilla",
+      "小田雞"
+    ]
+  },
+  {
+    "speciesId": 109,
+    "aliases": [
+      "siberian crane",
+      "leucogeranus leucogeranus",
+      "白鶴",
+      "白鹤"
+    ]
+  },
+  {
+    "speciesId": 110,
+    "aliases": [
+      "common crane",
+      "grus grus",
+      "灰鶴",
+      "灰鹤"
+    ]
+  },
+  {
+    "speciesId": 111,
+    "aliases": [
+      "great thick-knee",
+      "esacus recurvirostris",
+      "大石鴴",
+      "大石鸻"
+    ]
+  },
+  {
+    "speciesId": 112,
+    "aliases": [
+      "black-winged stilt",
+      "himantopus himantopus",
+      "黑翅長腳鷸",
+      "黑翅長腳鹬"
+    ]
+  },
+  {
+    "speciesId": 113,
+    "aliases": [
+      "pied avocet",
+      "recurvirostra avosetta",
+      "反嘴鷸",
+      "反嘴鹬"
+    ]
+  },
+  {
+    "speciesId": 114,
+    "aliases": [
+      "eurasian oystercatcher",
+      "haematopus ostralegus",
+      "蠣鷸",
+      "蠣鹬"
+    ]
+  },
+  {
+    "speciesId": 115,
+    "aliases": [
+      "black-bellied plover",
+      "pluvialis squatarola",
+      "灰鴴",
+      "灰鸻"
+    ]
+  },
+  {
+    "speciesId": 116,
+    "aliases": [
+      "european golden-plover",
+      "pluvialis apricaria"
+    ]
+  },
+  {
+    "speciesId": 117,
+    "aliases": [
+      "american golden-plover",
+      "pluvialis dominica"
+    ]
+  },
+  {
+    "speciesId": 118,
+    "aliases": [
+      "pacific golden-plover",
+      "pluvialis fulva",
+      "金鴴",
+      "金鸻"
+    ]
+  },
+  {
+    "speciesId": 119,
+    "aliases": [
+      "northern lapwing",
+      "vanellus vanellus",
+      "鳳頭麥雞"
+    ]
+  },
+  {
+    "speciesId": 120,
+    "aliases": [
+      "lesser sand-plover",
+      "charadrius mongolus",
+      "蒙古沙鴴",
+      "蒙古沙鸻"
+    ]
+  },
+  {
+    "speciesId": 121,
+    "aliases": [
+      "greater sand-plover",
+      "charadrius leschenaultii",
+      "鐵嘴沙鴴",
+      "鐵嘴沙鸻"
+    ]
+  },
+  {
+    "speciesId": 122,
+    "aliases": [
+      "kentish plover",
+      "charadrius alexandrinus",
+      "環頸鴴",
+      "環頸鸻"
+    ]
+  },
+  {
+    "speciesId": 123,
+    "aliases": [
+      "white-faced plover",
+      "charadrius dealbatus"
+    ]
+  },
+  {
+    "speciesId": 124,
+    "aliases": [
+      "snowy plover",
+      "charadrius nivosus"
+    ]
+  },
+  {
+    "speciesId": 125,
+    "aliases": [
+      "common ringed plover",
+      "charadrius hiaticula",
+      "劍鴴",
+      "劍鸻"
+    ]
+  },
+  {
+    "speciesId": 126,
+    "aliases": [
+      "long-billed plover",
+      "charadrius placidus",
+      "長嘴鴴",
+      "長嘴鸻"
+    ]
+  },
+  {
+    "speciesId": 127,
+    "aliases": [
+      "little ringed plover",
+      "charadrius dubius",
+      "金眶鴴",
+      "金眶鸻"
+    ]
+  },
+  {
+    "speciesId": 128,
+    "aliases": [
+      "oriental plover",
+      "charadrius veredus",
+      "東方鴴",
+      "東方鸻"
+    ]
+  },
+  {
+    "speciesId": 129,
+    "aliases": [
+      "greater painted-snipe",
+      "rostratula benghalensis",
+      "彩鷸",
+      "彩鹬"
+    ]
+  },
+  {
+    "speciesId": 130,
+    "aliases": [
+      "pheasant-tailed jacana",
+      "hydrophasianus chirurgus",
+      "水雉"
+    ]
+  },
+  {
+    "speciesId": 131,
+    "aliases": [
+      "whimbrel",
+      "numenius phaeopus",
+      "中杓鷸",
+      "中杓鹬"
+    ]
+  },
+  {
+    "speciesId": 132,
+    "aliases": [
+      "little curlew",
+      "numenius minutus",
+      "小杓鷸",
+      "小杓鹬",
+      "black noddy",
+      "anous minutus"
+    ]
+  },
+  {
+    "speciesId": 133,
+    "aliases": [
+      "far eastern curlew",
+      "numenius madagascariensis",
+      "大杓鷸",
+      "大杓鹬"
+    ]
+  },
+  {
+    "speciesId": 134,
+    "aliases": [
+      "eurasian curlew",
+      "numenius arquata",
+      "白腰杓鷸",
+      "白腰杓鹬"
+    ]
+  },
+  {
+    "speciesId": 135,
+    "aliases": [
+      "bar-tailed godwit",
+      "limosa lapponica",
+      "斑尾塍鷸",
+      "斑尾塍鹬"
+    ]
+  },
+  {
+    "speciesId": 136,
+    "aliases": [
+      "black-tailed godwit",
+      "limosa limosa",
+      "黑尾塍鷸",
+      "黑尾塍鹬"
+    ]
+  },
+  {
+    "speciesId": 137,
+    "aliases": [
+      "ruddy turnstone",
+      "arenaria interpres",
+      "翻石鷸",
+      "翻石鹬"
+    ]
+  },
+  {
+    "speciesId": 138,
+    "aliases": [
+      "great knot",
+      "calidris tenuirostris",
+      "大濱鷸",
+      "大濱鹬"
+    ]
+  },
+  {
+    "speciesId": 139,
+    "aliases": [
+      "red knot",
+      "calidris canutus",
+      "紅腹濱鷸",
+      "紅腹濱鹬"
+    ]
+  },
+  {
+    "speciesId": 140,
+    "aliases": [
+      "ruff",
+      "calidris pugnax",
+      "流蘇鷸",
+      "流蘇鹬"
+    ]
+  },
+  {
+    "speciesId": 141,
+    "aliases": [
+      "broad-billed sandpiper",
+      "calidris falcinellus",
+      "闊嘴鷸",
+      "闊嘴鹬",
+      "glossy ibis",
+      "plegadis falcinellus"
+    ]
+  },
+  {
+    "speciesId": 142,
+    "aliases": [
+      "sharp-tailed sandpiper",
+      "calidris acuminata",
+      "尖尾濱鷸",
+      "尖尾濱鹬"
+    ]
+  },
+  {
+    "speciesId": 143,
+    "aliases": [
+      "curlew sandpiper",
+      "calidris ferruginea",
+      "彎嘴濱鷸",
+      "彎嘴濱鹬"
+    ]
+  },
+  {
+    "speciesId": 144,
+    "aliases": [
+      "temminck's stint",
+      "calidris temminckii",
+      "青腳濱鷸",
+      "青腳濱鹬"
+    ]
+  },
+  {
+    "speciesId": 145,
+    "aliases": [
+      "long-toed stint",
+      "calidris subminuta",
+      "長趾濱鷸",
+      "長趾濱鹬"
+    ]
+  },
+  {
+    "speciesId": 146,
+    "aliases": [
+      "spoon-billed sandpiper",
+      "calidris pygmeus",
+      "勺嘴鷸",
+      "勺嘴鹬"
+    ]
+  },
+  {
+    "speciesId": 147,
+    "aliases": [
+      "red-necked stint",
+      "calidris ruficollis",
+      "紅頸濱鷸",
+      "紅頸濱鹬"
+    ]
+  },
+  {
+    "speciesId": 148,
+    "aliases": [
+      "sanderling",
+      "calidris alba",
+      "三趾濱鷸",
+      "三趾濱鹬"
+    ]
+  },
+  {
+    "speciesId": 149,
+    "aliases": [
+      "dunlin",
+      "calidris alpina",
+      "黑腹濱鷸",
+      "黑腹濱鹬"
+    ]
+  },
+  {
+    "speciesId": 150,
+    "aliases": [
+      "little stint",
+      "calidris minuta",
+      "小濱鷸",
+      "小濱鹬"
+    ]
+  },
+  {
+    "speciesId": 151,
+    "aliases": [
+      "buff-breasted sandpiper",
+      "calidris subruficollis"
+    ]
+  },
+  {
+    "speciesId": 152,
+    "aliases": [
+      "pectoral sandpiper",
+      "calidris melanotos",
+      "斑胸濱鷸",
+      "斑胸濱鹬"
+    ]
+  },
+  {
+    "speciesId": 153,
+    "aliases": [
+      "asian dowitcher",
+      "limnodromus semipalmatus",
+      "半蹼鷸",
+      "半蹼鹬"
+    ]
+  },
+  {
+    "speciesId": 154,
+    "aliases": [
+      "long-billed dowitcher",
+      "limnodromus scolopaceus",
+      "長嘴半蹼鷸",
+      "長嘴半蹼鹬"
+    ]
+  },
+  {
+    "speciesId": 155,
+    "aliases": [
+      "eurasian woodcock",
+      "scolopax rusticola",
+      "丘鷸",
+      "丘鹬"
+    ]
+  },
+  {
+    "speciesId": 156,
+    "aliases": [
+      "latham's snipe",
+      "gallinago hardwickii",
+      "橙腹葉鵯",
+      "橙腹葉鹎",
+      "orange-bellied leafbird",
+      "chloropsis hardwickii"
+    ]
+  },
+  {
+    "speciesId": 157,
+    "aliases": [
+      "common snipe",
+      "gallinago gallinago",
+      "扇尾沙錐"
+    ]
+  },
+  {
+    "speciesId": 158,
+    "aliases": [
+      "pin-tailed snipe",
+      "gallinago stenura",
+      "針尾沙錐"
+    ]
+  },
+  {
+    "speciesId": 159,
+    "aliases": [
+      "swinhoe's snipe",
+      "gallinago megala",
+      "大沙錐"
+    ]
+  },
+  {
+    "speciesId": 160,
+    "aliases": [
+      "terek sandpiper",
+      "xenus cinereus",
+      "翹嘴鷸",
+      "翹嘴鹬"
+    ]
+  },
+  {
+    "speciesId": 161,
+    "aliases": [
+      "red-necked phalarope",
+      "phalaropus lobatus",
+      "紅頸瓣蹼鷸",
+      "紅頸瓣蹼鹬"
+    ]
+  },
+  {
+    "speciesId": 162,
+    "aliases": [
+      "red phalarope",
+      "phalaropus fulicarius"
+    ]
+  },
+  {
+    "speciesId": 163,
+    "aliases": [
+      "common sandpiper",
+      "actitis hypoleucos",
+      "磯鷸",
+      "磯鹬"
+    ]
+  },
+  {
+    "speciesId": 164,
+    "aliases": [
+      "green sandpiper",
+      "tringa ochropus",
+      "白腰草鷸",
+      "白腰草鹬"
+    ]
+  },
+  {
+    "speciesId": 165,
+    "aliases": [
+      "gray-tailed tattler",
+      "tringa brevipes",
+      "灰尾鷸",
+      "灰尾鹬"
+    ]
+  },
+  {
+    "speciesId": 166,
+    "aliases": [
+      "spotted redshank",
+      "tringa erythropus",
+      "鶴鷸",
+      "鹤鹬"
+    ]
+  },
+  {
+    "speciesId": 167,
+    "aliases": [
+      "common greenshank",
+      "tringa nebularia",
+      "青腳鷸",
+      "青腳鹬"
+    ]
+  },
+  {
+    "speciesId": 168,
+    "aliases": [
+      "nordmann's greenshank",
+      "tringa guttifer",
+      "小青腳鷸",
+      "小青腳鹬"
+    ]
+  },
+  {
+    "speciesId": 169,
+    "aliases": [
+      "lesser yellowlegs",
+      "tringa flavipes",
+      "小黃腳鷸",
+      "小黃腳鹬"
+    ]
+  },
+  {
+    "speciesId": 170,
+    "aliases": [
+      "marsh sandpiper",
+      "tringa stagnatilis",
+      "澤鷸",
+      "澤鹬"
+    ]
+  },
+  {
+    "speciesId": 171,
+    "aliases": [
+      "wood sandpiper",
+      "tringa glareola",
+      "林鷸",
+      "林鹬"
+    ]
+  },
+  {
+    "speciesId": 172,
+    "aliases": [
+      "common redshank",
+      "tringa totanus",
+      "紅腳鷸",
+      "紅腳鹬"
+    ]
+  },
+  {
+    "speciesId": 173,
+    "aliases": [
+      "small buttonquail",
+      "turnix sylvaticus"
+    ]
+  },
+  {
+    "speciesId": 174,
+    "aliases": [
+      "yellow-legged buttonquail",
+      "turnix tanki",
+      "黃腳三趾鶉",
+      "黃腳三趾鹑"
+    ]
+  },
+  {
+    "speciesId": 175,
+    "aliases": [
+      "barred buttonquail",
+      "turnix suscitator",
+      "棕三趾鶉",
+      "棕三趾鹑"
+    ]
+  },
+  {
+    "speciesId": 176,
+    "aliases": [
+      "oriental pratincole",
+      "glareola maldivarum",
+      "普通燕鴴",
+      "普通燕鸻"
+    ]
+  },
+  {
+    "speciesId": 177,
+    "aliases": [
+      "small pratincole",
+      "glareola lactea"
+    ]
+  },
+  {
+    "speciesId": 178,
+    "aliases": [
+      "pomarine jaeger",
+      "stercorarius pomarinus",
+      "中賊鷗",
+      "中賊鸥"
+    ]
+  },
+  {
+    "speciesId": 179,
+    "aliases": [
+      "parasitic jaeger",
+      "stercorarius parasiticus",
+      "短尾賊鷗",
+      "短尾賊鸥"
+    ]
+  },
+  {
+    "speciesId": 180,
+    "aliases": [
+      "long-tailed jaeger",
+      "stercorarius longicaudus",
+      "長尾賊鷗",
+      "長尾賊鸥"
+    ]
+  },
+  {
+    "speciesId": 181,
+    "aliases": [
+      "ancient murrelet",
+      "synthliboramphus antiquus",
+      "扁嘴海雀"
+    ]
+  },
+  {
+    "speciesId": 182,
+    "aliases": [
+      "japanese murrelet",
+      "synthliboramphus wumizusume",
+      "冠海雀"
+    ]
+  },
+  {
+    "speciesId": 183,
+    "aliases": [
+      "black-legged kittiwake",
+      "rissa tridactyla",
+      "三趾鷗",
+      "三趾鸥"
+    ]
+  },
+  {
+    "speciesId": 184,
+    "aliases": [
+      "saunders's gull",
+      "saundersilarus saundersi",
+      "黑嘴鷗",
+      "黑嘴鸥"
+    ]
+  },
+  {
+    "speciesId": 185,
+    "aliases": [
+      "slender-billed gull",
+      "chroicocephalus genei",
+      "細嘴鷗",
+      "細嘴鸥"
+    ]
+  },
+  {
+    "speciesId": 186,
+    "aliases": [
+      "black-headed gull",
+      "chroicocephalus ridibundus",
+      "紅嘴鷗",
+      "紅嘴鸥"
+    ]
+  },
+  {
+    "speciesId": 187,
+    "aliases": [
+      "brown-headed gull",
+      "chroicocephalus brunnicephalus",
+      "棕頭鷗",
+      "棕頭鸥"
+    ]
+  },
+  {
+    "speciesId": 188,
+    "aliases": [
+      "little gull",
+      "hydrocoloeus minutus",
+      "小鷗",
+      "小鸥"
+    ]
+  },
+  {
+    "speciesId": 189,
+    "aliases": [
+      "franklin's gull",
+      "leucophaeus pipixcan"
+    ]
+  },
+  {
+    "speciesId": 190,
+    "aliases": [
+      "relict gull",
+      "ichthyaetus relictus",
+      "遺鷗",
+      "遺鸥"
+    ]
+  },
+  {
+    "speciesId": 191,
+    "aliases": [
+      "pallas's gull",
+      "ichthyaetus ichthyaetus",
+      "漁鷗",
+      "漁鸥"
+    ]
+  },
+  {
+    "speciesId": 192,
+    "aliases": [
+      "black-tailed gull",
+      "larus crassirostris",
+      "黑尾鷗",
+      "黑尾鸥"
+    ]
+  },
+  {
+    "speciesId": 193,
+    "aliases": [
+      "common gull",
+      "larus canus",
+      "海鷗",
+      "海鸥"
+    ]
+  },
+  {
+    "speciesId": 194,
+    "aliases": [
+      "short-billed gull",
+      "larus brachyrhynchus"
+    ]
+  },
+  {
+    "speciesId": 195,
+    "aliases": [
+      "ring-billed gull",
+      "larus delawarensis"
+    ]
+  },
+  {
+    "speciesId": 196,
+    "aliases": [
+      "herring gull",
+      "larus argentatus"
+    ]
+  },
+  {
+    "speciesId": 197,
+    "aliases": [
+      "caspian gull",
+      "larus cachinnans",
+      "黃腿銀鷗",
+      "黃腿銀鸥"
+    ]
+  },
+  {
+    "speciesId": 198,
+    "aliases": [
+      "iceland gull",
+      "larus glaucoides"
+    ]
+  },
+  {
+    "speciesId": 199,
+    "aliases": [
+      "lesser black-backed gull",
+      "larus fuscus",
+      "灰燕鵙",
+      "ashy woodswallow",
+      "artamus fuscus"
+    ]
+  },
+  {
+    "speciesId": 200,
+    "aliases": [
+      "slaty-backed gull",
+      "larus schistisagus",
+      "灰背鷗",
+      "灰背鸥"
+    ]
+  },
+  {
+    "speciesId": 201,
+    "aliases": [
+      "glaucous-winged gull",
+      "larus glaucescens",
+      "灰翅鷗",
+      "灰翅鸥"
+    ]
+  },
+  {
+    "speciesId": 202,
+    "aliases": [
+      "glaucous gull",
+      "larus hyperboreus",
+      "北極鷗",
+      "北極鸥"
+    ]
+  },
+  {
+    "speciesId": 203,
+    "aliases": [
+      "brown noddy",
+      "anous stolidus"
+    ]
+  },
+  {
+    "speciesId": 204,
+    "aliases": [
+      "sooty tern",
+      "onychoprion fuscatus",
+      "褐柳鶯",
+      "褐柳莺",
+      "dusky warbler",
+      "phylloscopus fuscatus"
+    ]
+  },
+  {
+    "speciesId": 205,
+    "aliases": [
+      "bridled tern",
+      "onychoprion anaethetus",
+      "褐翅燕鷗",
+      "褐翅燕鸥"
+    ]
+  },
+  {
+    "speciesId": 206,
+    "aliases": [
+      "aleutian tern",
+      "onychoprion aleuticus"
+    ]
+  },
+  {
+    "speciesId": 207,
+    "aliases": [
+      "gull-billed tern",
+      "gelochelidon nilotica",
+      "鷗嘴噪鷗",
+      "鸥嘴噪鸥"
+    ]
+  },
+  {
+    "speciesId": 208,
+    "aliases": [
+      "caspian tern",
+      "hydroprogne caspia",
+      "紅嘴巨鷗",
+      "紅嘴巨鸥"
+    ]
+  },
+  {
+    "speciesId": 209,
+    "aliases": [
+      "white-winged tern",
+      "chlidonias leucopterus",
+      "白翅浮鷗",
+      "白翅浮鸥"
+    ]
+  },
+  {
+    "speciesId": 210,
+    "aliases": [
+      "whiskered tern",
+      "chlidonias hybrida"
+    ]
+  },
+  {
+    "speciesId": 211,
+    "aliases": [
+      "roseate tern",
+      "sterna dougallii",
+      "粉紅燕鷗",
+      "粉紅燕鸥"
+    ]
+  },
+  {
+    "speciesId": 212,
+    "aliases": [
+      "black-naped tern",
+      "sterna sumatrana",
+      "黑枕燕鷗",
+      "黑枕燕鸥"
+    ]
+  },
+  {
+    "speciesId": 213,
+    "aliases": [
+      "common tern",
+      "sterna hirundo",
+      "普通燕鷗",
+      "普通燕鸥"
+    ]
+  },
+  {
+    "speciesId": 214,
+    "aliases": [
+      "great crested tern",
+      "thalasseus bergii",
+      "大鳳頭燕鷗",
+      "大鳳頭燕鸥"
+    ]
+  },
+  {
+    "speciesId": 215,
+    "aliases": [
+      "white-tailed tropicbird",
+      "phaethon lepturus",
+      "白尾鸏"
+    ]
+  },
+  {
+    "speciesId": 216,
+    "aliases": [
+      "red-throated loon",
+      "gavia stellata",
+      "紅喉潛鳥",
+      "紅喉潛鸟"
+    ]
+  },
+  {
+    "speciesId": 217,
+    "aliases": [
+      "pacific loon",
+      "gavia pacifica",
+      "太平洋潛鳥",
+      "太平洋潛鸟"
+    ]
+  },
+  {
+    "speciesId": 218,
+    "aliases": [
+      "yellow-billed loon",
+      "gavia adamsii",
+      "黃嘴潛鳥",
+      "黃嘴潛鸟"
+    ]
+  },
+  {
+    "speciesId": 219,
+    "aliases": [
+      "bulwer's petrel",
+      "bulweria bulwerii",
+      "褐燕鸌"
+    ]
+  },
+  {
+    "speciesId": 220,
+    "aliases": [
+      "streaked shearwater",
+      "calonectris leucomelas",
+      "白額鸌"
+    ]
+  },
+  {
+    "speciesId": 221,
+    "aliases": [
+      "flesh-footed shearwater",
+      "ardenna carneipes"
+    ]
+  },
+  {
+    "speciesId": 222,
+    "aliases": [
+      "wedge-tailed shearwater",
+      "ardenna pacificus",
+      "楔尾鸌"
+    ]
+  },
+  {
+    "speciesId": 223,
+    "aliases": [
+      "short-tailed shearwater",
+      "ardenna tenuirostris",
+      "短尾鸌"
+    ]
+  },
+  {
+    "speciesId": 224,
+    "aliases": [
+      "black stork",
+      "ciconia nigra",
+      "黑鸛",
+      "黑鹳"
+    ]
+  },
+  {
+    "speciesId": 225,
+    "aliases": [
+      "oriental stork",
+      "ciconia boyciana",
+      "東方白鸛",
+      "東方白鹳"
+    ]
+  },
+  {
+    "speciesId": 226,
+    "aliases": [
+      "lesser frigatebird",
+      "fregata ariel",
+      "白斑軍艦鳥",
+      "白斑軍艦鸟"
+    ]
+  },
+  {
+    "speciesId": 227,
+    "aliases": [
+      "christmas island frigatebird",
+      "fregata andrewsi",
+      "白腹軍艦鳥",
+      "白腹軍艦鸟"
+    ]
+  },
+  {
+    "speciesId": 228,
+    "aliases": [
+      "great frigatebird",
+      "fregata minor",
+      "黑腹軍艦鳥",
+      "黑腹軍艦鸟",
+      "japanese tit",
+      "parus minor"
+    ]
+  },
+  {
+    "speciesId": 229,
+    "aliases": [
+      "masked booby",
+      "sula dactylatra",
+      "藍臉鰹鳥",
+      "藍臉鰹鸟"
+    ]
+  },
+  {
+    "speciesId": 230,
+    "aliases": [
+      "brown booby",
+      "sula leucogaster",
+      "褐鰹鳥",
+      "褐鰹鸟"
+    ]
+  },
+  {
+    "speciesId": 231,
+    "aliases": [
+      "red-footed booby",
+      "sula sula",
+      "紅腳鰹鳥",
+      "紅腳鰹鸟"
+    ]
+  },
+  {
+    "speciesId": 232,
+    "aliases": [
+      "great cormorant",
+      "phalacrocorax carbo",
+      "普通鸕鷀"
+    ]
+  },
+  {
+    "speciesId": 233,
+    "aliases": [
+      "japanese cormorant",
+      "phalacrocorax capillatus",
+      "綠背鸕鷀"
+    ]
+  },
+  {
+    "speciesId": 234,
+    "aliases": [
+      "dalmatian pelican",
+      "pelecanus crispus",
+      "卷羽鵜鶘"
+    ]
+  },
+  {
+    "speciesId": 235,
+    "aliases": [
+      "great bittern",
+      "botaurus stellaris",
+      "大麻鳽"
+    ]
+  },
+  {
+    "speciesId": 236,
+    "aliases": [
+      "yellow bittern",
+      "ixobrychus sinensis",
+      "黃斑葦鳽",
+      "white-shouldered starling",
+      "sturnia sinensis"
+    ]
+  },
+  {
+    "speciesId": 237,
+    "aliases": [
+      "schrenck's bittern",
+      "ixobrychus eurhythmus",
+      "紫背葦鳽"
+    ]
+  },
+  {
+    "speciesId": 238,
+    "aliases": [
+      "cinnamon bittern",
+      "ixobrychus cinnamomeus",
+      "栗葦鳽",
+      "russet sparrow",
+      "passer cinnamomeus"
+    ]
+  },
+  {
+    "speciesId": 239,
+    "aliases": [
+      "black bittern",
+      "ixobrychus flavicollis",
+      "黑鳽"
+    ]
+  },
+  {
+    "speciesId": 240,
+    "aliases": [
+      "gray heron",
+      "ardea cinerea",
+      "蒼鷺",
+      "蒼鹭"
+    ]
+  },
+  {
+    "speciesId": 241,
+    "aliases": [
+      "purple heron",
+      "ardea purpurea",
+      "草鷺",
+      "草鹭"
+    ]
+  },
+  {
+    "speciesId": 242,
+    "aliases": [
+      "great egret",
+      "ardea alba",
+      "大白鷺",
+      "大白鹭"
+    ]
+  },
+  {
+    "speciesId": 243,
+    "aliases": [
+      "intermediate egret",
+      "ardea intermedia",
+      "中白鷺",
+      "中白鹭"
+    ]
+  },
+  {
+    "speciesId": 244,
+    "aliases": [
+      "chinese egret",
+      "egretta eulophotes",
+      "黃嘴白鷺",
+      "黃嘴白鹭"
+    ]
+  },
+  {
+    "speciesId": 245,
+    "aliases": [
+      "little egret",
+      "egretta garzetta",
+      "小白鷺",
+      "小白鹭"
+    ]
+  },
+  {
+    "speciesId": 246,
+    "aliases": [
+      "pacific reef-heron",
+      "egretta sacra",
+      "岩鷺",
+      "岩鹭"
+    ]
+  },
+  {
+    "speciesId": 247,
+    "aliases": [
+      "cattle egret",
+      "bubulcus ibis",
+      "牛背鷺",
+      "牛背鹭"
+    ]
+  },
+  {
+    "speciesId": 248,
+    "aliases": [
+      "chinese pond-heron",
+      "ardeola bacchus",
+      "池鷺",
+      "池鹭"
+    ]
+  },
+  {
+    "speciesId": 249,
+    "aliases": [
+      "black-crowned night-heron",
+      "nycticorax nycticorax",
+      "夜鷺",
+      "夜鹭"
+    ]
+  },
+  {
+    "speciesId": 250,
+    "aliases": [
+      "japanese night-heron",
+      "gorsachius goisagi",
+      "栗頭鳽"
+    ]
+  },
+  {
+    "speciesId": 251,
+    "aliases": [
+      "malayan night-heron",
+      "gorsachius melanolophus",
+      "黑冠鳽"
+    ]
+  },
+  {
+    "speciesId": 252,
+    "aliases": [
+      "black-headed ibis",
+      "threskiornis melanocephalus"
+    ]
+  },
+  {
+    "speciesId": 253,
+    "aliases": [
+      "eurasian spoonbill",
+      "platalea leucorodia",
+      "白琵鷺",
+      "白琵鹭"
+    ]
+  },
+  {
+    "speciesId": 254,
+    "aliases": [
+      "black-faced spoonbill",
+      "platalea minor",
+      "黑臉琵鷺",
+      "黑臉琵鹭"
+    ]
+  },
+  {
+    "speciesId": 255,
+    "aliases": [
+      "osprey",
+      "pandion haliaetus",
+      "魚鷹",
+      "魚鹰"
+    ]
+  },
+  {
+    "speciesId": 256,
+    "aliases": [
+      "black-winged kite",
+      "elanus caeruleus",
+      "黑翅鳶",
+      "黑翅鸢"
+    ]
+  },
+  {
+    "speciesId": 257,
+    "aliases": [
+      "oriental honey-buzzard",
+      "pernis ptilorhynchus"
+    ]
+  },
+  {
+    "speciesId": 258,
+    "aliases": [
+      "black baza",
+      "aviceda leuphotes",
+      "黑冠鵑隼",
+      "黑冠鹃隼"
+    ]
+  },
+  {
+    "speciesId": 259,
+    "aliases": [
+      "cinereous vulture",
+      "aegypius monachus",
+      "禿鷲",
+      "禿鹫"
+    ]
+  },
+  {
+    "speciesId": 260,
+    "aliases": [
+      "crested serpent-eagle",
+      "spilornis cheela",
+      "蛇鵰",
+      "蛇雕"
+    ]
+  },
+  {
+    "speciesId": 261,
+    "aliases": [
+      "greater spotted eagle",
+      "clanga clanga",
+      "烏鵰",
+      "烏雕"
+    ]
+  },
+  {
+    "speciesId": 262,
+    "aliases": [
+      "imperial eagle",
+      "aquila heliaca",
+      "白肩鵰",
+      "白肩雕"
+    ]
+  },
+  {
+    "speciesId": 263,
+    "aliases": [
+      "bonelli's eagle",
+      "aquila fasciata"
+    ]
+  },
+  {
+    "speciesId": 264,
+    "aliases": [
+      "eastern marsh-harrier",
+      "circus spilonotus",
+      "白腹鷂",
+      "白腹鹞",
+      "yellow-cheeked tit",
+      "machlolophus spilonotus"
+    ]
+  },
+  {
+    "speciesId": 265,
+    "aliases": [
+      "hen harrier",
+      "circus cyaneus"
+    ]
+  },
+  {
+    "speciesId": 266,
+    "aliases": [
+      "pied harrier",
+      "circus melanoleucos",
+      "鵲鷂",
+      "鹊鹞"
+    ]
+  },
+  {
+    "speciesId": 267,
+    "aliases": [
+      "crested goshawk",
+      "accipiter trivirgatus",
+      "鳳頭鷹",
+      "鳳頭鹰"
+    ]
+  },
+  {
+    "speciesId": 268,
+    "aliases": [
+      "chinese sparrowhawk",
+      "accipiter soloensis",
+      "赤腹鷹",
+      "赤腹鹰"
+    ]
+  },
+  {
+    "speciesId": 269,
+    "aliases": [
+      "japanese sparrowhawk",
+      "accipiter gularis",
+      "日本松雀鷹",
+      "日本松雀鹰"
+    ]
+  },
+  {
+    "speciesId": 270,
+    "aliases": [
+      "besra",
+      "accipiter virgatus",
+      "松雀鷹",
+      "松雀鹰"
+    ]
+  },
+  {
+    "speciesId": 271,
+    "aliases": [
+      "eurasian sparrowhawk",
+      "accipiter nisus",
+      "雀鷹",
+      "雀鹰"
+    ]
+  },
+  {
+    "speciesId": 272,
+    "aliases": [
+      "northern goshawk",
+      "accipiter gentilis",
+      "蒼鷹",
+      "蒼鹰"
+    ]
+  },
+  {
+    "speciesId": 273,
+    "aliases": [
+      "brahminy kite",
+      "haliastur indus",
+      "栗鳶",
+      "栗鸢"
+    ]
+  },
+  {
+    "speciesId": 274,
+    "aliases": [
+      "white-bellied sea-eagle",
+      "haliaeetus leucogaster",
+      "白腹海鵰",
+      "白腹海雕"
+    ]
+  },
+  {
+    "speciesId": 275,
+    "aliases": [
+      "common buzzard",
+      "buteo buteo",
+      "普通鵟"
+    ]
+  },
+  {
+    "speciesId": 276,
+    "aliases": [
+      "australasian grass-owl",
+      "tyto longimembris"
+    ]
+  },
+  {
+    "speciesId": 277,
+    "aliases": [
+      "collared scops-owl",
+      "otus lettia"
+    ]
+  },
+  {
+    "speciesId": 278,
+    "aliases": [
+      "sunda scops-owl",
+      "otus lempiji"
+    ]
+  },
+  {
+    "speciesId": 279,
+    "aliases": [
+      "oriental scops-owl",
+      "otus sunia",
+      "紅角鴞",
+      "紅角鸮"
+    ]
+  },
+  {
+    "speciesId": 280,
+    "aliases": [
+      "mountain scops owl",
+      "otus spilocephalus"
+    ]
+  },
+  {
+    "speciesId": 281,
+    "aliases": [
+      "eurasian eagle-owl",
+      "bubo bubo",
+      "鵰鴞",
+      "雕鸮"
+    ]
+  },
+  {
+    "speciesId": 282,
+    "aliases": [
+      "brown fish-owl",
+      "ketupa zeylonensis",
+      "褐魚鴞",
+      "褐魚鸮"
+    ]
+  },
+  {
+    "speciesId": 283,
+    "aliases": [
+      "asian barred owlet",
+      "glaucidium cuculoides",
+      "斑頭鵂鶹"
+    ]
+  },
+  {
+    "speciesId": 284,
+    "aliases": [
+      "collared owlet",
+      "taenioptynx brodiei"
+    ]
+  },
+  {
+    "speciesId": 285,
+    "aliases": [
+      "brown wood-owl",
+      "strix leptogrammica",
+      "褐林鴞",
+      "褐林鸮"
+    ]
+  },
+  {
+    "speciesId": 286,
+    "aliases": [
+      "short-eared owl",
+      "asio flammeus",
+      "短耳鴞",
+      "短耳鸮"
+    ]
+  },
+  {
+    "speciesId": 287,
+    "aliases": [
+      "brown boobook",
+      "ninox scutulata",
+      "鷹鴞",
+      "鹰鸮"
+    ]
+  },
+  {
+    "speciesId": 288,
+    "aliases": [
+      "eurasian hoopoe",
+      "upupa epops",
+      "戴勝"
+    ]
+  },
+  {
+    "speciesId": 289,
+    "aliases": [
+      "common kingfisher",
+      "alcedo atthis",
+      "普通翠鳥",
+      "普通翠鸟"
+    ]
+  },
+  {
+    "speciesId": 290,
+    "aliases": [
+      "black-backed dwarf-kingfisher",
+      "ceyx erithaca"
+    ]
+  },
+  {
+    "speciesId": 291,
+    "aliases": [
+      "ruddy kingfisher",
+      "halcyon coromanda",
+      "赤翡翠"
+    ]
+  },
+  {
+    "speciesId": 292,
+    "aliases": [
+      "white-throated kingfisher",
+      "halcyon smyrnensis",
+      "白胸翡翠"
+    ]
+  },
+  {
+    "speciesId": 293,
+    "aliases": [
+      "black-capped kingfisher",
+      "halcyon pileata",
+      "藍翡翠"
+    ]
+  },
+  {
+    "speciesId": 294,
+    "aliases": [
+      "collared kingfisher",
+      "todirhamphus chloris",
+      "白領翡翠"
+    ]
+  },
+  {
+    "speciesId": 295,
+    "aliases": [
+      "pied kingfisher",
+      "ceryle rudis",
+      "斑魚狗"
+    ]
+  },
+  {
+    "speciesId": 296,
+    "aliases": [
+      "blue-throated bee-eater",
+      "merops viridis",
+      "藍喉蜂虎"
+    ]
+  },
+  {
+    "speciesId": 297,
+    "aliases": [
+      "blue-tailed bee-eater",
+      "merops philippinus",
+      "栗喉蜂虎"
+    ]
+  },
+  {
+    "speciesId": 298,
+    "aliases": [
+      "european roller",
+      "coracias garrulus",
+      "藍胸佛法僧"
+    ]
+  },
+  {
+    "speciesId": 299,
+    "aliases": [
+      "dollarbird",
+      "eurystomus orientalis",
+      "三寶鳥",
+      "三寶鸟"
+    ]
+  },
+  {
+    "speciesId": 300,
+    "aliases": [
+      "great barbet",
+      "psilopogon virens",
+      "大擬鴷"
+    ]
+  },
+  {
+    "speciesId": 301,
+    "aliases": [
+      "chinese barbet",
+      "psilopogon faber"
+    ]
+  },
+  {
+    "speciesId": 302,
+    "aliases": [
+      "eurasian wryneck",
+      "jynx torquilla",
+      "蟻鴷"
+    ]
+  },
+  {
+    "speciesId": 303,
+    "aliases": [
+      "speckled piculet",
+      "picumnus innominatus",
+      "斑姬啄木鳥",
+      "斑姬啄木鸟"
+    ]
+  },
+  {
+    "speciesId": 304,
+    "aliases": [
+      "rufous-bellied woodpecker",
+      "dendrocopos hyperythrus",
+      "棕腹啄木鳥",
+      "棕腹啄木鸟"
+    ]
+  },
+  {
+    "speciesId": 305,
+    "aliases": [
+      "bay woodpecker",
+      "blythipicus pyrrhotis",
+      "黃嘴栗啄木鳥",
+      "黃嘴栗啄木鸟"
+    ]
+  },
+  {
+    "speciesId": 306,
+    "aliases": [
+      "rufous woodpecker",
+      "micropternus brachyurus",
+      "栗啄木鳥",
+      "栗啄木鸟"
+    ]
+  },
+  {
+    "speciesId": 307,
+    "aliases": [
+      "gray-headed woodpecker",
+      "picus canus",
+      "灰頭綠啄木鳥",
+      "灰頭綠啄木鸟"
+    ]
+  },
+  {
+    "speciesId": 308,
+    "aliases": [
+      "eurasian kestrel",
+      "falco tinnunculus",
+      "紅隼"
+    ]
+  },
+  {
+    "speciesId": 309,
+    "aliases": [
+      "amur falcon",
+      "falco amurensis"
+    ]
+  },
+  {
+    "speciesId": 310,
+    "aliases": [
+      "eurasian hobby",
+      "falco subbuteo",
+      "燕隼"
+    ]
+  },
+  {
+    "speciesId": 311,
+    "aliases": [
+      "peregrine falcon",
+      "falco peregrinus",
+      "遊隼"
+    ]
+  },
+  {
+    "speciesId": 312,
+    "aliases": [
+      "alexandrine parakeet",
+      "psittacula eupatria"
+    ]
+  },
+  {
+    "speciesId": 313,
+    "aliases": [
+      "rose-ringed parakeet",
+      "psittacula krameri",
+      "紅領綠鸚鵡",
+      "紅領綠鹦鹉"
+    ]
+  },
+  {
+    "speciesId": 314,
+    "aliases": [
+      "blue-winged pitta",
+      "pitta moluccensis",
+      "藍翅八色鶇",
+      "藍翅八色鸫"
+    ]
+  },
+  {
+    "speciesId": 315,
+    "aliases": [
+      "fairy pitta",
+      "pitta nympha",
+      "仙八色鶇",
+      "仙八色鸫"
+    ]
+  },
+  {
+    "speciesId": 316,
+    "aliases": [
+      "gray-chinned minivet",
+      "pericrocotus solaris",
+      "灰喉山椒鳥",
+      "灰喉山椒鸟"
+    ]
+  },
+  {
+    "speciesId": 317,
+    "aliases": [
+      "scarlet minivet",
+      "pericrocotus speciosus"
+    ]
+  },
+  {
+    "speciesId": 318,
+    "aliases": [
+      "ryukyu minivet",
+      "pericrocotus tegimae"
+    ]
+  },
+  {
+    "speciesId": 319,
+    "aliases": [
+      "ashy minivet",
+      "pericrocotus divaricatus",
+      "灰山椒鳥",
+      "灰山椒鸟"
+    ]
+  },
+  {
+    "speciesId": 320,
+    "aliases": [
+      "brown-rumped minivet",
+      "pericrocotus cantonensis",
+      "小灰山椒鳥",
+      "小灰山椒鸟"
+    ]
+  },
+  {
+    "speciesId": 321,
+    "aliases": [
+      "rosy minivet",
+      "pericrocotus roseus",
+      "粉紅椋鳥",
+      "粉紅椋鸟",
+      "rosy starling",
+      "pastor roseus"
+    ]
+  },
+  {
+    "speciesId": 322,
+    "aliases": [
+      "black-winged cuckooshrike",
+      "lalage melaschistos",
+      "暗灰鵑鵙",
+      "暗灰鹃鵙"
+    ]
+  },
+  {
+    "speciesId": 323,
+    "aliases": [
+      "white-bellied erpornis",
+      "erpornis zantholeuca",
+      "白腹鳳鶥"
+    ]
+  },
+  {
+    "speciesId": 324,
+    "aliases": [
+      "black-naped oriole",
+      "oriolus chinensis",
+      "黑枕黃鸝"
+    ]
+  },
+  {
+    "speciesId": 325,
+    "aliases": [
+      "maroon oriole",
+      "oriolus traillii"
+    ]
+  },
+  {
+    "speciesId": 326,
+    "aliases": [
+      "silver oriole",
+      "oriolus mellianus"
+    ]
+  },
+  {
+    "speciesId": 327,
+    "aliases": [
+      "black drongo",
+      "dicrurus macrocercus",
+      "黑卷尾"
+    ]
+  },
+  {
+    "speciesId": 328,
+    "aliases": [
+      "ashy drongo",
+      "dicrurus leucophaeus",
+      "灰卷尾"
+    ]
+  },
+  {
+    "speciesId": 329,
+    "aliases": [
+      "crow-billed drongo",
+      "dicrurus annectens"
+    ]
+  },
+  {
+    "speciesId": 330,
+    "aliases": [
+      "hair-crested drongo",
+      "dicrurus hottentottus",
+      "髮冠卷尾"
+    ]
+  },
+  {
+    "speciesId": 331,
+    "aliases": [
+      "black-naped monarch",
+      "hypothymis azurea",
+      "黑枕王鶲",
+      "黑枕王鹟"
+    ]
+  },
+  {
+    "speciesId": 332,
+    "aliases": [
+      "japanese paradise-flycatcher",
+      "terpsiphone atrocaudata",
+      "紫壽帶"
+    ]
+  },
+  {
+    "speciesId": 333,
+    "aliases": [
+      "amur paradise-flycatcher",
+      "terpsiphone incei"
+    ]
+  },
+  {
+    "speciesId": 334,
+    "aliases": [
+      "tiger shrike",
+      "lanius tigrinus",
+      "虎紋伯勞"
+    ]
+  },
+  {
+    "speciesId": 335,
+    "aliases": [
+      "bull-headed shrike",
+      "lanius bucephalus",
+      "牛頭伯勞"
+    ]
+  },
+  {
+    "speciesId": 336,
+    "aliases": [
+      "red-backed shrike",
+      "lanius collurio",
+      "紅背伯勞"
+    ]
+  },
+  {
+    "speciesId": 337,
+    "aliases": [
+      "brown shrike",
+      "lanius cristatus",
+      "紅尾伯勞"
+    ]
+  },
+  {
+    "speciesId": 338,
+    "aliases": [
+      "long-tailed shrike",
+      "lanius schach",
+      "棕背伯勞"
+    ]
+  },
+  {
+    "speciesId": 339,
+    "aliases": [
+      "gray-backed shrike",
+      "lanius tephronotus"
+    ]
+  },
+  {
+    "speciesId": 340,
+    "aliases": [
+      "chinese gray shrike",
+      "lanius sphenocercus"
+    ]
+  },
+  {
+    "speciesId": 341,
+    "aliases": [
+      "eurasian jay",
+      "garrulus glandarius",
+      "松鴉",
+      "松鸦"
+    ]
+  },
+  {
+    "speciesId": 342,
+    "aliases": [
+      "azure-winged magpie",
+      "cyanopica cyanus"
+    ]
+  },
+  {
+    "speciesId": 343,
+    "aliases": [
+      "indochinese green-magpie",
+      "cissa hypoleuca"
+    ]
+  },
+  {
+    "speciesId": 344,
+    "aliases": [
+      "oriental magpie",
+      "pica serica"
+    ]
+  },
+  {
+    "speciesId": 345,
+    "aliases": [
+      "daurian jackdaw",
+      "corvus dauuricus",
+      "達烏里寒鴉",
+      "達烏里寒鸦"
+    ]
+  },
+  {
+    "speciesId": 346,
+    "aliases": [
+      "house crow",
+      "corvus splendens"
+    ]
+  },
+  {
+    "speciesId": 347,
+    "aliases": [
+      "rook",
+      "corvus frugilegus"
+    ]
+  },
+  {
+    "speciesId": 348,
+    "aliases": [
+      "carrion crow",
+      "corvus corone",
+      "小嘴烏鴉",
+      "小嘴烏鸦"
+    ]
+  },
+  {
+    "speciesId": 349,
+    "aliases": [
+      "large-billed crow",
+      "corvus macrorhynchos",
+      "大嘴烏鴉",
+      "大嘴烏鸦"
+    ]
+  },
+  {
+    "speciesId": 350,
+    "aliases": [
+      "collared crow",
+      "corvus torquatus",
+      "白頸鴉",
+      "白頸鸦"
+    ]
+  },
+  {
+    "speciesId": 351,
+    "aliases": [
+      "gray-headed canary-flycatcher",
+      "culicicapa ceylonensis",
+      "方尾鶲",
+      "方尾鹟"
+    ]
+  },
+  {
+    "speciesId": 352,
+    "aliases": [
+      "fire-capped tit",
+      "cephalopyrus flammiceps"
+    ]
+  },
+  {
+    "speciesId": 353,
+    "aliases": [
+      "yellow-bellied tit",
+      "periparus venustulus",
+      "黃腹山雀"
+    ]
+  },
+  {
+    "speciesId": 354,
+    "aliases": [
+      "varied tit",
+      "sittiparus varius",
+      "雜色山雀"
+    ]
+  },
+  {
+    "speciesId": 355,
+    "aliases": [
+      "chinese penduline-tit",
+      "remiz consobrinus",
+      "攀雀"
+    ]
+  },
+  {
+    "speciesId": 356,
+    "aliases": [
+      "mongolian short-toed lark",
+      "calandrella dukhunensis"
+    ]
+  },
+  {
+    "speciesId": 357,
+    "aliases": [
+      "eurasian skylark",
+      "alauda arvensis",
+      "雲雀"
+    ]
+  },
+  {
+    "speciesId": 358,
+    "aliases": [
+      "oriental skylark",
+      "alauda gulgula",
+      "小雲雀"
+    ]
+  },
+  {
+    "speciesId": 359,
+    "aliases": [
+      "yellow-bellied prinia",
+      "prinia flaviventris",
+      "黃腹山鷦鶯",
+      "黃腹山鷦莺"
+    ]
+  },
+  {
+    "speciesId": 360,
+    "aliases": [
+      "plain prinia",
+      "prinia inornata",
+      "純色山鷦鶯",
+      "純色山鷦莺"
+    ]
+  },
+  {
+    "speciesId": 361,
+    "aliases": [
+      "zitting cisticola",
+      "cisticola juncidis",
+      "棕扇尾鶯",
+      "棕扇尾莺"
+    ]
+  },
+  {
+    "speciesId": 362,
+    "aliases": [
+      "golden-headed cisticola",
+      "cisticola exilis",
+      "金頭扇尾鶯",
+      "金頭扇尾莺"
+    ]
+  },
+  {
+    "speciesId": 363,
+    "aliases": [
+      "thick-billed warbler",
+      "arundinax aedon",
+      "厚嘴葦鶯",
+      "厚嘴葦莺"
+    ]
+  },
+  {
+    "speciesId": 364,
+    "aliases": [
+      "booted warbler",
+      "iduna caligata"
+    ]
+  },
+  {
+    "speciesId": 365,
+    "aliases": [
+      "sykes's warbler",
+      "iduna rama",
+      "賽氏篱鶯",
+      "賽氏篱莺"
+    ]
+  },
+  {
+    "speciesId": 366,
+    "aliases": [
+      "black-browed reed warbler",
+      "acrocephalus bistrigiceps",
+      "黑眉葦鶯",
+      "黑眉葦莺"
+    ]
+  },
+  {
+    "speciesId": 367,
+    "aliases": [
+      "paddyfield warbler",
+      "acrocephalus agricola",
+      "稻田葦鶯",
+      "稻田葦莺"
+    ]
+  },
+  {
+    "speciesId": 368,
+    "aliases": [
+      "blunt-winged warbler",
+      "acrocephalus concinens",
+      "鈍翅葦鶯",
+      "鈍翅葦莺"
+    ]
+  },
+  {
+    "speciesId": 369,
+    "aliases": [
+      "manchurian reed warbler",
+      "acrocephalus tangorum",
+      "遠東葦鶯",
+      "遠東葦莺"
+    ]
+  },
+  {
+    "speciesId": 370,
+    "aliases": [
+      "blyth's reed warbler",
+      "acrocephalus dumetorum",
+      "布氏葦鶯",
+      "布氏葦莺"
+    ]
+  },
+  {
+    "speciesId": 371,
+    "aliases": [
+      "oriental reed warbler",
+      "acrocephalus orientalis",
+      "東方大葦鶯",
+      "東方大葦莺"
+    ]
+  },
+  {
+    "speciesId": 372,
+    "aliases": [
+      "gray's grasshopper warbler",
+      "helopsaltes fasciolatus"
+    ]
+  },
+  {
+    "speciesId": 373,
+    "aliases": [
+      "marsh grassbird",
+      "helopsaltes pryeri",
+      "斑背大尾鶯",
+      "斑背大尾莺"
+    ]
+  },
+  {
+    "speciesId": 374,
+    "aliases": [
+      "pallas's grasshopper warbler",
+      "helopsaltes certhiola",
+      "小蝗鶯",
+      "小蝗莺"
+    ]
+  },
+  {
+    "speciesId": 375,
+    "aliases": [
+      "middendorff's grasshopper warbler",
+      "helopsaltes ochotensis",
+      "北蝗鶯",
+      "北蝗莺"
+    ]
+  },
+  {
+    "speciesId": 376,
+    "aliases": [
+      "pleske's grasshopper warbler",
+      "helopsaltes pleskei",
+      "史氏蝗鶯",
+      "史氏蝗莺"
+    ]
+  },
+  {
+    "speciesId": 377,
+    "aliases": [
+      "lanceolated warbler",
+      "locustella lanceolata",
+      "矛紋蝗鶯",
+      "矛紋蝗莺"
+    ]
+  },
+  {
+    "speciesId": 378,
+    "aliases": [
+      "brown bush warbler",
+      "locustella luteoventris",
+      "棕褐短翅鶯",
+      "棕褐短翅莺"
+    ]
+  },
+  {
+    "speciesId": 379,
+    "aliases": [
+      "chinese bush warbler",
+      "locustella tacsanowskia"
+    ]
+  },
+  {
+    "speciesId": 380,
+    "aliases": [
+      "baikal bush warbler",
+      "locustella davidi",
+      "北短翅鶯",
+      "北短翅莺"
+    ]
+  },
+  {
+    "speciesId": 381,
+    "aliases": [
+      "russet bush warbler",
+      "locustella mandelli",
+      "高山短翅鶯",
+      "高山短翅莺"
+    ]
+  },
+  {
+    "speciesId": 382,
+    "aliases": [
+      "benguet bush warbler",
+      "locustella seebohmi"
+    ]
+  },
+  {
+    "speciesId": 383,
+    "aliases": [
+      "pygmy cupwing",
+      "pnoepyga pusilla",
+      "小鷦鶥"
+    ]
+  },
+  {
+    "speciesId": 384,
+    "aliases": [
+      "gray-throated martin",
+      "riparia chinensis",
+      "灰喉沙燕"
+    ]
+  },
+  {
+    "speciesId": 385,
+    "aliases": [
+      "bank swallow",
+      "riparia riparia"
+    ]
+  },
+  {
+    "speciesId": 386,
+    "aliases": [
+      "pale sand martin",
+      "riparia diluta",
+      "淡色沙燕"
+    ]
+  },
+  {
+    "speciesId": 387,
+    "aliases": [
+      "barn swallow",
+      "hirundo rustica",
+      "家燕"
+    ]
+  },
+  {
+    "speciesId": 388,
+    "aliases": [
+      "red-rumped swallow",
+      "cecropis daurica",
+      "金腰燕"
+    ]
+  },
+  {
+    "speciesId": 389,
+    "aliases": [
+      "common house-martin",
+      "delichon urbicum",
+      "白腹毛腳燕"
+    ]
+  },
+  {
+    "speciesId": 390,
+    "aliases": [
+      "asian house-martin",
+      "delichon dasypus",
+      "煙腹毛腳燕"
+    ]
+  },
+  {
+    "speciesId": 391,
+    "aliases": [
+      "sooty-headed bulbul",
+      "pycnonotus aurigaster",
+      "白喉紅臀鵯",
+      "白喉紅臀鹎"
+    ]
+  },
+  {
+    "speciesId": 392,
+    "aliases": [
+      "black bulbul",
+      "hypsipetes leucocephalus",
+      "黑短腳鵯",
+      "黑短腳鹎"
+    ]
+  },
+  {
+    "speciesId": 393,
+    "aliases": [
+      "brown-eared bulbul",
+      "hypsipetes amaurotis"
+    ]
+  },
+  {
+    "speciesId": 394,
+    "aliases": [
+      "chestnut bulbul",
+      "hemixos castanonotus",
+      "栗背短腳鵯",
+      "栗背短腳鹎"
+    ]
+  },
+  {
+    "speciesId": 395,
+    "aliases": [
+      "mountain bulbul",
+      "ixos mcclellandii",
+      "綠翅短腳鵯",
+      "綠翅短腳鹎"
+    ]
+  },
+  {
+    "speciesId": 396,
+    "aliases": [
+      "wood warbler",
+      "phylloscopus sibilatrix"
+    ]
+  },
+  {
+    "speciesId": 397,
+    "aliases": [
+      "yellow-browed warbler",
+      "phylloscopus inornatus",
+      "黃眉柳鶯",
+      "黃眉柳莺"
+    ]
+  },
+  {
+    "speciesId": 398,
+    "aliases": [
+      "hume's warbler",
+      "phylloscopus humei",
+      "淡眉柳鶯",
+      "淡眉柳莺"
+    ]
+  },
+  {
+    "speciesId": 399,
+    "aliases": [
+      "chinese leaf warbler",
+      "phylloscopus yunnanensis",
+      "雲南柳鶯",
+      "雲南柳莺"
+    ]
+  },
+  {
+    "speciesId": 400,
+    "aliases": [
+      "pallas's leaf warbler",
+      "phylloscopus proregulus",
+      "黃腰柳鶯",
+      "黃腰柳莺"
+    ]
+  },
+  {
+    "speciesId": 401,
+    "aliases": [
+      "radde's warbler",
+      "phylloscopus schwarzi",
+      "巨嘴柳鶯",
+      "巨嘴柳莺"
+    ]
+  },
+  {
+    "speciesId": 402,
+    "aliases": [
+      "yellow-streaked warbler",
+      "phylloscopus armandii",
+      "棕眉柳鶯",
+      "棕眉柳莺"
+    ]
+  },
+  {
+    "speciesId": 403,
+    "aliases": [
+      "willow warbler",
+      "phylloscopus trochilus",
+      "歐柳鶯",
+      "歐柳莺"
+    ]
+  },
+  {
+    "speciesId": 404,
+    "aliases": [
+      "mountain chiffchaff",
+      "phylloscopus sindianus"
+    ]
+  },
+  {
+    "speciesId": 405,
+    "aliases": [
+      "common chiffchaff",
+      "phylloscopus collybita",
+      "嘰喳柳鶯",
+      "嘰喳柳莺"
+    ]
+  },
+  {
+    "speciesId": 406,
+    "aliases": [
+      "eastern crowned warbler",
+      "phylloscopus coronatus",
+      "冕柳鶯",
+      "冕柳莺"
+    ]
+  },
+  {
+    "speciesId": 407,
+    "aliases": [
+      "ijima's leaf warbler",
+      "phylloscopus ijimae"
+    ]
+  },
+  {
+    "speciesId": 408,
+    "aliases": [
+      "gray-crowned warbler",
+      "phylloscopus tephrocephalus",
+      "灰冠鶲鶯",
+      "灰冠鹟莺"
+    ]
+  },
+  {
+    "speciesId": 409,
+    "aliases": [
+      "bianchi's warbler",
+      "phylloscopus valentini",
+      "比氏鶲鶯",
+      "比氏鹟莺"
+    ]
+  },
+  {
+    "speciesId": 410,
+    "aliases": [
+      "martens's warbler",
+      "phylloscopus omeiensis"
+    ]
+  },
+  {
+    "speciesId": 411,
+    "aliases": [
+      "alström's warbler",
+      "phylloscopus soror",
+      "純色尾鶲鶯",
+      "純色尾鹟莺"
+    ]
+  },
+  {
+    "speciesId": 412,
+    "aliases": [
+      "greenish warbler",
+      "phylloscopus trochiloides",
+      "暗綠柳鶯",
+      "暗綠柳莺"
+    ]
+  },
+  {
+    "speciesId": 413,
+    "aliases": [
+      "emei leaf warbler",
+      "phylloscopus emeiensis"
+    ]
+  },
+  {
+    "speciesId": 414,
+    "aliases": [
+      "pale-legged leaf warbler",
+      "phylloscopus tenellipes",
+      "淡腳柳鶯",
+      "淡腳柳莺"
+    ]
+  },
+  {
+    "speciesId": 415,
+    "aliases": [
+      "sakhalin leaf warbler",
+      "phylloscopus borealoides",
+      "日本淡腳柳鶯",
+      "日本淡腳柳莺"
+    ]
+  },
+  {
+    "speciesId": 416,
+    "aliases": [
+      "japanese leaf warbler",
+      "phylloscopus xanthodryas"
+    ]
+  },
+  {
+    "speciesId": 417,
+    "aliases": [
+      "arctic warbler",
+      "phylloscopus borealis",
+      "極北柳鶯",
+      "極北柳莺"
+    ]
+  },
+  {
+    "speciesId": 418,
+    "aliases": [
+      "chestnut-crowned warbler",
+      "phylloscopus castaniceps",
+      "栗耳鳳鶥"
+    ]
+  },
+  {
+    "speciesId": 419,
+    "aliases": [
+      "sulphur-breasted warbler",
+      "phylloscopus ricketti",
+      "黑眉柳鶯",
+      "黑眉柳莺"
+    ]
+  },
+  {
+    "speciesId": 420,
+    "aliases": [
+      "claudia's leaf warbler",
+      "phylloscopus claudiae"
+    ]
+  },
+  {
+    "speciesId": 421,
+    "aliases": [
+      "hartert's leaf warbler",
+      "phylloscopus goodsoni"
+    ]
+  },
+  {
+    "speciesId": 422,
+    "aliases": [
+      "kloss's leaf warbler",
+      "phylloscopus ogilviegranti"
+    ]
+  },
+  {
+    "speciesId": 423,
+    "aliases": [
+      "pale-footed bush warbler",
+      "urosphena pallidipes",
+      "淡腳樹鶯",
+      "淡腳樹莺"
+    ]
+  },
+  {
+    "speciesId": 424,
+    "aliases": [
+      "asian stubtail",
+      "urosphena squameiceps",
+      "鱗頭樹鶯",
+      "鱗頭樹莺"
+    ]
+  },
+  {
+    "speciesId": 425,
+    "aliases": [
+      "rufous-faced warbler",
+      "abroscopus albogularis",
+      "棕臉鶲鶯",
+      "棕臉鹟莺"
+    ]
+  },
+  {
+    "speciesId": 426,
+    "aliases": [
+      "mountain tailorbird",
+      "phyllergates cuculatus",
+      "栗頭縫葉鶯",
+      "栗頭縫葉莺"
+    ]
+  },
+  {
+    "speciesId": 427,
+    "aliases": [
+      "manchurian bush warbler",
+      "horornis borealis",
+      "遠東樹鶯",
+      "遠東樹莺"
+    ]
+  },
+  {
+    "speciesId": 428,
+    "aliases": [
+      "brownish-flanked bush warbler",
+      "horornis fortipes",
+      "強腳樹鶯",
+      "強腳樹莺"
+    ]
+  },
+  {
+    "speciesId": 429,
+    "aliases": [
+      "black-throated tit",
+      "aegithalos concinnus"
+    ]
+  },
+  {
+    "speciesId": 430,
+    "aliases": [
+      "lesser whitethroat",
+      "curruca curruca",
+      "白喉林鶯",
+      "白喉林莺"
+    ]
+  },
+  {
+    "speciesId": 431,
+    "aliases": [
+      "spot-breasted parrotbill",
+      "paradoxornis guttaticollis"
+    ]
+  },
+  {
+    "speciesId": 432,
+    "aliases": [
+      "vinous-throated parrotbill",
+      "sinosuthora webbiana"
+    ]
+  },
+  {
+    "speciesId": 433,
+    "aliases": [
+      "indochinese yuhina",
+      "staphida torqueola"
+    ]
+  },
+  {
+    "speciesId": 434,
+    "aliases": [
+      "black-chinned yuhina",
+      "yuhina nigrimenta"
+    ]
+  },
+  {
+    "speciesId": 435,
+    "aliases": [
+      "chestnut-flanked white-eye",
+      "zosterops erythropleurus",
+      "紅脇繡眼鳥",
+      "紅脇繡眼鸟"
+    ]
+  },
+  {
+    "speciesId": 436,
+    "aliases": [
+      "swinhoe's white-eye",
+      "zosterops simplex"
+    ]
+  },
+  {
+    "speciesId": 437,
+    "aliases": [
+      "rufous-capped babbler",
+      "stachyridopsis ruficeps",
+      "紅頭穗鶥"
+    ]
+  },
+  {
+    "speciesId": 438,
+    "aliases": [
+      "streak-breasted scimitar-babbler",
+      "pomatorhinus ruficollis",
+      "棕頸鈎嘴鶥"
+    ]
+  },
+  {
+    "speciesId": 439,
+    "aliases": [
+      "chinese grassbird",
+      "graminicola striatus",
+      "綠鷺",
+      "綠鹭"
+    ]
+  },
+  {
+    "speciesId": 440,
+    "aliases": [
+      "huet's fulvetta",
+      "alcippe hueti",
+      "黑眉雀鶥"
+    ]
+  },
+  {
+    "speciesId": 441,
+    "aliases": [
+      "blue-winged minla",
+      "minla cyanouroptera",
+      "藍翅希鶥"
+    ]
+  },
+  {
+    "speciesId": 442,
+    "aliases": [
+      "red-billed leiothrix",
+      "leiothrix lutea",
+      "紅嘴相思鳥",
+      "紅嘴相思鸟"
+    ]
+  },
+  {
+    "speciesId": 443,
+    "aliases": [
+      "silver-eared mesia",
+      "leiothrix argentauris",
+      "銀耳相思鳥",
+      "銀耳相思鸟"
+    ]
+  },
+  {
+    "speciesId": 444,
+    "aliases": [
+      "white-browed laughingthrush",
+      "pterorhinus sannio",
+      "白頰噪鶥"
+    ]
+  },
+  {
+    "speciesId": 445,
+    "aliases": [
+      "masked laughingthrush",
+      "pterorhinus perspicillatus",
+      "黑臉噪鶥"
+    ]
+  },
+  {
+    "speciesId": 446,
+    "aliases": [
+      "greater necklaced laughingthrush",
+      "pterorhinus pectoralis",
+      "黑領噪鶥"
+    ]
+  },
+  {
+    "speciesId": 447,
+    "aliases": [
+      "chinese babax",
+      "pterorhinus lanceolatus",
+      "矛紋草鶥"
+    ]
+  },
+  {
+    "speciesId": 448,
+    "aliases": [
+      "velvet-fronted nuthatch",
+      "sitta frontalis",
+      "絨額鳾",
+      "絨額䴓"
+    ]
+  },
+  {
+    "speciesId": 449,
+    "aliases": [
+      "european starling",
+      "sturnus vulgaris",
+      "紫翅椋鳥",
+      "紫翅椋鸟"
+    ]
+  },
+  {
+    "speciesId": 450,
+    "aliases": [
+      "daurian starling",
+      "agropsar sturninus",
+      "北椋鳥",
+      "北椋鸟"
+    ]
+  },
+  {
+    "speciesId": 451,
+    "aliases": [
+      "chestnut-cheeked starling",
+      "agropsar philippensis",
+      "紫背椋鳥",
+      "紫背椋鸟"
+    ]
+  },
+  {
+    "speciesId": 452,
+    "aliases": [
+      "chestnut-tailed starling",
+      "sturnia malabarica"
+    ]
+  },
+  {
+    "speciesId": 453,
+    "aliases": [
+      "red-billed starling",
+      "spodiopsar sericeus",
+      "絲光椋鳥",
+      "絲光椋鸟"
+    ]
+  },
+  {
+    "speciesId": 454,
+    "aliases": [
+      "white-cheeked starling",
+      "spodiopsar cineraceus",
+      "灰椋鳥",
+      "灰椋鸟"
+    ]
+  },
+  {
+    "speciesId": 455,
+    "aliases": [
+      "common myna",
+      "acridotheres tristis",
+      "家八哥"
+    ]
+  },
+  {
+    "speciesId": 456,
+    "aliases": [
+      "white's thrush",
+      "zoothera aurea"
+    ]
+  },
+  {
+    "speciesId": 457,
+    "aliases": [
+      "scaly thrush",
+      "zoothera dauma",
+      "虎斑地鶇",
+      "虎斑地鸫"
+    ]
+  },
+  {
+    "speciesId": 458,
+    "aliases": [
+      "siberian thrush",
+      "geokichla sibirica",
+      "白眉地鶇",
+      "白眉地鸫"
+    ]
+  },
+  {
+    "speciesId": 459,
+    "aliases": [
+      "orange-headed thrush",
+      "geokichla citrina",
+      "橙頭地鶇",
+      "橙頭地鸫"
+    ]
+  },
+  {
+    "speciesId": 460,
+    "aliases": [
+      "chinese thrush",
+      "otocichla mupinensis",
+      "寶興歌鶇",
+      "寶興歌鸫"
+    ]
+  },
+  {
+    "speciesId": 461,
+    "aliases": [
+      "eurasian blackbird",
+      "turdus merula",
+      "烏鶇",
+      "烏鸫"
+    ]
+  },
+  {
+    "speciesId": 462,
+    "aliases": [
+      "chinese blackbird",
+      "turdus mandarinus"
+    ]
+  },
+  {
+    "speciesId": 463,
+    "aliases": [
+      "japanese thrush",
+      "turdus cardis",
+      "烏灰鶇",
+      "烏灰鸫"
+    ]
+  },
+  {
+    "speciesId": 464,
+    "aliases": [
+      "gray-backed thrush",
+      "turdus hortulorum",
+      "灰背鶇",
+      "灰背鸫"
+    ]
+  },
+  {
+    "speciesId": 465,
+    "aliases": [
+      "eyebrowed thrush",
+      "turdus obscurus",
+      "白眉鶇",
+      "白眉鸫"
+    ]
+  },
+  {
+    "speciesId": 466,
+    "aliases": [
+      "brown-headed thrush",
+      "turdus chrysolaus",
+      "赤胸鶇",
+      "赤胸鸫"
+    ]
+  },
+  {
+    "speciesId": 467,
+    "aliases": [
+      "pale thrush",
+      "turdus pallidus",
+      "白腹鶇",
+      "白腹鸫"
+    ]
+  },
+  {
+    "speciesId": 468,
+    "aliases": [
+      "black-throated thrush",
+      "turdus atrogularis"
+    ]
+  },
+  {
+    "speciesId": 469,
+    "aliases": [
+      "red-throated thrush",
+      "turdus ruficollis",
+      "赤頸鶇",
+      "赤頸鸫"
+    ]
+  },
+  {
+    "speciesId": 470,
+    "aliases": [
+      "dusky thrush",
+      "turdus eunomus"
+    ]
+  },
+  {
+    "speciesId": 471,
+    "aliases": [
+      "naumann's thrush",
+      "turdus naumanni",
+      "斑鶇",
+      "斑鸫"
+    ]
+  },
+  {
+    "speciesId": 472,
+    "aliases": [
+      "gray-streaked flycatcher",
+      "muscicapa griseisticta",
+      "灰紋鶲",
+      "灰紋鹟"
+    ]
+  },
+  {
+    "speciesId": 473,
+    "aliases": [
+      "dark-sided flycatcher",
+      "muscicapa sibirica",
+      "烏鶲",
+      "烏鹟"
+    ]
+  },
+  {
+    "speciesId": 474,
+    "aliases": [
+      "ferruginous flycatcher",
+      "muscicapa ferruginea",
+      "棕尾褐鶲",
+      "棕尾褐鹟"
+    ]
+  },
+  {
+    "speciesId": 475,
+    "aliases": [
+      "asian brown flycatcher",
+      "muscicapa dauurica",
+      "北灰鶲",
+      "北灰鹟"
+    ]
+  },
+  {
+    "speciesId": 476,
+    "aliases": [
+      "brown-breasted flycatcher",
+      "muscicapa muttui",
+      "褐胸鶲",
+      "褐胸鹟"
+    ]
+  },
+  {
+    "speciesId": 477,
+    "aliases": [
+      "white-rumped shama",
+      "copsychus malabaricus",
+      "灰頭椋鳥",
+      "灰頭椋鸟"
+    ]
+  },
+  {
+    "speciesId": 478,
+    "aliases": [
+      "hainan blue flycatcher",
+      "cyornis hainanus",
+      "海南藍仙鶲",
+      "海南藍仙鹟"
+    ]
+  },
+  {
+    "speciesId": 479,
+    "aliases": [
+      "chinese blue flycatcher",
+      "cyornis glaucicomans",
+      "中華仙鶲",
+      "中華仙鹟"
+    ]
+  },
+  {
+    "speciesId": 480,
+    "aliases": [
+      "hill blue flycatcher",
+      "cyornis whitei"
+    ]
+  },
+  {
+    "speciesId": 481,
+    "aliases": [
+      "brown-chested jungle flycatcher",
+      "cyornis brunneatus"
+    ]
+  },
+  {
+    "speciesId": 482,
+    "aliases": [
+      "small niltava",
+      "niltava macgrigoriae",
+      "小仙鶲",
+      "小仙鹟"
+    ]
+  },
+  {
+    "speciesId": 483,
+    "aliases": [
+      "fujian niltava",
+      "niltava davidi",
+      "棕腹大仙鶲",
+      "棕腹大仙鹟"
+    ]
+  },
+  {
+    "speciesId": 484,
+    "aliases": [
+      "blue-and-white flycatcher",
+      "cyanoptila cyanomelana",
+      "白腹藍姬鶲",
+      "白腹藍姬鹟"
+    ]
+  },
+  {
+    "speciesId": 485,
+    "aliases": [
+      "zappey's flycatcher",
+      "cyanoptila cumatilis",
+      "琉璃藍鶲",
+      "琉璃藍鹟"
+    ]
+  },
+  {
+    "speciesId": 486,
+    "aliases": [
+      "verditer flycatcher",
+      "eumyias thalassinus"
+    ]
+  },
+  {
+    "speciesId": 487,
+    "aliases": [
+      "lesser shortwing",
+      "brachypteryx leucophris"
+    ]
+  },
+  {
+    "speciesId": 488,
+    "aliases": [
+      "rufous-tailed robin",
+      "larvivora sibilans",
+      "紅尾歌鴝"
+    ]
+  },
+  {
+    "speciesId": 489,
+    "aliases": [
+      "japanese robin",
+      "larvivora akahige",
+      "日本歌鴝"
+    ]
+  },
+  {
+    "speciesId": 490,
+    "aliases": [
+      "siberian blue robin",
+      "larvivora cyane",
+      "藍歌鴝"
+    ]
+  },
+  {
+    "speciesId": 491,
+    "aliases": [
+      "bluethroat",
+      "luscinia svecica",
+      "藍喉歌鴝"
+    ]
+  },
+  {
+    "speciesId": 492,
+    "aliases": [
+      "blue whistling-thrush",
+      "myophonus caeruleus",
+      "紫嘯鶇",
+      "紫嘯鸫"
+    ]
+  },
+  {
+    "speciesId": 493,
+    "aliases": [
+      "white-crowned forktail",
+      "enicurus leschenaulti"
+    ]
+  },
+  {
+    "speciesId": 494,
+    "aliases": [
+      "slaty-backed forktail",
+      "enicurus schistaceus",
+      "灰背燕尾"
+    ]
+  },
+  {
+    "speciesId": 495,
+    "aliases": [
+      "siberian rubythroat",
+      "calliope calliope",
+      "紅喉歌鴝"
+    ]
+  },
+  {
+    "speciesId": 496,
+    "aliases": [
+      "white-tailed robin",
+      "myiomela leucura"
+    ]
+  },
+  {
+    "speciesId": 497,
+    "aliases": [
+      "red-flanked bluetail",
+      "tarsiger cyanurus",
+      "紅脇藍尾鴝"
+    ]
+  },
+  {
+    "speciesId": 498,
+    "aliases": [
+      "yellow-rumped flycatcher",
+      "ficedula zanthopygia",
+      "白眉姬鶲",
+      "白眉姬鹟"
+    ]
+  },
+  {
+    "speciesId": 499,
+    "aliases": [
+      "green-backed flycatcher",
+      "ficedula elisae",
+      "綠背姬鶲",
+      "綠背姬鹟"
+    ]
+  },
+  {
+    "speciesId": 500,
+    "aliases": [
+      "narcissus flycatcher",
+      "ficedula narcissina",
+      "黃眉姬鶲",
+      "黃眉姬鹟"
+    ]
+  },
+  {
+    "speciesId": 501,
+    "aliases": [
+      "ryuku flycatcher",
+      "ficedula owstoni"
+    ]
+  },
+  {
+    "speciesId": 502,
+    "aliases": [
+      "mugimaki flycatcher",
+      "ficedula mugimaki",
+      "鴝姬鶲",
+      "鴝姬鹟"
+    ]
+  },
+  {
+    "speciesId": 503,
+    "aliases": [
+      "slaty-backed flycatcher",
+      "ficedula erithacus"
+    ]
+  },
+  {
+    "speciesId": 504,
+    "aliases": [
+      "rufous-gorgeted flycatcher",
+      "ficedula strophiata",
+      "橙胸姬鶲",
+      "橙胸姬鹟"
+    ]
+  },
+  {
+    "speciesId": 505,
+    "aliases": [
+      "ultramarine flycatcher",
+      "ficedula superciliaris"
+    ]
+  },
+  {
+    "speciesId": 506,
+    "aliases": [
+      "taiga flycatcher",
+      "ficedula albicilla",
+      "紅喉姬鶲",
+      "紅喉姬鹟"
+    ]
+  },
+  {
+    "speciesId": 507,
+    "aliases": [
+      "red-breasted flycatcher",
+      "ficedula parva",
+      "紅胸姬鶲",
+      "紅胸姬鹟"
+    ]
+  },
+  {
+    "speciesId": 508,
+    "aliases": [
+      "plumbeous redstart",
+      "phoenicurus fuliginosus",
+      "紅尾水鴝"
+    ]
+  },
+  {
+    "speciesId": 509,
+    "aliases": [
+      "hodgson's redstart",
+      "phoenicurus hodgsoni",
+      "黑喉紅尾鴝"
+    ]
+  },
+  {
+    "speciesId": 510,
+    "aliases": [
+      "black redstart",
+      "phoenicurus ochruros",
+      "赭紅尾鴝"
+    ]
+  },
+  {
+    "speciesId": 511,
+    "aliases": [
+      "daurian redstart",
+      "phoenicurus auroreus",
+      "北紅尾鴝"
+    ]
+  },
+  {
+    "speciesId": 512,
+    "aliases": [
+      "chestnut-bellied rock-thrush",
+      "monticola rufiventris",
+      "栗腹磯鶇",
+      "栗腹磯鸫"
+    ]
+  },
+  {
+    "speciesId": 513,
+    "aliases": [
+      "white-throated rock-thrush",
+      "monticola gularis",
+      "白喉磯鶇",
+      "白喉磯鸫"
+    ]
+  },
+  {
+    "speciesId": 514,
+    "aliases": [
+      "blue rock-thrush",
+      "monticola solitarius",
+      "藍磯鶇",
+      "藍磯鸫"
+    ]
+  },
+  {
+    "speciesId": 515,
+    "aliases": [
+      "siberian stonechat",
+      "saxicola maurus"
+    ]
+  },
+  {
+    "speciesId": 516,
+    "aliases": [
+      "gray bushchat",
+      "saxicola ferreus"
+    ]
+  },
+  {
+    "speciesId": 517,
+    "aliases": [
+      "pied wheatear",
+      "oenanthe pleschanka"
+    ]
+  },
+  {
+    "speciesId": 518,
+    "aliases": [
+      "japanese waxwing",
+      "bombycilla japonica",
+      "小太平鳥",
+      "小太平鸟"
+    ]
+  },
+  {
+    "speciesId": 519,
+    "aliases": [
+      "plain flowerpecker",
+      "dicaeum minullum"
+    ]
+  },
+  {
+    "speciesId": 520,
+    "aliases": [
+      "fire-breasted flowerpecker",
+      "dicaeum ignipectus",
+      "紅胸啄花鳥",
+      "紅胸啄花鸟"
+    ]
+  },
+  {
+    "speciesId": 521,
+    "aliases": [
+      "scarlet-backed flowerpecker",
+      "dicaeum cruentatum",
+      "朱背啄花鳥",
+      "朱背啄花鸟"
+    ]
+  },
+  {
+    "speciesId": 522,
+    "aliases": [
+      "mrs. gould's sunbird",
+      "aethopyga gouldiae",
+      "藍喉太陽鳥",
+      "藍喉太陽鸟"
+    ]
+  },
+  {
+    "speciesId": 523,
+    "aliases": [
+      "baya weaver",
+      "ploceus philippinus",
+      "黃胸織雀"
+    ]
+  },
+  {
+    "speciesId": 524,
+    "aliases": [
+      "scaly-breasted munia",
+      "lonchura punctulata",
+      "斑文鳥",
+      "斑文鸟"
+    ]
+  },
+  {
+    "speciesId": 525,
+    "aliases": [
+      "chestnut munia",
+      "lonchura atricapilla",
+      "栗腹文鳥",
+      "栗腹文鸟"
+    ]
+  },
+  {
+    "speciesId": 526,
+    "aliases": [
+      "house sparrow",
+      "passer domesticus"
+    ]
+  },
+  {
+    "speciesId": 527,
+    "aliases": [
+      "forest wagtail",
+      "dendronanthus indicus",
+      "山鶺鴒",
+      "山鹡鸰"
+    ]
+  },
+  {
+    "speciesId": 528,
+    "aliases": [
+      "gray wagtail",
+      "motacilla cinerea",
+      "灰鶺鴒",
+      "灰鹡鸰"
+    ]
+  },
+  {
+    "speciesId": 529,
+    "aliases": [
+      "western yellow wagtail",
+      "motacilla flava",
+      "黃鶺鴒",
+      "黃鹡鸰"
+    ]
+  },
+  {
+    "speciesId": 530,
+    "aliases": [
+      "eastern yellow wagtail",
+      "motacilla tschutschensis"
+    ]
+  },
+  {
+    "speciesId": 531,
+    "aliases": [
+      "citrine wagtail",
+      "motacilla citreola",
+      "黃頭鶺鴒",
+      "黃頭鹡鸰"
+    ]
+  },
+  {
+    "speciesId": 532,
+    "aliases": [
+      "white wagtail",
+      "motacilla alba",
+      "白鶺鴒",
+      "白鹡鸰"
+    ]
+  },
+  {
+    "speciesId": 533,
+    "aliases": [
+      "richard's pipit",
+      "anthus richardi",
+      "田鷚"
+    ]
+  },
+  {
+    "speciesId": 534,
+    "aliases": [
+      "blyth's pipit",
+      "anthus godlewskii",
+      "布氏鷚"
+    ]
+  },
+  {
+    "speciesId": 535,
+    "aliases": [
+      "upland pipit",
+      "anthus sylvanus",
+      "山鷚"
+    ]
+  },
+  {
+    "speciesId": 536,
+    "aliases": [
+      "rosy pipit",
+      "anthus roseatus",
+      "粉紅胸鷚"
+    ]
+  },
+  {
+    "speciesId": 537,
+    "aliases": [
+      "tree pipit",
+      "anthus trivialis"
+    ]
+  },
+  {
+    "speciesId": 538,
+    "aliases": [
+      "olive-backed pipit",
+      "anthus hodgsoni",
+      "樹鷚"
+    ]
+  },
+  {
+    "speciesId": 539,
+    "aliases": [
+      "pechora pipit",
+      "anthus gustavi",
+      "北鷚"
+    ]
+  },
+  {
+    "speciesId": 540,
+    "aliases": [
+      "red-throated pipit",
+      "anthus cervinus",
+      "紅喉鷚"
+    ]
+  },
+  {
+    "speciesId": 541,
+    "aliases": [
+      "water pipit",
+      "anthus spinoletta",
+      "水鷚"
+    ]
+  },
+  {
+    "speciesId": 542,
+    "aliases": [
+      "american pipit",
+      "anthus rubescens",
+      "黃腹鷚"
+    ]
+  },
+  {
+    "speciesId": 543,
+    "aliases": [
+      "brambling",
+      "fringilla montifringilla",
+      "燕雀"
+    ]
+  },
+  {
+    "speciesId": 544,
+    "aliases": [
+      "hawfinch",
+      "coccothraustes coccothraustes",
+      "錫嘴雀"
+    ]
+  },
+  {
+    "speciesId": 545,
+    "aliases": [
+      "yellow-billed grosbeak",
+      "eophona migratoria",
+      "黑尾蠟嘴雀"
+    ]
+  },
+  {
+    "speciesId": 546,
+    "aliases": [
+      "japanese grosbeak",
+      "eophona personata",
+      "黑頭蠟嘴雀"
+    ]
+  },
+  {
+    "speciesId": 547,
+    "aliases": [
+      "common rosefinch",
+      "carpodacus erythrinus",
+      "普通朱雀"
+    ]
+  },
+  {
+    "speciesId": 548,
+    "aliases": [
+      "oriental greenfinch",
+      "chloris sinica",
+      "金翅雀"
+    ]
+  },
+  {
+    "speciesId": 549,
+    "aliases": [
+      "eurasian siskin",
+      "spinus spinus",
+      "黃雀"
+    ]
+  },
+  {
+    "speciesId": 550,
+    "aliases": [
+      "lapland longspur",
+      "calcarius lapponicus"
+    ]
+  },
+  {
+    "speciesId": 551,
+    "aliases": [
+      "crested bunting",
+      "emberiza lathami",
+      "鳳頭鵐",
+      "鳳頭鹀"
+    ]
+  },
+  {
+    "speciesId": 552,
+    "aliases": [
+      "black-headed bunting",
+      "emberiza melanocephala",
+      "黑頭鵐",
+      "黑頭鹀"
+    ]
+  },
+  {
+    "speciesId": 553,
+    "aliases": [
+      "red-headed bunting",
+      "emberiza bruniceps",
+      "褐頭鵐",
+      "褐頭鹀"
+    ]
+  },
+  {
+    "speciesId": 554,
+    "aliases": [
+      "chestnut-eared bunting",
+      "emberiza fucata",
+      "栗耳鵐",
+      "栗耳鹀"
+    ]
+  },
+  {
+    "speciesId": 555,
+    "aliases": [
+      "pine bunting",
+      "emberiza leucocephalos"
+    ]
+  },
+  {
+    "speciesId": 556,
+    "aliases": [
+      "ortolan bunting",
+      "emberiza hortulana",
+      "圃鵐",
+      "圃鹀"
+    ]
+  },
+  {
+    "speciesId": 557,
+    "aliases": [
+      "slaty bunting",
+      "emberiza siemsseni",
+      "藍鵐",
+      "藍鹀"
+    ]
+  },
+  {
+    "speciesId": 558,
+    "aliases": [
+      "yellow-throated bunting",
+      "emberiza elegans",
+      "黃喉鵐",
+      "黃喉鹀"
+    ]
+  },
+  {
+    "speciesId": 559,
+    "aliases": [
+      "ochre-rumped bunting",
+      "emberiza yessoensis",
+      "紅頸葦鵐",
+      "紅頸葦鹀"
+    ]
+  },
+  {
+    "speciesId": 560,
+    "aliases": [
+      "pallas's bunting",
+      "emberiza pallasi",
+      "葦鵐",
+      "葦鹀"
+    ]
+  },
+  {
+    "speciesId": 561,
+    "aliases": [
+      "reed bunting",
+      "emberiza schoeniclus",
+      "蘆鵐",
+      "蘆鹀"
+    ]
+  },
+  {
+    "speciesId": 562,
+    "aliases": [
+      "yellow-breasted bunting",
+      "emberiza aureola",
+      "黃胸鵐",
+      "黃胸鹀"
+    ]
+  },
+  {
+    "speciesId": 563,
+    "aliases": [
+      "little bunting",
+      "emberiza pusilla",
+      "小鵐",
+      "小鹀"
+    ]
+  },
+  {
+    "speciesId": 564,
+    "aliases": [
+      "rustic bunting",
+      "emberiza rustica",
+      "田鵐",
+      "田鹀"
+    ]
+  },
+  {
+    "speciesId": 565,
+    "aliases": [
+      "yellow bunting",
+      "emberiza sulphurata",
+      "硫黃鵐",
+      "硫黃鹀"
+    ]
+  },
+  {
+    "speciesId": 566,
+    "aliases": [
+      "black-faced bunting",
+      "emberiza spodocephala",
+      "灰頭鵐",
+      "灰頭鹀"
+    ]
+  },
+  {
+    "speciesId": 567,
+    "aliases": [
+      "chestnut bunting",
+      "emberiza rutila",
+      "栗鵐",
+      "栗鹀"
+    ]
+  },
+  {
+    "speciesId": 568,
+    "aliases": [
+      "yellow-browed bunting",
+      "emberiza chrysophrys",
+      "黃眉鵐",
+      "黃眉鹀"
+    ]
+  },
+  {
+    "speciesId": 569,
+    "aliases": [
+      "tristram's bunting",
+      "emberiza tristrami",
+      "白眉鵐",
+      "白眉鹀"
+    ]
+  }
+]
