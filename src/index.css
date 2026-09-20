@@ -143,3 +143,17 @@ body {
               radial-gradient(ellipse at 70% 80%, rgba(0,240,255,0.06) 0%, transparent 50%),
               linear-gradient(180deg, rgba(255,255,255,0.03) 0%, transparent 100%);
 }
+
+/* Shared mobile shell: preserve the v3 layout while respecting browser bars/notches. */
+.app-shell {
+  height: 100vh;
+  height: 100dvh;
+  padding-top: env(safe-area-inset-top);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+@media (max-width: 640px) {
+  input:not([type="range"]):not([type="checkbox"]):not([type="radio"]), textarea, select {
+    font-size: 16px; /* Avoid involuntary iOS input zoom without disabling accessibility zoom. */
+  }
+}

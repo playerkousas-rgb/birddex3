@@ -27,3 +27,27 @@ BIRD-DEX 是一個結合「戶外生態觀察」與「卡牌收集養成」的 W
 
 ---
 *Developed for Hong Kong Birding Enthusiasts & Scouts.*
+
+## 部署與防增肥（後續改版必讀）
+
+請先閱讀 [DEPLOYMENT_GUARDRAILS.md](DEPLOYMENT_GUARDRAILS.md)。
+部署採 Vite 原始碼建置、`dist/` 輸出與獨立 Vercel API；鳥卡目前由 R2 載入，並非上文歷史說明中的本機 `public/birds/`。
+
+```sh
+npm ci --include=dev
+npm run check
+npm run lint
+npm run build
+```
+
+正式建置會自動檢查容量與部署檔案；本次變更和驗證範圍見 [瘦身報告](docs/SLIMMING_REPORT.md)。
+
+## 版權 / Copyright
+
+© 2026 Scout System. All Rights Reserved.
+
+Scout System 原創內容的版權聲明見 [COPYRIGHT.md](COPYRIGHT.md)；第三方套件、模型與素材仍遵循各自授權。
+
+## 共有功能升級
+
+只移植兩版共有的相機／辨識／存檔／XP／圖鑑圖片／手機 PWA 改善；保留 v3 專屬玩法。變更與驗證範圍見 [SHARED_FEATURE_UPGRADE.md](docs/SHARED_FEATURE_UPGRADE.md)。

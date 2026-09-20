@@ -1,11 +1,12 @@
 import { useState, useRef } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
-import { getLevelFromXp, RARITY_ORDER, RARITY_META } from '../lib/theme';
+import { getLevelFromXp, getLevelProgress, RARITY_ORDER, RARITY_META } from '../lib/theme';
 import { User, Edit3, Award, Feather, Target, Trash2, Check, X, Sparkles, ImageOff, Wand2, Share2, QrCode } from 'lucide-react';
 import type { AltArtMode } from '../hooks/useCollection';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
+import { COPYRIGHT_FULL, COPYRIGHT_SHORT } from '../lib/copyright';
 
 const AVATARS = [
   { emoji: '🥾', unlockLevel: 1, desc: '見習裝備' },
@@ -139,13 +140,11 @@ export function ProfileScreen() {
             <span>XP {profile.xp}</span>
             <span>{levelInfo.nextXp ? `下一級 ${levelInfo.nextXp} XP` : '已達最高等級 MAX'}</span>
           </div>
-          <div className="h-2.5 rounded-full bg-dex-border overflow-hidden relative">
+          <div role="progressbar" aria-label="訓練師等級進度" aria-valuemin={0} aria-valuemax={100} aria-valuenow={getLevelProgress(profile.xp)} className="h-2.5 rounded-full bg-dex-border overflow-hidden relative">
             <div
               className="absolute left-0 top-0 bottom-0 rounded-full bg-gradient-to-r from-dex-neon to-dex-accent transition-all duration-700"
               style={{
-                width: levelInfo.nextXp
-                  ? `${Math.min(100, ((profile.xp - (getLevelFromXp(profile.xp - 1)?.nextXp || 0)) / ((levelInfo.nextXp || profile.xp) - (getLevelFromXp(profile.xp - 1)?.nextXp || 0))) * 100)}%`
-                  : '100%'
+                width: `${getLevelProgress(profile.xp)}%`,
               }}
             />
           </div>
@@ -299,7 +298,7 @@ export function ProfileScreen() {
       </div>
 
       <div className="text-center text-[10px] text-white/30 font-mono pb-8">
-        © 2026 Scout System
+        {COPYRIGHT_FULL}
       </div>
 
       {/* Share Card Modal */}
@@ -330,6 +329,7 @@ export function ProfileScreen() {
                     <QRCodeSVG value={shareUrl} size={72} />
                   </div>
                 </div>
+                <div className="mt-3 text-center text-[10px] text-white/50">{COPYRIGHT_SHORT}</div>
               </div>
             </div>
             <div className="flex gap-2 mt-3">

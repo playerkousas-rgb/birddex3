@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { CaptureRecord, TrainerProfile, Rarity, CaptureResult, CaptureStats } from '../types';
 import { BIRD_SPECIES } from '../data/birdData';
+import { readJSON, saveJSON, savedDataForBackup } from '../lib/storage';
 import { getRarityFromCount, xpForCapture, getLevelFromXp } from '../lib/theme';
 
 const STORAGE_KEY = 'bd_collection_v3';
@@ -42,69 +43,31 @@ const DEFAULT_ALTART: AltArtState = {
   missingOnR2: [],
 };
 
+const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
+const isCollection = (value: unknown) => isObject(value) && Array.isArray(value.captures) && value.captures.every(c =>
+  isObject(c) && Number.isInteger(c.speciesId) && typeof c.count === 'number' && ['UC','C','R','SR','SSR','UR','LR'].includes(String(c.currentRarity)));
+
 function loadSettings(): AppSettings {
-  try {
-    const raw = localStorage.getItem(SETTINGS_KEY);
-    if (raw) return { ...DEFAULT_SETTINGS, ...JSON.parse(raw) };
-  } catch { /* ignore */ }
-  return DEFAULT_SETTINGS;
+  return { ...DEFAULT_SETTINGS, ...readJSON(SETTINGS_KEY, {}, value => isObject(value) && (value.altArtMode === undefined || ['off','high-rarity','all'].includes(String(value.altArtMode)))) };
 }
 
-function saveSettings(s: AppSettings) {
-  localStorage.setItem(SETTINGS_KEY, JSON.stringify(s));
-}
-
-// migrate v2 -> v3
+// Read-only initialization: a full disk must not turn a valid v2 save into an empty v3 save.
 function loadStored(): StoredData {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-    // migrate from v2
-    const old = localStorage.getItem('bd_collection_v2');
-    if (old) {
-      const parsed = JSON.parse(old);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ ...parsed, version: 3 }));
-      return { ...parsed, version: 3 };
-    }
-  } catch { /* ignore */ }
-  return { captures: [], version: 3 };
-}
-
-function saveStored(data: StoredData) {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const current = readJSON<StoredData | null>(STORAGE_KEY, null, isCollection);
+  if (current) return current;
+  const old = readJSON<StoredData | null>('bd_collection_v2', null, isCollection);
+  return old ? { ...old, version: 3 } : { captures: [], version: 3 };
 }
 
 function loadAltArt(): AltArtState {
-  try {
-    const raw = localStorage.getItem(ALTART_KEY);
-    if (raw) return { ...DEFAULT_ALTART, ...JSON.parse(raw) };
-  } catch { /* ignore */ }
-  return DEFAULT_ALTART;
-}
-
-function saveAltArt(s: AltArtState) {
-  localStorage.setItem(ALTART_KEY, JSON.stringify(s));
+  return { ...DEFAULT_ALTART, ...readJSON(ALTART_KEY, {}, value => isObject(value) && ['unlocked','existsOnR2','missingOnR2'].every(k => value[k] === undefined || (Array.isArray(value[k]) && value[k].every(Number.isInteger)))) };
 }
 
 function loadProfile(): TrainerProfile {
-  try {
-    const raw = localStorage.getItem(PROFILE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch { /* ignore */ }
-  return {
-    name: '見習訓練師',
-    xp: 0,
-    level: 1,
-    title: '見習觀鳥員',
-    totalCaptures: 0,
-    uniqueSpecies: 0,
-    joinedAt: new Date().toISOString(),
-    avatar: '🥾',
-  };
-}
-
-function saveProfile(profile: TrainerProfile) {
-  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+  return readJSON(PROFILE_KEY, {
+    name: '見習訓練師', xp: 0, level: 1, title: '見習觀鳥員', totalCaptures: 0,
+    uniqueSpecies: 0, joinedAt: new Date().toISOString(), avatar: '🥾',
+  }, value => isObject(value) && typeof value.name === 'string' && typeof value.xp === 'number' && Number.isFinite(value.xp) && typeof value.level === 'number');
 }
 
 export function useCollection() {
@@ -113,10 +76,32 @@ export function useCollection() {
   const [settings, setSettings] = useState<AppSettings>(() => loadSettings());
   const [altArt, setAltArt] = useState<AltArtState>(() => loadAltArt());
 
-  useEffect(() => { saveStored({ captures, version: 3 }); }, [captures]);
-  useEffect(() => { saveProfile(profile); }, [profile]);
-  useEffect(() => { saveSettings(settings); }, [settings]);
-  useEffect(() => { saveAltArt(altArt); }, [altArt]);
+  const [storageErrors, setStorageErrors] = useState<Record<string, boolean>>({});
+  const persist = useCallback((key: string, value: unknown) => {
+    const failed = !saveJSON(key, value);
+    setStorageErrors(prev => prev[key] === failed ? prev : { ...prev, [key]: failed });
+  }, []);
+  useEffect(() => { persist(STORAGE_KEY, { captures, version: 3 }); }, [captures, persist]);
+  useEffect(() => { persist(PROFILE_KEY, profile); }, [profile, persist]);
+  useEffect(() => { persist(SETTINGS_KEY, settings); }, [settings, persist]);
+  useEffect(() => { persist(ALTART_KEY, altArt); }, [altArt, persist]);
+  const storageError = Object.values(storageErrors).some(Boolean);
+  useEffect(() => {
+    if (!storageError) return;
+    const warn = (event: BeforeUnloadEvent) => { event.preventDefault(); event.returnValue = ''; };
+    window.addEventListener('beforeunload', warn);
+    return () => window.removeEventListener('beforeunload', warn);
+  }, [storageError]);
+  const retrySave = () => {
+    persist(STORAGE_KEY, { captures, version: 3 }); persist(PROFILE_KEY, profile);
+    persist(SETTINGS_KEY, settings); persist(ALTART_KEY, altArt);
+  };
+  const exportBackup = () => ({
+    format: 'birddex-backup', version: 1, exportedAt: new Date().toISOString(),
+    // Full in-memory state, including photos, IV histories and stickers, never a slimmed copy.
+    current: { [STORAGE_KEY]: { captures, version: 3 }, [PROFILE_KEY]: profile, [SETTINGS_KEY]: settings, [ALTART_KEY]: altArt },
+    saved: savedDataForBackup(),
+  });
 
   const setAltArtMode = useCallback((mode: AltArtMode) => {
     setSettings(prev => ({ ...prev, altArtMode: mode }));
@@ -199,7 +184,7 @@ export function useCollection() {
 
     // IV handling
     const stats = opts?.stats;
-    let allCatches = existing?.allCatches ? [...existing.allCatches] : [];
+    const allCatches = existing?.allCatches ? [...existing.allCatches] : [];
     if (stats) allCatches.push(stats);
 
     const bestPrev = existing?.bestStats;
@@ -380,6 +365,7 @@ export function useCollection() {
   const totalCount = captures.reduce((sum, c) => sum + c.count, 0);
 
   return {
+    storageError, retrySave, exportBackup,
     captures,
     profile,
     settings,

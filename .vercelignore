@@ -1,0 +1,36 @@
+# Vercel builds from source; never upload local dependencies/build caches.
+.git/
+**/node_modules/
+dist/
+.vercel/
+.vite/
+.cache/
+coverage/
+playwright-report/
+test-results/
+**/__pycache__/
+**/*.tsbuildinfo
+
+# Local data, backups, editor files and secrets
+**/uploads/
+**/*.bak*
+**/*.tmp*
+**/*.old*
+**/*.log*
+**/.DS_Store
+.env
+.env.*
+!.env.example
+
+# Maintenance-only reference data and scripts are NOT runtime inputs.
+# Keep scripts/check-deployment.mjs: npm run build uses this size guard.
+scripts/**/*.py
+scripts/reference_data/
+fix_r2_urls2.cjs
+BIRD_ID_MAPPING.csv
+tests/
+docs/
+*.md
+.github/
+
+# Keep src/, public/, api/, package*.json and build configuration!

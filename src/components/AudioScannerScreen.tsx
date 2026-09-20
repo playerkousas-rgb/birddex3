@@ -24,40 +24,6 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
   const timerRef = useRef<any>(null);
   const { captureBird } = useCollectionContext();
 
-  const startRecording = useCallback(async () => {
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
-        ? 'audio/webm;codecs=opus'
-        : MediaRecorder.isTypeSupported('audio/mp4')
-        ? 'audio/mp4'
-        : undefined;
-      const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
-      mediaRef.current = recorder;
-      chunksRef.current = [];
-      recorder.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
-      recorder.onstop = async () => {
-        const blob = new Blob(chunksRef.current, { type: mime || 'audio/webm' });
-        await processAudio(blob);
-        stream.getTracks().forEach(t => t.stop());
-      };
-      recorder.start(200);
-      setPhase('recording');
-      setRecSec(0);
-      timerRef.current = setInterval(() => setRecSec(s => s + 1), 1000);
-    } catch (e: any) {
-      setPhase('error');
-      setErrorMsg(e.name === 'NotAllowedError' ? '麥克風權限被拒絕' : `錄音失敗：${e.message}`);
-    }
-  }, []);
-
-  const stopRecording = useCallback(() => {
-    if (timerRef.current) clearInterval(timerRef.current);
-    if (mediaRef.current && mediaRef.current.state !== 'inactive') {
-      mediaRef.current.stop();
-    }
-  }, []);
-
   const processAudio = useCallback(async (blob: Blob) => {
     setPhase('analyzing');
     const texts = ['聲音頻譜分析...', '特徵比對中...', '查詢鳥鳴圖鑑...', 'AI 推理中...'];
@@ -85,6 +51,40 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
       setErrorMsg(err.message || '分析過程發生錯誤');
     }
   }, [captureBird, onCapture]);
+
+  const startRecording = useCallback(async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mime = MediaRecorder.isTypeSupported('audio/webm;codecs=opus')
+        ? 'audio/webm;codecs=opus'
+        : MediaRecorder.isTypeSupported('audio/mp4')
+        ? 'audio/mp4'
+        : undefined;
+      const recorder = new MediaRecorder(stream, mime ? { mimeType: mime } : undefined);
+      mediaRef.current = recorder;
+      chunksRef.current = [];
+      recorder.ondataavailable = e => { if (e.data.size > 0) chunksRef.current.push(e.data); };
+      recorder.onstop = async () => {
+        const blob = new Blob(chunksRef.current, { type: mime || 'audio/webm' });
+        await processAudio(blob);
+        stream.getTracks().forEach(t => t.stop());
+      };
+      recorder.start(200);
+      setPhase('recording');
+      setRecSec(0);
+      timerRef.current = setInterval(() => setRecSec(s => s + 1), 1000);
+    } catch (e: any) {
+      setPhase('error');
+      setErrorMsg(e.name === 'NotAllowedError' ? '麥克風權限被拒絕' : `錄音失敗：${e.message}`);
+    }
+  }, [processAudio]);
+
+  const stopRecording = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    if (mediaRef.current && mediaRef.current.state !== 'inactive') {
+      mediaRef.current.stop();
+    }
+  }, []);
 
   const handleFileUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];

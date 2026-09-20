@@ -44,7 +44,7 @@ export function generateCaptureStats(opts?: {
   catchScore?: CaptureStats['catchScore'],
   zoomLevel?: number,
 }): CaptureStats {
-  let iv = rollIV();
+  const iv = rollIV();
   
   // 投擲得分加成
   if (opts?.catchScore === 'Great') {

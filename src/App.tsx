@@ -11,6 +11,7 @@ import { BirdDetailScreen } from './components/BirdDetailScreen';
 import { ThrowCaptureScreen } from './components/ThrowCaptureScreen';
 import { MapScreen } from './components/MapScreen';
 import { BattleScreen } from './components/BattleScreen';
+import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
 
 function AppRouter() {
@@ -20,7 +21,8 @@ function AppRouter() {
   const [throwSession, setThrowSession] = useState<ThrowSession | null>(null);
   const [throwZoom, setThrowZoom] = useState(1);
 
-  const { captureBird } = useCollectionContext();
+  const [scannerBusy, setScannerBusy] = useState(false);
+  const { captureBird, storageError, retrySave, exportBackup } = useCollectionContext();
 
   const handleCapture = (result: CaptureResultType) => {
     setLastCapture(result);
@@ -28,7 +30,7 @@ function AppRouter() {
   };
 
   const handleCloseCapture = () => {
-    setView('album');
+    setView(lastCapture?.failed ? 'scanner' : 'album');
     setLastCapture(null);
   };
 
@@ -42,8 +44,8 @@ function AppRouter() {
       setSelectedSpeciesId(null);
       setView('dex');
     } else if (view === 'capture-result') {
+      setView(lastCapture?.failed ? 'scanner' : 'album');
       setLastCapture(null);
-      setView('album');
     } else {
       setView('dex');
     }
@@ -75,12 +77,22 @@ function AppRouter() {
   };
 
   return (
-    <div className="h-screen w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">
-      <div className="flex-1 overflow-y-auto overflow-x-hidden">
+    <div className="app-shell w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">
+      {storageError && (
+        <div role="alert" className="shrink-0 bg-amber-950 text-amber-100 px-3 py-2 text-xs z-[60]">
+          <p>儲存空間不足或瀏覽器禁止儲存。新資料暫存於此頁，請勿關閉；照片與既有存檔未被刪除。</p>
+          <div className="flex gap-4 mt-1">
+            <button className="underline py-1" onClick={() => downloadBackup(exportBackup())}>下載完整備份</button>
+            <button className="underline py-1" onClick={retrySave}>重試儲存</button>
+          </div>
+        </div>
+      )}
+      <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {view === 'scanner' && (
           <ScannerScreen
             onCapture={handleCapture}
             onStartThrow={handleStartThrow}
+            onBusyChange={setScannerBusy}
           />
         )}
         {view === 'throw' && throwSession && (
@@ -104,7 +116,7 @@ function AppRouter() {
         )}
       </div>
 
-      {view !== 'capture-result' && view !== 'detail' && view !== 'throw' && (
+      {view !== 'capture-result' && view !== 'detail' && view !== 'throw' && !scannerBusy && (
         <Navbar current={view} onNavigate={setView} />
       )}
     </div>
