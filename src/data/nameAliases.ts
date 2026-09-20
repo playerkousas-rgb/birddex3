@@ -17,7 +17,7 @@ for (const entry of ALIASES) {
   for (const alias of entry.aliases) {
     aliasMap.set(alias.toLowerCase().trim(), entry.speciesId);
     // 也存無標點版本
-    aliasMap.set(alias.toLowerCase().replace(/[-_']/g, '').trim(), entry.speciesId);
+    aliasMap.set(alias.toLowerCase().replace(/[-_'.]/g, '').trim(), entry.speciesId);
   }
 }
 
@@ -30,10 +30,11 @@ export function resolveBirdId(label: string): number | undefined {
   // 去掉標點
   const noPunct = key.replace(/[-_'.]/g, '');
   if (aliasMap.has(noPunct)) return aliasMap.get(noPunct);
-  // 只取前兩個單詞嘗試 (e.g. "Passer montanus (Tree Sparrow)")
+  // 保留原本前三詞比對，再嘗試學名的前兩詞 (e.g. "Passer montanus (Tree Sparrow)")
   const words = key.split(/\s+/).slice(0, 3).join(' ');
   if (aliasMap.has(words)) return aliasMap.get(words);
-  return undefined;
+  const scientific = key.split(/\s+/).slice(0, 2).join(' ');
+  return aliasMap.get(scientific);
 }
 
 /** 取得所有 aliases（用於 Debug） */

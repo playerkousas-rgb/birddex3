@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useBirdImage } from '../hooks/useBirdImage';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
 import { RARITY_META } from '../lib/theme';
@@ -13,7 +14,7 @@ interface BirdDetailScreenProps {
 
 export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   const bird = getBirdById(speciesId);
-  const { captures, canShowAltArt, markAltArtExists, markAltArtMissing, altArt, setCaptureSticker, setBestIndividual, deleteCatchRecord } = useCollectionContext();
+  const { captures, canShowAltArt, altArt, setCaptureSticker, setBestIndividual, deleteCatchRecord } = useCollectionContext();
   const capture = captures.find(c => c.speciesId === speciesId);
   const isCaught = !!capture;
 
@@ -26,9 +27,8 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   const [showIvList, setShowIvList] = useState(false);
 
   const wantsAltArt = bird ? canShowAltArt(bird.id, rarity) : false;
-  const heroImageUrl = useStickerView && stats?.stickerUrl
-    ? stats.stickerUrl
-    : bird?.photoUrl ? (wantsAltArt ? bird.photoUrl.replace('.avif', '_UR.avif') : bird.photoUrl) : null;
+  const { imageUrl: heroImageUrl, isSticker: showingSticker, onLoad: handleImageLoad, onError: handleImageError } =
+    useBirdImage(speciesId, bird?.photoUrl, wantsAltArt, useStickerView ? stats?.stickerUrl : null);
 
   const handleMakeSticker = async () => {
     if (!bird || !capture?.photoDataUrl || stickerBusy) return;
@@ -87,13 +87,9 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
               <img
                 src={heroImageUrl}
                 alt={bird.name}
-                className={`w-full h-full ${useStickerView ? 'object-contain p-6' : 'object-cover'}`}
-                onLoad={() => { if (wantsAltArt && !useStickerView) markAltArtExists(bird.id); }}
-                onError={(e) => {
-                  const img = e.currentTarget;
-                  if (wantsAltArt && !useStickerView) markAltArtMissing(bird.id);
-                  if (bird.photoUrl && img.src !== bird.photoUrl) img.src = bird.photoUrl;
-                }}
+                className={`w-full h-full ${showingSticker ? 'object-contain p-6' : 'object-cover'}`}
+                onLoad={handleImageLoad}
+                onError={handleImageError}
               />
             ) : (
               <div className="w-full h-full flex flex-col items-center justify-center bg-gray-900 relative">
@@ -105,7 +101,7 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
 
             {isCaught && (
               <div className="absolute top-3 right-3 z-10 flex flex-col gap-1.5 items-end">
-                {useStickerView && <div className="px-2 py-1 rounded-md bg-dex-neon text-dex-bg text-[10px] font-black">貼圖版</div>}
+                {showingSticker && <div className="px-2 py-1 rounded-md bg-dex-neon text-dex-bg text-[10px] font-black">貼圖版</div>}
                 {wantsAltArt && !altArtMissing && !useStickerView && (
                   <div className="px-2 py-1 rounded-md bg-gradient-to-r from-fuchsia-500 to-purple-600 text-white text-[10px] font-black tracking-wider shadow-lg border border-white/30">✨ ALT ART</div>
                 )}
@@ -118,7 +114,7 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
             <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 via-black/70 to-transparent pt-12 pb-4 px-4">
               <div className="flex items-end justify-between gap-3">
                 <div className="min-w-0">
-                  <div className="text-[10px] text-gray-400 font-mono mb-0.5">NO.{String(bird.id).padStart(4, '0')} {useStickerView && '· 貼圖版'}</div>
+                  <div className="text-[10px] text-gray-400 font-mono mb-0.5">NO.{String(bird.id).padStart(4, '0')} {showingSticker && '· 貼圖版'}</div>
                   <h1 className="text-3xl font-black text-white leading-tight truncate drop-shadow-md">{bird.name}</h1>
                   <p className="text-sm text-gray-300 truncate font-bold">{bird.nameEn}</p>
                   {stats && <p className="text-[11px] mt-1" style={{color: ivRankLabel(stats.iv.percent).color}}>CP {stats.cp} · {ivRankLabel(stats.iv.percent).label} {stats.iv.percent}% · {stats.nature}</p>}

@@ -16,6 +16,7 @@ export function useLiveBirdDetector(
 ) {
   const modelRef = useRef<cocoSsd.ObjectDetection | null>(null);
   const rafRef = useRef<number>(0);
+  const detectingRef = useRef(false);
   const [detections, setDetections] = useState<LiveDetection[]>([]);
   const [loading, setLoading] = useState(true);
   const [fps, setFps] = useState(0);
@@ -24,11 +25,18 @@ export function useLiveBirdDetector(
     let cancelled = false;
     setLoading(true);
     cocoSsd.load({ base: 'lite_mobilenet_v2' }).then(m => {
-      if (cancelled) return;
+      if (cancelled) { m.dispose(); return; }
       modelRef.current = m;
       setLoading(false);
+    }).catch(() => {
+      // Live boxes are optional; a failed/offline model must not block camera capture.
+      if (!cancelled) setLoading(false);
     });
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+      modelRef.current?.dispose();
+      modelRef.current = null;
+    };
   }, []);
 
   useEffect(() => {
@@ -36,6 +44,8 @@ export function useLiveBirdDetector(
       setDetections([]);
       return;
     }
+    let cancelled = false;
+    const model = modelRef.current;
     let lastTs = performance.now();
     let frames = 0;
     let lastDetect = 0;
@@ -50,12 +60,14 @@ export function useLiveBirdDetector(
         lastTs = now;
       }
       // 限制偵測頻率 ~5 fps，省電
-      if (now - lastDetect < 200) return;
+      if (now - lastDetect < 200 || detectingRef.current) return;
       lastDetect = now;
 
       if (videoEl.readyState < 2 || videoEl.videoWidth === 0) return;
+      detectingRef.current = true;
       try {
-        const preds = await modelRef.current!.detect(videoEl, 20, 0.45);
+        const preds = await model.detect(videoEl, 20, 0.45);
+        if (cancelled) return;
         const birds: LiveDetection[] = preds
           .filter(p => BIRD_CLASSES.has(p.class))
           .map(p => ({
@@ -68,9 +80,13 @@ export function useLiveBirdDetector(
           }));
         setDetections(birds);
       } catch { /* ignore */ }
+      finally { detectingRef.current = false; }
     };
     rafRef.current = requestAnimationFrame(loop);
-    return () => cancelAnimationFrame(rafRef.current);
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(rafRef.current);
+    };
   }, [enabled, videoEl, loading]);
 
   return { detections, loading, fps, ready: !!modelRef.current && !loading };

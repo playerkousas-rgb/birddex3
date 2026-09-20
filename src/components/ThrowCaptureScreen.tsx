@@ -65,9 +65,9 @@ export function ThrowCaptureScreen({ session, zoomLevel, onComplete, onSkip }: P
   return (
     <div className="absolute inset-0 z-50 bg-[#07121a] flex flex-col">
       {/* Photo background */}
-      <div className="absolute inset-0 opacity-35 bg-cover bg-center blur-[18px]"
+      <div className="pointer-events-none absolute inset-0 opacity-35 bg-cover bg-center blur-[18px]"
         style={{ backgroundImage: `url(${session.photoDataUrl})` }}/>
-      <div className="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60"/>
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black via-black/30 to-black/60"/>
 
       <div className="relative z-10 px-4 pt-4 pb-2 flex items-center justify-between text-[11px] font-mono text-dex-neon">
         <div>THROW MODE · {session.species.name}</div>

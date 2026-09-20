@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useBirdImage } from '../hooks/useBirdImage';
 import { BirdSpecies, CaptureRecord, Rarity } from '../types';
 import { RARITY_META } from '../lib/theme';
 import { useCollectionContext } from '../context/CollectionContext';
@@ -16,8 +16,7 @@ interface BirdCardProps {
 }
 
 export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats, useSticker }: BirdCardProps) {
-  const [imgError, setImgError] = useState(false);
-  const { canShowAltArt, markAltArtExists, markAltArtMissing } = useCollectionContext();
+  const { canShowAltArt } = useCollectionContext();
   const rarity: Rarity = capture?.currentRarity ?? 'UC';
   const meta = RARITY_META[rarity];
   const isUncaptured = !capture;
@@ -27,28 +26,8 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
 
   // 圖片來源優先序：貼圖 > 異圖卡 > 原圖
   const wantsAltArt = canShowAltArt(bird.id, rarity);
-  const altArtUrl = bird.photoUrl ? bird.photoUrl.replace('.avif', '_UR.avif') : null;
-  const stickerUrl = stats?.stickerUrl || null;
-  
-  const currentImageUrl = useSticker && stickerUrl
-    ? stickerUrl
-    : (wantsAltArt && altArtUrl && !imgError ? altArtUrl : bird.photoUrl);
-
-  const isStickerMode = useSticker && !!stickerUrl;
-
-  const handleImgError = () => {
-    if (wantsAltArt && !imgError && !isStickerMode) {
-      markAltArtMissing(bird.id);
-      setImgError(true);
-    } else {
-      setImgError(true);
-    }
-  };
-  const handleImgLoad = () => {
-    if (wantsAltArt && currentImageUrl === altArtUrl) {
-      markAltArtExists(bird.id);
-    }
-  };
+  const { imageUrl: currentImageUrl, isSticker: isStickerMode, onError: handleImgError, onLoad: handleImgLoad } =
+    useBirdImage(bird.id, bird.photoUrl, wantsAltArt, useSticker ? stats?.stickerUrl : null);
 
   // 是否顯示 IV 數值
   const shouldShowIv = showStats ? true : hideStats ? false : !!stats;

@@ -19,30 +19,50 @@ export interface AnalyzeResponse {
   warnings?: string[];
 }
 
-async function postBlob(file: Blob | File, mediaType: 'image' | 'audio'): Promise<AnalyzeResponse> {
-  const contentType = file.type || (mediaType === 'image' ? 'image/jpeg' : 'audio/wav');
-  const res = await fetch('/api/analyze', {
-    method: 'POST',
-    headers: {
-      'Content-Type': contentType,
-      'X-Media-Type': mediaType,
-    },
-    body: file,
-  });
+export const ANALYZE_TIMEOUT_MS = 60_000;
 
-  const text = await res.text();
-  let json: any;
-  try { json = JSON.parse(text); } catch {
-    throw new Error(`伺服器回傳非 JSON：${text.slice(0, 160)}`);
+async function postBlob(file: Blob | File, mediaType: 'image' | 'audio', signal?: AbortSignal): Promise<AnalyzeResponse> {
+  const controller = new AbortController();
+  const abort = () => controller.abort();
+  let timedOut = false;
+  if (signal?.aborted) abort();
+  signal?.addEventListener('abort', abort, { once: true });
+  const timer = setTimeout(() => { timedOut = true; controller.abort(); }, ANALYZE_TIMEOUT_MS);
+  try {
+    const contentType = file.type || (mediaType === 'image' ? 'image/jpeg' : 'audio/wav');
+    const res = await fetch('/api/analyze', {
+      method: 'POST',
+      headers: {
+        'Content-Type': contentType,
+        'X-Media-Type': mediaType,
+      },
+      body: file,
+      signal: controller.signal,
+    });
+
+    const text = await res.text();
+    let json: any;
+    try { json = JSON.parse(text); } catch {
+      throw new Error(`伺服器回傳非 JSON：${text.slice(0, 160)}`);
+    }
+    if (!res.ok) {
+      throw new Error(json?.error || json?.details || `辨識失敗 (HTTP ${res.status})`);
+    }
+    if (!json || !Array.isArray(json.results) || !json.results.every((r: any) => r && typeof r.label === 'string' && Number.isFinite(r.score))) {
+      throw new Error('辨識伺服器回傳格式不正確，請稍後重試。');
+    }
+    return json as AnalyzeResponse;
+  } catch (error) {
+    if (timedOut) throw new Error('辨識逾時（60 秒），請稍後重試。');
+    throw error;
+  } finally {
+    clearTimeout(timer);
+    signal?.removeEventListener('abort', abort);
   }
-  if (!res.ok) {
-    throw new Error(json?.error || json?.details || `辨識失敗 (HTTP ${res.status})`);
-  }
-  return json as AnalyzeResponse;
 }
 
-export async function analyzeImage(file: Blob | File): Promise<RecognizeResult[]> {
-  const data = await postBlob(file, 'image');
+export async function analyzeImage(file: Blob | File, signal?: AbortSignal): Promise<RecognizeResult[]> {
+  const data = await postBlob(file, 'image', signal);
 
   // 後端判定不是鳥 → 回傳一個明確的 "Not a bird" 標記
   // ScannerScreen 會以 score < 0.7 / label 為 Unknown 視為失敗
@@ -62,8 +82,8 @@ export async function analyzeImage(file: Blob | File): Promise<RecognizeResult[]
  * 完整版：除了結果之外把整個後端回應一起回傳，
  * 之後 ScannerScreen 想顯示「看起來像 ___，不是鳥」就靠它。
  */
-export async function analyzeImageDetailed(file: Blob | File): Promise<AnalyzeResponse> {
-  return postBlob(file, 'image');
+export async function analyzeImageDetailed(file: Blob | File, signal?: AbortSignal): Promise<AnalyzeResponse> {
+  return postBlob(file, 'image', signal);
 }
 
 export async function analyzeAudio(_file: Blob | File): Promise<RecognizeResult[]> {

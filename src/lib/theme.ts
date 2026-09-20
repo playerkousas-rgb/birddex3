@@ -167,3 +167,12 @@ export function getCaptureMessage(rarity: Rarity, isNew: boolean): string {
     case 'LR': return '至尊鳥王降臨！';
   }
 }
+
+/** Progress within the current level. Never changes XP thresholds or awards. */
+export function getLevelProgress(xp: number): number {
+  if (!Number.isFinite(xp)) return 0;
+  const info = getLevelFromXp(xp);
+  if (info.nextXp === null) return 100;
+  const start = LEVEL_TITLES.find(entry => entry.level === info.level)?.xp ?? 0;
+  return Math.max(0, Math.min(100, ((xp - start) / (info.nextXp - start)) * 100));
+}

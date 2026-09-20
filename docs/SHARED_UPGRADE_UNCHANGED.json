@@ -1,0 +1,15 @@
+{
+  "date": "2026-09-20",
+  "comparison": "start vs end of shared-feature-upgrade turn; not git HEAD",
+  "sha256": {
+    "src/lib/birdStats.ts": "63fe8d9fece100bca05609c94011dd671df3aa6dc3774234a7a3a89c8f31660b",
+    "src/lib/stickerMaker.ts": "5abd33d150dd2154d7cfc6a32cb673cc61698de0202d20db079f73eb764627ea",
+    "src/lib/liveDetect.ts": "77ad1aed0e4c004cc76a7485844b8ef5766c1eb3d522965612327d9c7fd68f8e",
+    "src/components/ThrowCaptureScreen.tsx": "f94d85c0751cc781945bac2cde381dfcdd1919e4b030533f019a800e77f0f882",
+    "src/components/BattleScreen.tsx": "389ba551485985d517557d6f48ff282df5a8a7488832ffdd56137aa2a8bc1b14",
+    "src/components/MapScreen.tsx": "38f23f609ad8bb029fff89508e3ede36feec6403552b2203463b123696f8ecfa",
+    "src/types.ts": "cbd2a71868f301121740c8408433179804e7ccd365bc71a69e639a76ac4c523f",
+    "src/data/birds.json": "9bffd492befaae583809f486c740ab0d06ef5a2f1f65d912dc5613a7c6f19811",
+    "src/data/nameAliases.json": "b561f8bfac42082c5988d56878e84a4c743e94a44c437f67f0c90c9397efba1a"
+  }
+}

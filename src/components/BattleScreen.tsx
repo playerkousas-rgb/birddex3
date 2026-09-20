@@ -200,7 +200,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
                 {rightSt?.isShiny && <span className="ml-1">✨</span>}
               </div>
               <div className="text-[11px] text-amber-300 text-center">CP {rightCP}</div>
-              <div className="text-[9px] text-dex-muted text-center">{(rightSt as any)?.nature ?? ''} · IV {(rightSt as any)?.ivPercent ?? '?'}%</div>
+              <div className="text-[9px] text-dex-muted text-center">{(rightSt as any)?.nature ?? ''} · IV {(rightSt as any)?.ivPercent ?? (rightSt as any)?.iv?.percent ?? '?'}%</div>
               <div className="flex gap-1 mt-2">
                 <button onClick={()=>{
                   const n = useRival ? rivalTeam!.fighters.length : team.length;

@@ -82,7 +82,7 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
               capture={capture}
               compact
               hideStats
-              onClick={() => capture ? onSelectSpecies(bird.id) : undefined}
+              onClick={() => onSelectSpecies(bird.id)}
             />
           );
         })}
