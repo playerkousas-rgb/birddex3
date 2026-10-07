@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Analytics } from '@vercel/analytics/react';
 import { CollectionProvider, useCollectionContext } from './context/CollectionContext';
 import { View, CaptureResult as CaptureResultType, ThrowSession, CaptureStats } from './types';
 import { Navbar } from './components/Navbar';
@@ -127,6 +128,7 @@ export default function App() {
   return (
     <CollectionProvider>
       <AppRouter />
+      <Analytics />
     </CollectionProvider>
   );
 }
