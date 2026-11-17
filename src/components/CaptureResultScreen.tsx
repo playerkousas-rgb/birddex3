@@ -113,11 +113,11 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                 : `radial-gradient(ellipse at center, ${ambientColor}25 0%, rgba(8,9,12,0.85) 70%)`,
             }}
           />
-          <div className="absolute inset-0 -z-10 bg-dex-bg/55 backdrop-blur-sm" />
+          <div className="absolute inset-0 -z-10 bg-[#0B0F19]/55 backdrop-blur-sm" />
         </>
       ) : (
         <>
-          <div className="absolute inset-0 -z-10 bg-dex-bg/95 backdrop-blur-md" />
+          <div className="absolute inset-0 -z-10 bg-[#0B0F19]/95 backdrop-blur-md" />
           <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none opacity-40">
             {Array.from({ length: 30 }).map((_, i) => (
               <div key={i} className="absolute rounded-full bg-white/40"
@@ -200,13 +200,13 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
       {phase === 'escaped' && (
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           className="text-center z-10 pointer-events-auto">
-          <XCircle size={64} className="text-dex-muted mx-auto mb-4" />
+          <XCircle size={64} className="text-white/70 mx-auto mb-4" />
           <h2 className="text-2xl font-black text-white mb-2">鳥兒逃走了！</h2>
-          <p className="text-sm text-dex-muted mb-8 max-w-[280px]">
+          <p className="text-sm text-white/70 mb-8 max-w-[280px]">
             {failReason || '可能是因為畫面太模糊、光線太暗，或距離太遠。再試著靠近一點拍攝吧！'}
           </p>
           <button onClick={onClose}
-            className="w-full max-w-[200px] py-3.5 rounded-xl bg-dex-surface border border-dex-border text-white font-black text-sm hover:bg-white/10 transition">
+            className="w-full max-w-[200px] py-3.5 rounded-xl bg-white/10 border border-white/20 text-white font-black text-sm hover:bg-white/20 transition">
             返回繼續尋找
           </button>
         </motion.div>
@@ -249,7 +249,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
           )}
           {stickerUrl && !showSticker && phase === 'stats' && (
             <button onClick={()=>setShowSticker(true)}
-              className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-dex-neon text-dex-bg text-[11px] font-black shadow">查看貼圖</button>
+              className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full bg-dex-neon text-dex-ink text-[11px] font-black shadow">查看貼圖</button>
           )}
           {stickerUrl && showSticker && (
             <button onClick={()=>setShowSticker(false)}
@@ -270,7 +270,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                   style={{ background: RARITY_META[oldRarity].gradient, color: RARITY_META[oldRarity].textColor }}>
                   {RARITY_META[oldRarity].label}
                 </div>
-                <ChevronRight size={16} className="text-dex-muted" />
+                <ChevronRight size={16} className="text-white/70" />
               </>
             )}
             <div className="px-3 py-1.5 rounded-lg text-sm font-black tracking-wider shadow-lg flex items-center gap-1"
@@ -282,7 +282,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
 
           {/* 紀念條：捕捉日期 ＋ 地點（原相＋賽璐璐卡已永久保存，呢行要睇得到） */}
           {record && (
-            <div className="flex items-center justify-center gap-2 text-[11px] text-dex-muted bg-dex-surface/70 border border-dex-border rounded-full px-3.5 py-1.5">
+            <div className="flex items-center justify-center gap-2 text-[11px] text-white/85 bg-black/40 border border-white/15 rounded-full px-3.5 py-1.5">
               <span aria-hidden="true">📅</span>
               <span>{formatCapturedAt(record.capturedAt)}</span>
               <span className="text-dex-border" aria-hidden="true">·</span>
@@ -293,17 +293,17 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
 
           {/* Sticker Maker */}
           {photoForSticker && (
-            <div className="bg-dex-surface/90 backdrop-blur border border-dex-border rounded-2xl p-3">
+            <div className="bg-black/40 backdrop-blur border border-white/15 rounded-2xl p-3">
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-xs font-bold text-white flex items-center gap-1.5"><Scissors size={13}/> 鳥精靈貼圖</div>
-                  <div className="text-[10px] text-dex-muted mt-0.5">{stickerMsg || (stickerUrl ? '已生成透明 PNG' : '手動去背，生成可分享貼圖')}</div>
+                  <div className="text-[10px] text-white/70 mt-0.5">{stickerMsg || (stickerUrl ? '已生成透明 PNG' : '手動去背，生成可分享貼圖')}</div>
                 </div>
                 {!stickerUrl ? (
                   <button
                     disabled={stickerBusy}
                     onClick={handleMakeSticker}
-                    className="px-3 py-1.5 rounded-lg bg-dex-neon text-dex-bg text-xs font-black disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-lg bg-dex-neon text-dex-ink text-xs font-black disabled:opacity-50"
                   >
                     {stickerBusy ? '處理中…' : '生成貼圖'}
                   </button>
@@ -314,15 +314,15 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                   </div>
                 )}
               </div>
-              <div className="text-[10px] text-dex-muted mt-2">模型約 15MB，第一次較慢，會快取到瀏覽器。照片不滿意就別生成，純手動。</div>
+              <div className="text-[10px] text-white/70 mt-2">模型約 15MB，第一次較慢，會快取到瀏覽器。照片不滿意就別生成，純手動。</div>
             </div>
           )}
 
           {/* IV 卡 */}
           {captureStats && (
-            <div className="bg-dex-surface/90 backdrop-blur border border-dex-border rounded-2xl p-3">
+            <div className="bg-black/40 backdrop-blur border border-white/15 rounded-2xl p-3">
               <div className="flex items-center justify-between mb-2">
-                <div className="text-[11px] text-dex-muted">個體值 / IV</div>
+                <div className="text-[11px] text-white/70">個體值 / IV</div>
                 <div className="text-xs font-black" style={{ color: ivRankLabel(captureStats.iv.percent).color }}>
                   {ivRankLabel(captureStats.iv.percent).label} · {captureStats.iv.percent}%
                   {isBestIndividual && !isNew && <span className="ml-1 text-amber-300">★新高</span>}
@@ -337,7 +337,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                   ['STA', captureStats.iv.sta],
                 ].map(([k,v]) => (
                   <div key={k as string} className="bg-black/30 rounded-lg py-1.5">
-                    <div className="text-dex-muted">{k}</div>
+                    <div className="text-white/70">{k}</div>
                     <div className="font-black text-white">{v as number}</div>
                   </div>
                 ))}
@@ -353,17 +353,17 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
             </div>
           )}
 
-          <div className="bg-dex-surface/80 backdrop-blur border border-dex-border rounded-xl p-3 flex items-center justify-between">
+          <div className="bg-black/40 backdrop-blur border border-white/15 rounded-xl p-3 flex items-center justify-between">
             <div className="flex items-center gap-2">
               <Star size={16} className="text-dex-gold" />
-              <span className="text-sm text-dex-muted">獲得經驗值</span>
+              <span className="text-sm text-white/70">獲得經驗值</span>
             </div>
             <span className="text-lg font-black text-dex-gold">+{xpGained} XP</span>
           </div>
 
           <button
             onClick={onClose}
-            className="w-full py-3.5 mt-1 rounded-xl bg-dex-neon text-dex-bg font-black text-sm tracking-wider hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-dex-neon/20"
+            className="w-full py-3.5 mt-1 rounded-xl bg-dex-neon text-dex-ink font-black text-sm tracking-wider hover:brightness-110 active:scale-[0.98] transition shadow-lg shadow-dex-neon/20"
           >
             收入收藏冊
           </button>
@@ -378,7 +378,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
               跳去 AvianDex 解鎖 NO.{record.no}
             </button>
           )}
-          <p className="text-[10px] text-dex-muted text-center pt-0.5">
+          <p className="text-[10px] text-white/70 text-center pt-0.5">
             原相＝證據同步 Keep 埋 · 卡面撳「賽璐璐 ⇄ 原相」隨時轉
           </p>
         </motion.div>

@@ -1,3 +1,7 @@
+/**
+ * 【已退役 2026-11-17】地區地圖 — 精靈球版玩法係「影相→三問→對卡」，冇地區生成、
+ * 對戰亦已取消，地圖冇存在必要。App 路由已移除（檔案保留作日後地區玩法參考）。
+ */
 import { useEffect, useState, useMemo } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, Circle } from 'react-leaflet';
 import { DivIcon } from 'leaflet';
@@ -106,7 +110,7 @@ export function MapScreen({ onSelectSpecies, onGoScan }: MapScreenProps) {
             </button>
             <button
               onClick={() => setListMode(v => !v)}
-              className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 border transition ${listMode ? 'bg-dex-neon text-dex-bg border-dex-neon' : 'bg-dex-surface text-white border-dex-border'}`}
+              className={`px-3 py-2 rounded-lg text-xs font-bold flex items-center gap-1.5 border transition ${listMode ? 'bg-dex-neon text-dex-ink border-dex-neon' : 'bg-dex-surface text-white border-dex-border'}`}
             >
               {listMode ? <MapPin size={14} /> : <List size={14} />}
               {listMode ? '地圖' : '列表'}
@@ -123,7 +127,7 @@ export function MapScreen({ onSelectSpecies, onGoScan }: MapScreenProps) {
               <div className="text-5xl mb-3">🗺️</div>
               <div className="text-white font-bold mb-1">還沒有捕捉足跡</div>
               <div className="text-sm text-dex-muted mb-4">開啟 GPS 後外出捕捉，<br/>你的捕捉地點會自動記錄在這裡</div>
-              <button onClick={onGoScan} className="px-4 py-2.5 rounded-xl bg-dex-neon text-dex-bg font-black text-sm">去捕捉</button>
+              <button onClick={onGoScan} className="px-4 py-2.5 rounded-xl bg-dex-neon text-dex-ink font-black text-sm">去捕捉</button>
             </div>
           ) : (
             <div className="space-y-2">
@@ -240,7 +244,7 @@ export function MapScreen({ onSelectSpecies, onGoScan }: MapScreenProps) {
           {/* floating scan button */}
           <div className="absolute bottom-3 left-3 right-3 z-[400]">
             <button onClick={onGoScan}
-              className="w-full py-3.5 rounded-xl bg-dex-neon text-dex-bg font-black flex items-center justify-center gap-2 shadow-lg shadow-dex-neon/20">
+              className="w-full py-3.5 rounded-xl bg-dex-neon text-dex-ink font-black flex items-center justify-center gap-2 shadow-lg shadow-dex-neon/20">
               <Camera size={18} /> 前往捕捉
             </button>
             <div className="text-center text-[10px] text-white/70 mt-1.5 drop-shadow" style={{ textShadow: '0 1px 4px #000' }}>

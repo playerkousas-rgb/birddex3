@@ -271,7 +271,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
                 height: `${d.height * 100}%`,
               }}
             >
-              <div className="absolute -top-6 left-0 px-2 py-0.5 rounded bg-dex-neon text-dex-bg text-[10px] font-black tracking-wider">
+              <div className="absolute -top-6 left-0 px-2 py-0.5 rounded bg-dex-neon text-dex-ink text-[10px] font-black tracking-wider">
                 BIRD {(d.score * 100).toFixed(0)}%
               </div>
               {/* corners */}
@@ -316,9 +316,9 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       {phase === 'error' && (
         <div className="absolute inset-0 bg-dex-bg/95 flex flex-col items-center justify-center z-20 px-6">
           <AlertTriangle className="text-dex-accent mb-3" size={48} />
-          <div className="text-lg font-bold text-white mb-2">掃描器異常</div>
+          <div className="text-lg font-bold text-dex-text mb-2">掃描器異常</div>
           <div className="text-sm text-dex-muted text-center mb-6">{errorMsg}</div>
-          <button onClick={startCamera} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-bg font-bold text-sm">
+          <button onClick={startCamera} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-ink font-bold text-sm">
             重新啟動相機
           </button>
         </div>
@@ -393,7 +393,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
                 <button key={z}
                   onClick={()=>applyZoom(z)}
                   className={`w-11 h-11 rounded-full text-[11px] font-black border transition ${
-                    active ? 'bg-dex-neon text-dex-bg border-dex-neon' : 'bg-black/55 text-white border-white/20'
+                    active ? 'bg-dex-neon text-dex-ink border-dex-neon' : 'bg-black/55 text-white border-white/20'
                   }`}>
                   {z}x
                 </button>
@@ -424,7 +424,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
           >
             {birdDetected && <span className="pulse-ring absolute inset-0 rounded-full" style={{borderColor:'#00F0FF'}} />}
             <div className="w-[62px] h-[62px] rounded-full border-[3px] border-dex-bg flex items-center justify-center">
-              <Camera size={26} className="text-dex-bg" />
+              <Camera size={26} className="text-dex-ink" />
             </div>
           </button>
           <div className="text-[10px] text-white/40">Zoom {zoom.toFixed(1)}x · {supportsOpticalZoom ? '光學' : '數位'} · {liveDetectEnabled ? (ready ? `AI ON ${fps}fps` : modelLoading ? 'AI…' : 'AI OFFLINE') : 'AI OFF'}</div>

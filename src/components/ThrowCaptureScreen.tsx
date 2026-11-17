@@ -164,7 +164,7 @@ export function ThrowCaptureScreen({ session, zoomLevel, onComplete, onSkip }: P
         {phase === 'aim' ? (
           <button
             onClick={doThrow}
-            className="w-full py-4 rounded-2xl bg-dex-neon text-dex-bg font-black tracking-wider shadow-lg shadow-dex-neon/20 active:scale-[0.98]"
+            className="w-full py-4 rounded-2xl bg-dex-neon text-dex-ink font-black tracking-wider shadow-lg shadow-dex-neon/20 active:scale-[0.98]"
           >
             投出精靈球！
           </button>
