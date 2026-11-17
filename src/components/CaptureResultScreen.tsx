@@ -9,6 +9,7 @@ import { ivRankLabel, natureEffect } from '../lib/birdStats';
 import { makeSticker } from '../lib/stickerMaker';
 import { useCollectionContext } from '../context/CollectionContext';
 import { openAvianDexUnlock } from '../lib/aviandex';
+import { formatCapturedAt, formatCaptureLocation } from '../lib/captureMemory';
 
 interface CaptureResultScreenProps {
   result: CaptureResult;
@@ -278,6 +279,17 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
               {rarityMeta.label} · {rarityMeta.labelZh}
             </div>
           </div>
+
+          {/* 紀念條：捕捉日期 ＋ 地點（原相＋賽璐璐卡已永久保存，呢行要睇得到） */}
+          {record && (
+            <div className="flex items-center justify-center gap-2 text-[11px] text-dex-muted bg-dex-surface/70 border border-dex-border rounded-full px-3.5 py-1.5">
+              <span aria-hidden="true">📅</span>
+              <span>{formatCapturedAt(record.capturedAt)}</span>
+              <span className="text-dex-border" aria-hidden="true">·</span>
+              <span aria-hidden="true">📍</span>
+              <span>{formatCaptureLocation(record.location)}</span>
+            </div>
+          )}
 
           {/* Sticker Maker */}
           {photoForSticker && (

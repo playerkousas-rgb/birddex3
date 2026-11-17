@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useBirdImage } from '../hooks/useBirdImage';
+import { formatCaptureLocation } from '../lib/captureMemory';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
 import { RARITY_META } from '../lib/theme';
@@ -273,7 +274,8 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
               <div>
                 <p className="text-xs text-gray-500 font-black tracking-widest mb-1">捕捉紀錄</p>
                 <div className="flex items-baseline gap-2"><span className="text-4xl font-black text-white">{capture.count}</span><span className="text-sm text-gray-400 font-bold">次</span></div>
-                <p className="text-[10px] text-gray-500 mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')}</p>
+                <p className="text-[10px] text-gray-500 mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')} · 最近：{new Date(capture.lastCaptureDate).toLocaleDateString('zh-HK')}</p>
+                <p className="text-[10px] text-gray-500 mt-0.5">📍 {formatCaptureLocation(capture.location)}</p>
                 {allCatches.length > 1 && <p className="text-[10px] text-dex-neon mt-0.5">已記錄 {allCatches.length} 隻不同個體</p>}
               </div>
               <div className="text-right">

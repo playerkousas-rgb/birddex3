@@ -32,6 +32,8 @@ BirdEx 係「精靈球」：負責喺野外**捉**——影相 → 答 3 條問�
    - **賽璐璐版 = 精靈卡**：前端 Canvas 即時轉——Posterize（量化到 4–5 級平色塊）
      ＋ Sobel Edge Detection（加粗黑邊）。撳一下即變，零 upload、零 Backend、零錢。
    卡面預設顯示賽璐璐版；撳卡上「賽璐璐 ⇄ 原相」隨時轉。
+   每筆捕捉記錄**永久保存原相＋賽璐璐卡＋捕捉日期＋地點**（結果頁紀念條＋詳頁捕捉紀錄都顯示），
+   紀念價值睇得到、帶得走。
 
 5. **🔗 解鎖 AvianDex（兄弟互通）**
    捕捉記錄：`{ no: "0008", captured_at, location, method: "photo", photo_original_url, photo_cel_url }`
