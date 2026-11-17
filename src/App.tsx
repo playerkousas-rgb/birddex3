@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { CollectionProvider, useCollectionContext } from './context/CollectionContext';
 import { View, CaptureResult as CaptureResultType, QuizSession, CaptureStats } from './types';
@@ -51,10 +51,14 @@ function AppRouter() {
     }
   };
 
+  // 賽璐璐卡預生成：影完相即刻後台跑，小朋友答三問期間完成 — 揀中即刻入投球動畫
+  const celPromiseRef = useRef<Promise<string | null> | null>(null);
+
   // Scanner → 三問流程（相只係證據，冇 AI 辨識）
   const handlePhotoTaken = (session: QuizSession) => {
     setQuizSession(session);
     setView('quiz');
+    celPromiseRef.current = celShadeImage(session.photoDataUrl).catch(() => null);
   };
 
   // 小朋友對卡揀中 → 即刻生成賽璐璐卡 → 捕捉記錄（原相＋賽璐璐一齊 Keep）
@@ -65,10 +69,12 @@ function AppRouter() {
       const stats: CaptureStats = generateCaptureStats({ catchScore: null, zoomLevel: quizSession.zoom });
       let celUrl: string | null = null;
       try {
-        celUrl = await celShadeImage(quizSession.photoDataUrl);
+        // 優先用答問題期間預生成好嘅；未好就即場補做（通常即時 resolve）
+        celUrl = await (celPromiseRef.current ?? celShadeImage(quizSession.photoDataUrl));
       } catch {
         celUrl = null; // 轉換失敗都要保住原相（證據優先）
       }
+      celPromiseRef.current = null;
       const result = captureBird(speciesId, {
         photo_original_url: quizSession.photoDataUrl,
         photo_cel_url: celUrl,
@@ -123,6 +129,7 @@ function AppRouter() {
             session={quizSession}
             onBack={handleQuizBack}
             onPick={handlePick}
+            picking={picking}
           />
         )}
         {view === 'dex' && <DexScreen onSelectSpecies={handleSelectSpecies} />}

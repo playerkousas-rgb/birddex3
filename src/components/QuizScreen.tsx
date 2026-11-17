@@ -14,6 +14,8 @@ interface QuizScreenProps {
   onBack: () => void;
   /** 小朋友自己對卡揀中 → 上級直接生成賽璐璐卡並捕捉 */
   onPick: (speciesId: number) => void;
+  /** 生成賽璐璐卡中：GO 鈕出 loading，唔畀重複撳 */
+  picking?: boolean;
 }
 
 const MERLIN_URL = 'https://merlin.allaboutbirds.org';
@@ -121,7 +123,7 @@ function CandidateCard({
   );
 }
 
-export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
+export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScreenProps) {
   const [answers, setAnswers] = useState<Partial<QuizAnswers>>({});
   const [phase, setPhase] = useState<'questions' | 'candidates'>('questions');
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -352,15 +354,21 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
       {phase === 'candidates' && (
         <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-dex-bg border-t border-dex-border">
           <button
-            disabled={selectedId === null}
+            type="button"
+            disabled={selectedId === null || picking}
             onClick={() => selectedId !== null && onPick(selectedId)}
             className={`w-full py-4 rounded-2xl font-black tracking-wide text-base flex items-center justify-center gap-2 shadow-lg transition ${
-              selectedId !== null
+              selectedId !== null && !picking
                 ? 'bg-dex-neon text-dex-bg active:scale-[0.98]'
                 : 'bg-dex-surface text-dex-muted border border-dex-border'
             }`}
           >
-            {selectedId !== null ? '就係呢隻！精靈球捕捉 GO 🎯' : '先揀一張最似嘅卡'}
+            {picking ? (
+              <>
+                <span className="w-4 h-4 rounded-full border-2 border-dex-muted border-t-dex-neon animate-spin" aria-hidden="true" />
+                生成賽璐璐卡…
+              </>
+            ) : selectedId !== null ? '就係呢隻！精靈球捕捉 GO 🎯' : '先揀一張最似嘅卡'}
           </button>
         </div>
       )}
