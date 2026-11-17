@@ -32,8 +32,25 @@ https://avian-dex.vercel.app/?unlock=0008[&search=中文名]
   `{ no, unlocked_at, source: 'birddex3' }`，並直接打開該鳥（`?id=`/`?search=` 亦支援）。
 - BirdEx 嘅觸發點：
   1. 捕捉結果頁「跳去 AvianDex 解鎖 NO.NNNN」；
-  2. 鳥種詳頁（已捕捉）「解鎖 NO.NNNN」。
-- 實作：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock` / `toInteropRecord`）。
+  2. 鳥種詳頁（已捕捉）「解鎖 NO.NNNN」；
+  3. 收藏冊 header「圖鑑」掣（開 AvianDex 首頁，唔帶參數）。
+- 導航行為：優先 `window.open(..., '_blank')` ＋ postMessage 遞捕捉記錄（0／800／2500ms 三次）；
+  **彈窗被擋（例如 iframe 內）就退回同一分頁 `location.assign`** —— `?unlock=` 參數本身已經齊，
+  頂層導航照樣生效（docs/50 頂層跳板精神）。
+- 實作：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock` / `toInteropRecord` / `parseIncomingSpecies`）。
+
+### 3b. 入站深層連結（AvianDex → BirdEx，合約已就緒）
+
+```
+https://birddex3.vercel.app/?no=0008     （亦支援 ?species=8 / ?id=0008）
+```
+
+- BirdEx 收到後直接打開該鳥詳頁，處理完 `history.replaceState` 清走參數（重新整理唔會重開）。
+- **AvianDex 現況**：佢嘅「精靈球」掣（`src/App.tsx`／`PokedexDevice.tsx`）而家只開
+  `BIRD_CAPTURE_APP_URL` base URL，冇帶參數 —— AvianDex 嗰邊日後只要喺 URL 後面加
+  `?no=NNNN`（例如由邊隻鳥嘅詳頁開過嚟就帶邊隻），BirdEx 呢邊已經接得住。
+- `?unlock=` 屬出站方向，入站解析會忽略佢，唔會誤讀。
+- 守門：`tests/interop.test.mjs`（入站解析＋出站 fallback）。
 
 ## 4. R2 `birdcards/` 編號真相（2026-11-17 更新：bucket 已按 AvianDex 編號對齊）
 

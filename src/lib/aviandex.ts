@@ -39,6 +39,21 @@ export function toInteropRecord(record: CaptureRecord): InteropCaptureRecord {
   };
 }
 
+/**
+ * 入站深層連結（AvianDex → BirdEx）：AvianDex 嘅「精靈球」掣而家開 base URL，
+ * 日後只要帶 `?no=0008`（或 `?species=8`／`?id=0008`）就會直接開返呢隻鳥嘅詳頁。
+ * 合約已寫入 docs/AVIANDEX_INTEROP.md；`?unlock=` 屬出站方向，呢度唔會誤讀。
+ */
+export function parseIncomingSpecies(search: string): number | null {
+  const params = new URLSearchParams(search);
+  const raw = params.get('no') ?? params.get('species') ?? params.get('id');
+  if (!raw) return null;
+  const digits = raw.replace(/\D/g, '');
+  if (!digits || digits.length > 4) return null;
+  const id = Number(digits);
+  return Number.isInteger(id) && id >= 1 && id <= 9999 ? id : null;
+}
+
 /** AvianDex 深層連結：unlock 主用，search 作後備（同 AvianDex 實作對齊） */
 export function aviandexUnlockUrl(no: string, name?: string): string {
   const url = new URL(AVIANDEX_BASE_URL + '/');
@@ -59,7 +74,12 @@ export function openAvianDexUnlock(record: CaptureRecord, name?: string): void {
   const payload = { source: 'birddex3', type: 'capture-unlock', record: interop };
 
   const opened = window.open(url, '_blank');
-  if (!opened) return; // 彈窗被擋：連結照開唔到都要靜靜，唔好阻住捕捉流程
+  if (!opened) {
+    // 彈窗被擋（例如喺 iframe 入面）：退回同一分頁頂層導航，?unlock 合約照樣生效
+    // （docs/50：iframe 禁區改行頂層跳板；postMessage 呢條路就免了，參數已經齊）
+    window.location.assign(url);
+    return;
+  }
   const deliver = () => {
     try { opened.postMessage(payload, targetOrigin); } catch { /* 對方未 ready：照舊靠 ?unlock= */ }
   };

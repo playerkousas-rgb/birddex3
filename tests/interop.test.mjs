@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import { loadTs } from './load-ts.mjs';
 
 const av = loadTs('src/lib/aviandex.ts');
@@ -58,4 +59,21 @@ test('冇相嘅舊記錄都生到 interop 形狀（欄位用 null，唔係 undef
   assert.equal(interop.photo_original_url, null);
   assert.equal(interop.photo_cel_url, null);
   assert.equal(interop.location, null);
+});
+
+test('入站深層連結：AvianDex 帶 ?no/?species/?id 過嚟會解析到 speciesId', () => {
+  assert.equal(av.parseIncomingSpecies('?no=0008'), 8);
+  assert.equal(av.parseIncomingSpecies('?species=8'), 8);
+  assert.equal(av.parseIncomingSpecies('?id=0583'), 583);
+  assert.equal(av.parseIncomingSpecies('?no=8&search=鵲鴝'), 8);
+  assert.equal(av.parseIncomingSpecies('?unlock=0008'), null, '?unlock 係出站方向，唔係入站');
+  assert.equal(av.parseIncomingSpecies(''), null);
+  assert.equal(av.parseIncomingSpecies('?no=99999'), null, '超過 4 位唔收');
+  assert.equal(av.parseIncomingSpecies('?no=0000'), null, '0 唔係有效編號');
+  assert.equal(av.parseIncomingSpecies('?no=abc'), null);
+});
+
+test('出站解鎖：彈窗被擋要退回同一分頁導航（iframe 頂層跳板，docs/50）', () => {
+  const src = readFileSync('src/lib/aviandex.ts', 'utf8');
+  assert.match(src, /window\.location\.assign\(url\)/, 'popup blocked → same-tab fallback');
 });

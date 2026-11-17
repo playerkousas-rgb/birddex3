@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { CollectionProvider, useCollectionContext } from './context/CollectionContext';
 import { View, CaptureResult as CaptureResultType, QuizSession, CaptureStats } from './types';
@@ -16,6 +16,8 @@ import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
 import { celShadeImage } from './lib/celShade';
 import { PwaChrome } from './components/PwaChrome';
+import { parseIncomingSpecies } from './lib/aviandex';
+import { getBirdById } from './data/birdData';
 
 function AppRouter() {
   const [view, setView] = useState<View>('dex');
@@ -85,6 +87,18 @@ function AppRouter() {
     setQuizSession(null);
     setView('scanner');
   };
+
+  // 入站深層連結（AvianDex → BirdEx）：?no=0008 / ?species=8 / ?id=0008 直接開呢隻鳥嘅詳頁。
+  // 處理完清走參數，重新整理唔會重開。合約見 docs/AVIANDEX_INTEROP.md §3。
+  useEffect(() => {
+    const incoming = parseIncomingSpecies(window.location.search);
+    if (incoming === null) return;
+    if (getBirdById(incoming)) {
+      setSelectedSpeciesId(incoming);
+      setView('detail');
+    }
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+  }, []);
 
   return (
     <div className="app-shell w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">

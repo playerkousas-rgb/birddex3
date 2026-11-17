@@ -201,3 +201,8 @@ body {
   border-color: var(--neon);
   background: rgba(0, 240, 255, 0.08);
 }
+
+/* 戶外手機操作：取消雙擊縮放延遲，撳掣即時反應（唔影響捏合縮放） */
+button, a, [role="button"], label, select {
+  touch-action: manipulation;
+}

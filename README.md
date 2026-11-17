@@ -37,6 +37,9 @@ BirdEx 係「精靈球」：負責喺野外**捉**——影相 → 答 3 條問�
    捕捉記錄：`{ no: "0008", captured_at, location, method: "photo", photo_original_url, photo_cel_url }`
    捕捉結果頁／詳頁一鍵跳 `https://avian-dex.vercel.app/?unlock=0008`，
    AvianDex 嗰格由剪影變做小朋友張卡。進度存 localStorage，唔使 login、唔使 Backend。
+   反向都通：AvianDex 開 `birddex3.vercel.app/?no=0008` 會直接打開嗰隻鳥詳頁
+   （合約見 [docs/AVIANDEX_INTEROP.md](docs/AVIANDEX_INTEROP.md) §3b）；彈窗被擋會自動退回
+   同分頁導航，`?unlock=` 照樣生效。
 
 6. **🆘 Merlin 只做後備**
    三條問題下面有個細掣「唔肯定？試下用 Merlin 影相認」——真係唔肯定先跳出場外，
@@ -64,6 +67,15 @@ IV／CP／性格個體值、稀有度升階（UC→LR）、全息閃卡、去背
 - R2 `birdcards/NNNN.avif` = **AvianDex NO. 編號直對**（AvianDex 側 `ILLUSTRATION_REPAIRS` 已補
   29 個改配物種槽位 ＋ 14 個新編號並上載，583/583 有圖；真相見 interop 文檔 §4）。
 
+## 📱 戶外手機適配（捕捉＝純外出用）
+
+- **390px 手機優先**：底部導覽＋`safe-area-inset` 全面覆蓋（瀏海／底部橫條唔遮內容）；
+  `100dvh` 動態視窗高度，iOS 工具欄收起唔甩底。
+- **拍攝唔熄屏**：相機對準期間用 Wake Lock 保持屏幕長亮（唔支援／被拒會靜靜繼續，唔影響拍攝）。
+- **掣即撳即應**：`touch-action: manipulation` 消除雙擊縮放延遲；撳掣有 `:focus-visible` 環。
+- **PWA 鎖直向**（`orientation: portrait`）、`display: standalone`、離線 app shell；
+  允許捏合縮放地圖，唔封死縮放（可達性）。
+
 ## 📲 PWA 安裝與更新（真理倉 docs/46 I／UP）
 
 - **安裝要有掣**：圖鑑頁 header 同訓練師頁有「加主畫面」入口；已加入（standalone）自動隱藏。
@@ -82,9 +94,10 @@ IV／CP／性格個體值、稀有度升階（UC→LR）、全息閃卡、去背
 - **R2 圖 583 覆蓋未由本沙箱核實**：`r2.dev` 唔在網路白名單，逐個 probe 做唔到；
   404 會自動跌返 emoji 後備。可用 AvianDex 側 `npm run cards:probe` 出缺圖清單。
 - **雙語 L1 豁免**：`EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 docs/44 定案）— 維持粵語單語`。
-- **圖標未達 docs/33 九檔標準**：只有 `icon-192.png`／`icon-512.png`（manifest 已掛 maskable 512）
-  ＋ `favicon.svg`；缺獨立 maskable 檔、16/32 ICO、og-image。未做原因：沙箱冇圖像工具，
-  唔為咗佢新增圖像依賴。
+- **圖標未齊 docs/33 九檔**：已有統一「精靈球×鳥頭」標誌 —— `favicon.svg` ＋
+  `favicon.ico`(16+32) ＋ `icon-16/32/180/192/512.png`（`scripts/gen-icons.py` 純 stdlib 產生，
+  零新依賴）；maskable 用 512 兼任（球直徑 59% < 66% 安全區）。缺 **og-image（1200×630）**
+  同獨立 maskable 檔 —— 未做原因：沙箱冇字體渲染工具，唔為咗佢新增圖像依賴。
 - **舊 `alert()`／`confirm()` 仍在**（對戰複製、刪除確認等 11 處）：docs/46 I8 嘅禁令
   新 PWA 代碼已守（`tests/pwa.test.mjs` 有守門）；全站換 toast 屬後續工作。
 - **W2 生成圖 DCT 隱形水印未做**：賽璐璐卡未落隱形水印（貼圖／名片匯出已有可見 ©）。

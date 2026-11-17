@@ -124,6 +124,31 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
     return () => { cancelled = true; };
   }, []);
 
+  // 戶外拍攝：對準期間保持屏幕長亮（Wake Lock）。唔支援／被拒就靜靜繼續，唔影響拍攝。
+  useEffect(() => {
+    if (!('wakeLock' in navigator)) return;
+    let cancelled = false;
+    let sentinel: WakeLockSentinel | null = null;
+    const acquire = () => {
+      if (cancelled || phase !== 'active') return;
+      navigator.wakeLock.request('screen')
+        .then(s => {
+          if (cancelled || phase !== 'active') { void s.release().catch(() => {}); return; }
+          sentinel = s;
+        })
+        .catch(() => { /* 權限／前台限制：忽略 */ });
+    };
+    if (phase === 'active') acquire();
+    const onVisibility = () => { if (document.visibilityState === 'visible') acquire(); };
+    document.addEventListener('visibilitychange', onVisibility);
+    return () => {
+      cancelled = true;
+      document.removeEventListener('visibilitychange', onVisibility);
+      void sentinel?.release().catch(() => {});
+      sentinel = null;
+    };
+  }, [phase]);
+
   // pinch zoom
   useEffect(() => {
     const el = videoRef.current?.parentElement;

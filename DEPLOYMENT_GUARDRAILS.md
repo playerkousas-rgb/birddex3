@@ -111,7 +111,7 @@ PLAYWRIGHT_MODULE=/tmp/birddex-qa/node_modules/playwright node tests/browser-smo
 | **docs/47 README 寫作紀律** | ✅ README 每句「已修」有檢查兜底、「未做」入「已知限制」、冇「理論上應該 work」字樣 |
 | **docs/44 雙語 L1–L6** | `EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 2026-11-08 定案）— 維持粵語單語` |
 | **docs/50／51 App Store 白名單** | 未接入 scoutappstore。如日後要入白名單：本 app 有相機＋SW＋localStorage，iframe 內相機／PWA 安裝受限 → 按 SG 規則評估 `entry-gate` 頂層跳板，唔好直接嵌 |
-| **docs/33 圖標九檔** | 部分合規：192／512 PNG ＋ manifest `maskable` 512 ＋ favicon.svg；缺獨立 maskable 檔、16/32 ICO、og-image（README 已列限制，唔用新圖像依賴硬做） |
+| **docs/33 圖標九檔** | 大部分合規（2026-11-17 重做）：統一「精靈球×鳥頭」標誌 —— favicon.svg／favicon.ico(16+32)／icon-16·32·180·192·512 PNG，全部由 `scripts/gen-icons.py`（純 stdlib）產生；manifest maskable 掛 512（球 59% < 66% 安全區）。缺 og-image ＋獨立 maskable 檔（README 已列限制） |
 | **docs/04 設定層／隱藏超管** | 不適用：本 repo 係輕量遊戲 App（無帳號後台、無系統級開關面），唔屬「系統級 app」定義 |
 
 守門腳本跟實作調整（唔係放寬）：`registerSW.js` 唔再係 dist 必要檔 —— 註冊改由
