@@ -3,15 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --bg: #0B0F19;
-  --surface: #111827;
-  --border: #1F2937;
-  --neon: #00F0FF;
+  /* 淺色系（同 tailwind.config dex 色板同步） */
+  --bg: #F3F6FC;
+  --surface: #FFFFFF;
+  --border: #E3E8F2;
+  --neon: #0FA958;
   --accent: #FF3366;
-  --gold: #FFD700;
+  --gold: #D08A00;
   --success: #10B981;
-  --text: #F3F4F6;
-  --muted: #9CA3AF;
+  --text: #1B1F2A;
+  --muted: #626B80;
 }
 
 html, body, #root {

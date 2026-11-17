@@ -1,5 +1,5 @@
 import React from 'react';
-import { LayoutGrid, ScanLine, Images, User, Map, Swords } from 'lucide-react';
+import { LayoutGrid, ScanLine, Images, User } from 'lucide-react';
 import { View } from '../types';
 
 interface NavbarProps {
@@ -9,9 +9,7 @@ interface NavbarProps {
 
 const ITEMS: { key: View; label: string; icon: React.ElementType }[] = [
   { key: 'dex', label: '圖鑑', icon: LayoutGrid },
-  { key: 'map', label: '地圖', icon: Map },
   { key: 'scanner', label: '捕捉', icon: ScanLine },
-  { key: 'battle', label: '對戰', icon: Swords },
   { key: 'album', label: '收藏', icon: Images },
   { key: 'profile', label: '訓練師', icon: User },
 ];
@@ -33,7 +31,7 @@ export function Navbar({ current, onNavigate }: NavbarProps) {
             className={`flex-1 flex flex-col items-center justify-center gap-1 rounded-2xl transition-colors duration-150 ${
               active
                 ? 'bg-dex-neon/12 text-dex-neon'
-                : 'text-dex-muted hover:text-white'
+                : 'text-dex-muted hover:text-dex-text'
             }`}
           >
             <Icon size={21} strokeWidth={active ? 2.4 : 2} aria-hidden="true" />

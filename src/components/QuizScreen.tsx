@@ -96,13 +96,13 @@ function CandidateCard({
           NO.{birdNo(bird.id)}
         </div>
         {selected && (
-          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-dex-neon text-dex-bg text-[10px] font-black">
+          <div className="absolute top-1.5 right-1.5 px-1.5 py-0.5 rounded bg-dex-neon text-dex-ink text-[10px] font-black">
             ✓ 揀咗
           </div>
         )}
       </div>
       <div className="p-2">
-        <div className="text-sm font-black text-white leading-tight truncate">{bird.name}</div>
+        <div className="text-sm font-black text-dex-text leading-tight truncate">{bird.name}</div>
         <div className="text-[10px] text-dex-muted truncate">{bird.nameEn}</div>
         <div className="flex flex-wrap gap-1 mt-1.5">
           {chips.map(chip => (
@@ -110,8 +110,8 @@ function CandidateCard({
               key={chip.label}
               className={`px-1 py-0.5 rounded text-[9px] font-bold border ${
                 chip.ok
-                  ? 'bg-emerald-500/15 border-emerald-400/40 text-emerald-300'
-                  : 'bg-white/5 border-white/10 text-dex-muted'
+                  ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-700'
+                  : 'bg-dex-bg border-dex-border text-dex-muted'
               }`}
             >
               {chip.ok ? '✓ ' : '· '}{chip.label}
@@ -157,13 +157,13 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
         <div className="flex items-center gap-3">
           <button
             onClick={() => (phase === 'candidates' ? setPhase('questions') : onBack())}
-            className="w-10 h-10 rounded-full bg-dex-surface border border-dex-border flex items-center justify-center text-white shrink-0"
+            className="w-10 h-10 rounded-full bg-dex-surface border border-dex-border flex items-center justify-center text-dex-text shrink-0"
             aria-label="返回"
           >
             <ArrowLeft size={20} />
           </button>
           <div className="min-w-0">
-            <h1 className="text-lg font-black text-white leading-tight">
+            <h1 className="text-lg font-black text-dex-text leading-tight">
               {phase === 'questions' ? '答 3 條問題，對返你張相' : '邊隻最似你影嗰隻？'}
             </h1>
             <p className="text-[11px] text-dex-muted">
@@ -189,7 +189,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
         <div className="px-4 pt-4 space-y-5">
           {/* Q1 大小 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2.5">佢有幾大？</h2>
+            <h2 className="text-base font-black text-dex-text mb-2.5">佢有幾大？</h2>
             <div className="grid grid-cols-3 gap-2">
               {SIZE_OPTIONS.map(size => (
                 <button
@@ -200,7 +200,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                   }`}
                 >
                   <div className="text-2xl">{SIZE_HINT[size].emoji}</div>
-                  <div className="text-sm font-black text-white mt-1">{size}</div>
+                  <div className="text-sm font-black text-dex-text mt-1">{size}</div>
                   <div className="text-[10px] text-dex-muted">{SIZE_HINT[size].hint}</div>
                 </button>
               ))}
@@ -209,7 +209,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
 
           {/* Q2 主色 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2.5">佢咩色為主？</h2>
+            <h2 className="text-base font-black text-dex-text mb-2.5">佢咩色為主？</h2>
             <div className="grid grid-cols-4 gap-2">
               {COLOR_OPTIONS.map(color => (
                 <button
@@ -223,7 +223,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                     className="w-7 h-7 rounded-full border border-white/30"
                     style={{ background: COLOR_DOT[color] }}
                   />
-                  <span className="text-xs font-black text-white">{color}</span>
+                  <span className="text-xs font-black text-dex-text">{color}</span>
                 </button>
               ))}
             </div>
@@ -231,7 +231,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
 
           {/* Q3 嘴形 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2.5">佢個嘴係點？</h2>
+            <h2 className="text-base font-black text-dex-text mb-2.5">佢個嘴係點？</h2>
             <div className="grid grid-cols-4 gap-2">
               {BEAK_OPTIONS.map(beak => (
                 <button
@@ -242,7 +242,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                   }`}
                 >
                   <span className="text-2xl">{BEAK_EMOJI[beak]}</span>
-                  <span className="text-sm font-black text-white">{beak}</span>
+                  <span className="text-sm font-black text-dex-text">{beak}</span>
                 </button>
               ))}
             </div>
@@ -252,7 +252,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
           <div className="pt-1">
             <button
               onClick={openMerlin}
-              className="inline-flex items-center gap-1.5 text-[11px] text-dex-muted underline decoration-dotted underline-offset-2 hover:text-white"
+              className="inline-flex items-center gap-1.5 text-[11px] text-dex-muted underline decoration-dotted underline-offset-2 hover:text-dex-text"
             >
               <HelpCircle size={12} />
               唔肯定？試下用 Merlin 影相認
@@ -269,7 +269,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                     value={query}
                     onChange={e => setQuery(e.target.value)}
                     placeholder="輸入 NO. 編號或鳥名，如 0008 / 鵲鴝 / magpie"
-                    className="w-full pl-8 pr-3 py-2 rounded-lg bg-black/40 border border-dex-border text-sm text-white placeholder-dex-muted focus:outline-none focus:border-dex-neon/60"
+                    className="w-full pl-8 pr-3 py-2 rounded-lg bg-dex-surface border border-dex-border text-sm text-dex-text placeholder-dex-muted focus:outline-none focus:border-dex-neon/60"
                   />
                 </div>
                 {queryResults.length > 0 && (
@@ -278,10 +278,10 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                       <button
                         key={bird.id}
                         onClick={() => onPick(bird.id)}
-                        className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-black/30 border border-dex-border text-left active:bg-dex-neon/10"
+                        className="w-full flex items-center justify-between px-3 py-2 rounded-lg bg-dex-surface border border-dex-border text-left active:bg-dex-neon/10"
                       >
                         <span className="min-w-0">
-                          <span className="block text-sm font-bold text-white truncate">{bird.name}</span>
+                          <span className="block text-sm font-bold text-dex-text truncate">{bird.name}</span>
                           <span className="block text-[10px] text-dex-muted truncate">NO.{birdNo(bird.id)} · {bird.nameEn}</span>
                         </span>
                         <ChevronRight size={16} className="text-dex-neon shrink-0" />
@@ -300,7 +300,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
               onClick={() => { setSelectedId(null); setPhase('candidates'); }}
               className={`w-full py-4 rounded-2xl font-black tracking-wide flex items-center justify-center gap-2 shadow-lg transition ${
                 complete
-                  ? 'bg-dex-neon text-dex-bg active:scale-[0.98]'
+                  ? 'bg-dex-neon text-dex-ink active:scale-[0.98]'
                   : 'bg-dex-surface text-dex-muted border border-dex-border'
               }`}
             >
@@ -359,7 +359,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
             onClick={() => selectedId !== null && onPick(selectedId)}
             className={`w-full py-4 rounded-2xl font-black tracking-wide text-base flex items-center justify-center gap-2 shadow-lg transition ${
               selectedId !== null && !picking
-                ? 'bg-dex-neon text-dex-bg active:scale-[0.98]'
+                ? 'bg-dex-neon text-dex-ink active:scale-[0.98]'
                 : 'bg-dex-surface text-dex-muted border border-dex-border'
             }`}
           >

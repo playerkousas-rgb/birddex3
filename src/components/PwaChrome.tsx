@@ -69,7 +69,7 @@ export function PwaChrome() {
           <div className="flex items-center gap-3">
             <RefreshCw size={18} className="text-dex-neon shrink-0" aria-hidden="true" />
             <div className="min-w-0 flex-1">
-              <p className="text-sm font-bold text-white leading-snug">已下載新版本</p>
+              <p className="text-sm font-bold text-dex-text leading-snug">已下載新版本</p>
               <p className="text-[11px] text-dex-muted leading-snug">
                 按一下即自動重新載入，毋須刪除或重裝；本機收藏與相片會保留。
               </p>
@@ -77,7 +77,7 @@ export function PwaChrome() {
             <button
               type="button"
               onClick={applyUpdate}
-              className="shrink-0 px-3 py-2 rounded-xl bg-dex-neon text-dex-bg text-xs font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
+              className="shrink-0 px-3 py-2 rounded-xl bg-dex-neon text-dex-ink text-xs font-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-white"
             >
               立即更新
             </button>
@@ -85,7 +85,7 @@ export function PwaChrome() {
               type="button"
               onClick={dismissUpdate}
               aria-label="稍後再更新"
-              className="shrink-0 w-9 h-9 rounded-xl bg-white/10 text-white flex items-center justify-center"
+              className="shrink-0 w-9 h-9 rounded-xl bg-dex-bg text-dex-text flex items-center justify-center"
             >
               <X size={16} aria-hidden="true" />
             </button>
@@ -117,7 +117,7 @@ export function PwaChrome() {
             className="w-full max-w-sm bg-dex-surface border border-dex-border rounded-3xl p-5"
           >
             <div className="flex items-center justify-between mb-1">
-              <h2 id="installHelpTitle" className="text-base font-black text-white flex items-center gap-2">
+              <h2 id="installHelpTitle" className="text-base font-black text-dex-text flex items-center gap-2">
                 <Smartphone size={16} className="text-dex-neon" aria-hidden="true" />
                 加入主畫面
               </h2>
@@ -125,7 +125,7 @@ export function PwaChrome() {
                 ref={closeBtnRef}
                 type="button"
                 onClick={dismissIosHelp}
-                className="w-9 h-9 rounded-xl bg-white/10 text-white flex items-center justify-center"
+                className="w-9 h-9 rounded-xl bg-dex-bg text-dex-text flex items-center justify-center"
                 aria-label="關閉教學"
               >
                 <X size={16} aria-hidden="true" />
@@ -137,8 +137,8 @@ export function PwaChrome() {
                 '按底部「分享」⬆',
                 '揀「加入主畫面」，再按「加入」',
               ].map((step, i) => (
-                <li key={step} className="flex items-start gap-3 text-sm text-white/90">
-                  <span className="w-6 h-6 rounded-full bg-dex-neon text-dex-bg text-xs font-black flex items-center justify-center shrink-0">
+                <li key={step} className="flex items-start gap-3 text-sm text-dex-text/90">
+                  <span className="w-6 h-6 rounded-full bg-dex-neon text-dex-ink text-xs font-black flex items-center justify-center shrink-0">
                     {i + 1}
                   </span>
                   <span className="pt-0.5">{step}</span>
@@ -151,7 +151,7 @@ export function PwaChrome() {
             <button
               type="button"
               onClick={dismissIosHelp}
-              className="mt-4 w-full py-3 rounded-xl bg-dex-neon text-dex-bg font-black text-sm"
+              className="mt-4 w-full py-3 rounded-xl bg-dex-neon text-dex-ink font-black text-sm"
             >
               知道了
             </button>

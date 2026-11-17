@@ -9,6 +9,7 @@ import { toPng } from 'html-to-image';
 import { COPYRIGHT_FULL, COPYRIGHT_SHORT } from '../lib/copyright';
 import { APP_VERSION } from '../version';
 import { InstallButton } from './PwaChrome';
+import { TrainerTierBadge } from './TrainerTierBadge';
 
 const AVATARS = [
   { emoji: '🥾', unlockLevel: 1, desc: '見習裝備' },
@@ -94,9 +95,13 @@ export function ProfileScreen() {
         <div className="relative flex items-center gap-4">
           <button 
             onClick={handleAvatarTap}
-            className="w-20 h-20 rounded-2xl bg-dex-border border-2 border-dex-neon/30 flex items-center justify-center text-4xl shadow-lg shadow-dex-neon/10 hover:border-dex-neon transition-colors"
+            className="relative w-20 h-20 rounded-2xl bg-dex-border border-2 border-dex-neon/30 flex items-center justify-center text-4xl shadow-lg shadow-dex-neon/10 hover:border-dex-neon transition-colors"
           >
             {profile.avatar || (profile.level >= 10 ? '👑' : profile.level >= 7 ? '🦅' : profile.level >= 4 ? '🔭' : '🥾')}
+            {/* 當前等級勳章（按級別唔同圖） */}
+            <span className="absolute -bottom-2.5 -right-2.5 rounded-full ring-2 ring-white shadow-md bg-white">
+              <TrainerTierBadge level={profile.level} size={32} />
+            </span>
           </button>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2">
@@ -105,22 +110,22 @@ export function ProfileScreen() {
                   <input
                     value={nameDraft}
                     onChange={e => setNameDraft(e.target.value)}
-                    className="bg-dex-bg border border-dex-border rounded-lg px-2 py-1 text-sm text-white focus:outline-none focus:border-dex-neon w-full"
+                    className="bg-dex-bg border border-dex-border rounded-lg px-2 py-1 text-sm text-dex-text focus:outline-none focus:border-dex-neon w-full"
                     onKeyDown={e => e.key === 'Enter' && saveName()}
                     autoFocus
                   />
-                  <button onClick={saveName} className="p-1.5 rounded-lg bg-dex-neon text-dex-bg hover:brightness-110">
+                  <button onClick={saveName} className="p-1.5 rounded-lg bg-dex-neon text-dex-ink hover:brightness-110">
                     <Check size={16} />
                   </button>
                 </div>
               ) : (
                 <div className="flex items-center gap-2">
-                  <h2 className="text-lg font-black text-white truncate">{profile.name}</h2>
-                  <button onClick={() => { setNameDraft(profile.name); setEditing(true); }} className="text-dex-muted hover:text-white transition">
+                  <h2 className="text-lg font-black text-dex-text truncate">{profile.name}</h2>
+                  <button onClick={() => { setNameDraft(profile.name); setEditing(true); }} className="text-dex-muted hover:text-dex-text transition">
                     <Edit3 size={14} />
                   </button>
                   {/* 新增換頭像按鈕 */}
-                  <button onClick={() => setShowAvatarSelect(true)} className="text-dex-muted hover:text-white transition ml-2 bg-white/10 px-2 py-0.5 rounded text-[10px] font-bold">
+                  <button onClick={() => setShowAvatarSelect(true)} className="text-dex-muted hover:text-dex-text transition ml-2 bg-dex-bg border border-dex-border px-2 py-0.5 rounded text-[10px] font-bold">
                     換頭像
                   </button>
                 </div>
@@ -151,6 +156,26 @@ export function ProfileScreen() {
             />
           </div>
         </div>
+
+        {/* 訓練師勳章牆：按級別生成唔同嘅圖 — 解鎖晒 12 級，激發投入 */}
+        <div className="mt-5">
+          <div className="text-[10px] font-black text-dex-muted tracking-widest mb-2">
+            訓練師勳章 · 每級唔同圖 · 已解鎖 {Array.from({ length: 12 }, (_, i) => i + 1).filter(lv => profile.level >= lv).length}/12
+          </div>
+          <div className="grid grid-cols-6 gap-x-2 gap-y-2.5">
+            {Array.from({ length: 12 }, (_, i) => i + 1).map(lv => {
+              const unlocked = profile.level >= lv;
+              return (
+                <div key={lv} className="flex flex-col items-center gap-0.5">
+                  <span className="relative inline-flex">
+                    <TrainerTierBadge level={lv} size={36} locked={!unlocked} />
+                  </span>
+                  <span className={`text-[9px] font-black ${unlocked ? 'text-dex-text' : 'text-dex-muted'}`}>Lv.{lv}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
       </div>
 
       {/* Stats grid */}
@@ -160,7 +185,7 @@ export function ProfileScreen() {
             <Feather size={14} />
             <span className="text-[10px] font-bold tracking-wider">獨特種類</span>
           </div>
-          <div className="text-2xl font-black text-white">{captures.length}</div>
+          <div className="text-2xl font-black text-dex-text">{captures.length}</div>
           <div className="text-[10px] text-dex-muted">/ {BIRD_SPECIES.length} 種已收錄</div>
         </div>
         <div className="bg-dex-surface border border-dex-border rounded-xl p-3">
@@ -168,7 +193,7 @@ export function ProfileScreen() {
             <Target size={14} />
             <span className="text-[10px] font-bold tracking-wider">總捕捉次數</span>
           </div>
-          <div className="text-2xl font-black text-white">{totalCount}</div>
+          <div className="text-2xl font-black text-dex-text">{totalCount}</div>
           <div className="text-[10px] text-dex-muted">平均每種 {captures.length ? (totalCount / captures.length).toFixed(1) : '0'} 次</div>
         </div>
         <div className="bg-dex-surface border border-dex-border rounded-xl p-3">
@@ -205,7 +230,7 @@ export function ProfileScreen() {
         <div className="bg-dex-surface border border-dex-border rounded-xl p-4">
           <div className="flex items-center gap-2 mb-2">
             <Share2 size={14} className="text-dex-neon" />
-            <h3 className="text-sm font-black text-white">分享我的收藏</h3>
+            <h3 className="text-sm font-black text-dex-text">分享我的收藏</h3>
           </div>
           <p className="text-[11px] text-dex-muted mb-3">
             生成你的訓練師名片 · 包含等級、捕捉數、完成度 QR 碼
@@ -213,7 +238,7 @@ export function ProfileScreen() {
           <div className="flex gap-2 flex-wrap">
             <button
               onClick={async () => setShowShareCard(true)}
-              className="px-3 py-2 rounded-lg bg-dex-neon text-dex-bg text-xs font-black flex items-center gap-1.5"
+              className="px-3 py-2 rounded-lg bg-dex-neon text-dex-ink text-xs font-black flex items-center gap-1.5"
             >
               <QrCode size={14} /> 生成名片
             </button>
@@ -224,7 +249,7 @@ export function ProfileScreen() {
                 await navigator.clipboard.writeText(text);
                 alert('已複製到剪貼簿！');
               }}
-              className="px-3 py-2 rounded-lg bg-white/10 text-white text-xs font-bold border border-dex-border"
+              className="px-3 py-2 rounded-lg bg-dex-bg text-dex-text text-xs font-bold border border-dex-border"
             >
               <Share2 size={14} /> 快速分享
             </button>
@@ -238,18 +263,18 @@ export function ProfileScreen() {
           <div className="flex items-center justify-between gap-2 mb-1">
             <div className="flex items-center gap-2">
               <Sparkles size={14} className="text-dex-neon" />
-              <h3 className="text-sm font-black text-white tracking-wide">異圖卡顯示</h3>
+              <h3 className="text-sm font-black text-dex-text tracking-wide">異圖卡顯示</h3>
             </div>
             <div className="text-[10px] font-mono text-dex-muted">
               已解鎖 <span className="text-dex-neon font-bold">{altConfirmedCount}</span>
               {altUnlockedCount > altConfirmedCount && (
-                <span className="text-white/40"> / 持有 {altUnlockedCount}</span>
+                <span className="text-dex-muted"> / 持有 {altUnlockedCount}</span>
               )}
             </div>
           </div>
           <p className="text-[11px] text-dex-muted mb-3 leading-relaxed">
-            異圖卡是精靈化版本的鳥卡（檔名 <code className="px-1 py-0.5 bg-black/30 rounded text-dex-neon">_UR.avif</code>）。
-            <b className="text-white/80"> 達 UR 稀有度自動解鎖</b>，這是王者的權利 👑
+            異圖卡是精靈化版本的鳥卡（檔名 <code className="px-1 py-0.5 bg-dex-bg rounded text-dex-neon">_UR.avif</code>）。
+            <b className="text-dex-text/80"> 達 UR 稀有度自動解鎖</b>，這是王者的權利 👑
           </p>
 
           {([
@@ -265,8 +290,8 @@ export function ProfileScreen() {
                 onClick={() => setAltArtMode(opt.id)}
                 className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg mb-2 last:mb-0 transition-all border ${
                   active
-                    ? 'bg-dex-neon/15 border-dex-neon text-white'
-                    : 'bg-dex-bg border-dex-border text-dex-muted hover:border-dex-neon/40 hover:text-white'
+                    ? 'bg-dex-neon/10 border-dex-neon text-dex-text'
+                    : 'bg-dex-surface border-dex-border text-dex-muted hover:border-dex-neon/40 hover:text-dex-text'
                 }`}
               >
                 <Icon size={16} className={active ? 'text-dex-neon' : 'text-dex-muted'} />
@@ -303,8 +328,8 @@ export function ProfileScreen() {
         {/* I1 加入主畫面入口（standalone 自動隱藏） */}
         <InstallButton />
         {/* W1 可見頁尾 ＋ V2 用家可見版號 */}
-        <div className="text-center text-[10px] text-white/35 leading-relaxed">
-          {COPYRIGHT_FULL} · BIRD-DEX 3 <strong className="text-white/50">v{APP_VERSION}</strong>
+        <div className="text-center text-[10px] text-dex-muted leading-relaxed">
+          {COPYRIGHT_FULL} · BIRD-DEX 3 <strong className="text-dex-text/70">v{APP_VERSION}</strong>
         </div>
       </div>
 
@@ -316,7 +341,10 @@ export function ProfileScreen() {
               <div className="p-5 text-white">
                 <div className="text-[10px] tracking-widest text-dex-neon font-mono mb-1">BIRD-DEX TRAINER CARD</div>
                 <div className="flex items-center gap-3 mb-3">
-                  <div className="text-4xl">{profile.avatar || '🥾'}</div>
+                  <div className="flex items-center gap-2">
+                    <div className="text-4xl">{profile.avatar || '🥾'}</div>
+                    <TrainerTierBadge level={profile.level} size={34} />
+                  </div>
                   <div>
                     <div className="text-lg font-black">{profile.name}</div>
                     <div className="text-xs text-dex-neon">Lv.{profile.level} · {profile.title}</div>
@@ -340,7 +368,7 @@ export function ProfileScreen() {
               </div>
             </div>
             <div className="flex gap-2 mt-3">
-              <button onClick={doShareCardImage} className="flex-1 py-3 rounded-xl bg-dex-neon text-dex-bg font-black text-sm">分享 / 下載名片</button>
+              <button onClick={doShareCardImage} className="flex-1 py-3 rounded-xl bg-dex-neon text-dex-ink font-black text-sm">分享 / 下載名片</button>
               <button onClick={()=>setShowShareCard(false)} className="px-4 py-3 rounded-xl bg-white/10 text-white text-sm border border-white/15">關閉</button>
             </div>
           </div>
@@ -352,8 +380,8 @@ export function ProfileScreen() {
         <div className="absolute inset-0 bg-black/80 backdrop-blur-sm z-50 flex flex-col justify-end">
           <div className="bg-dex-bg border-t border-dex-border rounded-t-3xl p-6 pb-24">
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-bold text-white">更換角色形象</h3>
-              <button onClick={() => setShowAvatarSelect(false)} className="text-dex-muted hover:text-white">
+              <h3 className="text-lg font-bold text-dex-text">更換角色形象</h3>
+              <button onClick={() => setShowAvatarSelect(false)} className="text-dex-muted hover:text-dex-text">
                 <X size={20} />
               </button>
             </div>

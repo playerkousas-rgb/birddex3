@@ -124,7 +124,7 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
             onMouseUp={stopRecording}
             onTouchStart={startRecording}
             onTouchEnd={stopRecording}
-            className="w-full py-4 rounded-xl bg-dex-neon text-dex-bg font-black text-sm tracking-wider active:scale-95 transition select-none"
+            className="w-full py-4 rounded-xl bg-dex-neon text-dex-ink font-black text-sm tracking-wider active:scale-95 transition select-none"
           >
             按住錄音
           </button>
@@ -164,7 +164,7 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
           <div className="text-5xl">💨</div>
           <div className="text-xl font-black text-white">無法辨識這個聲音</div>
           <p className="text-sm text-dex-muted max-w-xs">可能是雜訊太大、鳥聲太短，或這隻鳥不在圖鑑中。</p>
-          <button onClick={() => setPhase('idle')} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-bg font-bold text-sm">再試一次</button>
+          <button onClick={() => setPhase('idle')} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-ink font-bold text-sm">再試一次</button>
         </div>
       )}
 
@@ -173,7 +173,7 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
           <div className="text-4xl">⚠️</div>
           <div className="text-lg font-bold text-white">錄音發生錯誤</div>
           <p className="text-sm text-dex-muted">{errorMsg}</p>
-          <button onClick={() => setPhase('idle')} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-bg font-bold text-sm">重試</button>
+          <button onClick={() => setPhase('idle')} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-ink font-bold text-sm">重試</button>
         </div>
       )}
     </div>

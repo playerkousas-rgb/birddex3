@@ -10,8 +10,6 @@ import { AlbumScreen } from './components/AlbumScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { CaptureResultScreen } from './components/CaptureResultScreen';
 import { BirdDetailScreen } from './components/BirdDetailScreen';
-import { MapScreen } from './components/MapScreen';
-import { BattleScreen } from './components/BattleScreen';
 import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
 import { celShadeImage } from './lib/celShade';
@@ -134,8 +132,6 @@ function AppRouter() {
         )}
         {view === 'dex' && <DexScreen onSelectSpecies={handleSelectSpecies} />}
         {view === 'album' && <AlbumScreen onSelectSpecies={handleSelectSpecies} />}
-        {view === 'map' && <MapScreen onSelectSpecies={handleSelectSpecies} onGoScan={() => setView('scanner')} />}
-        {view === 'battle' && <BattleScreen onBack={() => setView('dex')} />}
         {view === 'profile' && <ProfileScreen />}
         {view === 'detail' && selectedSpeciesId !== null && (
           <BirdDetailScreen speciesId={selectedSpeciesId} onBack={handleBack} />

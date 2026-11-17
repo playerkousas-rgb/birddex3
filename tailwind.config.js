@@ -17,12 +17,16 @@ export default {
           lr: '#1F2937',    // Legend Rare - 黑金
         },
         dex: {
-          bg: '#0B0F19',
-          surface: '#111827',
-          border: '#1F2937',
-          neon: '#00F0FF',
+          // 淺色系（2026-11-17：「太陰沉」改版 — 陽光户外感，白卡＋雲白底）
+          bg: '#F3F6FC',
+          surface: '#FFFFFF',
+          border: '#E3E8F2',
+          text: '#1B1F2A',   // 主文字
+          muted: '#626B80',  // 次文字
+          ink: '#14161C',    // 彩色按鈕上嘅深字（text-dex-bg 嘅新身分）
+          neon: '#0FA958',   // 草綠：白底可讀、配 ink 字對比夠
           accent: '#FF3366',
-          gold: '#FFD700',
+          gold: '#D08A00',   // 白底可讀嘅金
           success: '#10B981',
           warning: '#F59E0B',
         }

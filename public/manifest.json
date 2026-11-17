@@ -4,8 +4,8 @@
   "description": "影相做證 × 答3問對卡 × 賽璐璐精靈卡 × 原相證據 × IV養成 · 香港觀鳥 CatchCat！",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B0F19",
-  "theme_color": "#0B0F19",
+  "background_color": "#F3F6FC",
+  "theme_color": "#F3F6FC",
   "orientation": "portrait",
   "icons": [
     {

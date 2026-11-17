@@ -100,7 +100,7 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
           {isUncaptured ? '???' : meta.label}
         </div>
         {isStickerMode && (
-          <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-dex-neon/90 text-dex-bg text-[9px] font-black">貼圖</div>
+          <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded bg-dex-neon/90 text-dex-ink text-[9px] font-black">貼圖</div>
         )}
         {stats && !isUncaptured && !hideStats && (
           <div className="absolute top-2 left-2 px-1.5 py-0.5 rounded-md bg-black/65 border border-white/15 text-[10px] font-black"
@@ -172,7 +172,7 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
       </div>
 
       {isStickerMode && (
-        <div className="absolute top-14 right-3 px-2 py-1 rounded-full bg-dex-neon text-dex-bg text-[10px] font-black">貼圖</div>
+        <div className="absolute top-14 right-3 px-2 py-1 rounded-full bg-dex-neon text-dex-ink text-[10px] font-black">貼圖</div>
       )}
 
       {stats && shouldShowIv && !isUncaptured && (

@@ -1,3 +1,7 @@
+/**
+ * 【已退役 2026-11-17】對戰 — 用戶指示「不要對戰了」。Navbar 同 App 路由已移除
+ * （檔案保留；BattleCard／BattleLog 等基礎建設如有日後玩法可再用）。
+ */
 import { useMemo, useState, useRef } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
@@ -154,7 +158,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
         <div className="text-sm text-dex-muted mb-4">至少捕捉 2 隻有個體值的鳥才能對戰<br/>或匯入朋友的隊伍來打</div>
         <div className="flex gap-2">
           <button onClick={onBack} className="px-5 py-2.5 rounded-xl bg-dex-surface border border-dex-border text-white">返回</button>
-          <button onClick={()=>setShowTeamIO(true)} className="px-5 py-2.5 rounded-xl bg-dex-neon text-dex-bg font-black">匯入隊伍</button>
+          <button onClick={()=>setShowTeamIO(true)} className="px-5 py-2.5 rounded-xl bg-dex-neon text-dex-ink font-black">匯入隊伍</button>
         </div>
       </div>
     );
@@ -235,7 +239,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
 
         <div className="flex gap-2">
           <button onClick={doBattle} disabled={!leftBird || !rightBird}
-            className="flex-1 py-3.5 rounded-xl bg-dex-neon text-dex-bg font-black disabled:opacity-40">開戰！</button>
+            className="flex-1 py-3.5 rounded-xl bg-dex-neon text-dex-ink font-black disabled:opacity-40">開戰！</button>
           <button onClick={()=>setBattleResult(null)} className="px-4 py-3.5 rounded-xl bg-dex-surface border border-dex-border text-white"><RotateCcw size={18}/></button>
           <button onClick={()=>shareBattle()} className="px-4 py-3.5 rounded-xl bg-dex-surface border border-dex-border text-white"><Share2 size={18}/></button>
           {battleResult && <button onClick={()=>shareBattle()} className="px-3 py-3.5 rounded-xl bg-white/10 border border-dex-border text-white text-[11px]"><Download size={16}/></button>}
@@ -264,7 +268,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
               </div>
               <div className="flex gap-2 mt-2">
                 <button onClick={async ()=>{ await navigator.clipboard.writeText(exp.code); alert('隊伍代碼已複製！'); }}
-                  className="flex-1 py-2 rounded-lg bg-dex-neon text-dex-bg text-xs font-black flex items-center justify-center gap-1">
+                  className="flex-1 py-2 rounded-lg bg-dex-neon text-dex-ink text-xs font-black flex items-center justify-center gap-1">
                   <Copy size={13}/> 複製代碼
                 </button>
                 <button onClick={async ()=>{
