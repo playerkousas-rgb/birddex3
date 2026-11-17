@@ -1,55 +1,54 @@
-# BIRD-DEX 資料庫同步與維護指南
+# BIRD-DEX 資料庫同步與維護指南（精靈球版）
 
-BIRD-DEX v2 已經將所有的核心資料從 TypeScript 程式碼中抽離，轉為 **JSON 格式**。
-這樣做的目的是為了方便與另一個專案 `AvianDex` 共用資料庫，並允許透過自動化腳本進行同步。
+BirdEx 嘅核心資料係 **JSON**，同兄弟專案 **AvianDex** 共用同一套 `NO. NNNN` 編號。
+**AvianDex 嘅 583 隻名單係編號真相**；BirdEx 唔再各自維護一份。
 
-## 📁 核心資料檔案位置
+## 1. 檔案角色
 
-在 `skw-birdex2` 專案中，主要有兩個 JSON 檔案需要維護：
+| 檔案 | 用途 |
+|---|---|
+| `src/data/birds.json` | 圖鑑主資料：583 隻（`id` 為數字 1–583）＋ `size`/`main_color`/`beak` 三問特徵 |
+| `src/data/nameAliases.json` | 名稱／學名 → `speciesId` 對照（Merlin 後備查找用） |
+| `scripts/reference_data/aviandex_birds.json` | AvianDex 名單快照（編號權威） |
+| `scripts/reference_data/birdTaxonomy.json` | 583 隻目／科（推導特徵用） |
+| `scripts/reference_data/explorerIndex.json` ＋ `filterTraits.json` | 體長資料（推導 `size` 用） |
+| `scripts/reference_data/legacy_birds_569.json` | 改造前 569 名單快照——只用嚟核對 URL 模式（自id四碼 .avif） |
 
-1. **`src/data/birds.json`**
-   - **用途**：鳥類圖鑑的主要詳細資訊（包含中文名、英文名、學名、特徵、棲地、圖片 URL 等）。
-   - **對應介面**：符合 `BirdSpecies` 型別定義。
+> `scripts/reference_data/` 喺 Git 保留、部署排除（見 DEPLOYMENT_GUARDRAILS §2）。
 
-2. **`src/data/nameAliases.json`**
-   - **用途**：AI 模型（如 Hugging Face, BirdNET）辨識結果的映射表。因為 AI 回傳的名稱可能是英文、學名或簡體中文，這個檔案負責將各種 `aliases` 對應回 `birds.json` 中的 `speciesId`。
-   - **對應介面**：陣列包含 `{ speciesId: number, aliases: string[] }`。
+## 2. 點同步
 
----
+```bash
+# 1) 先喺 AvianDex repo 更新 reference 快照（gh api 或手動下載五個 JSON）
+# 2) 重跑同步（idempotent，可重跑）
+python3 scripts/sync_from_aviandex.py
+# 3) 驗證
+npm run check && npm run lint && npm run build
+```
 
-## 🔄 如何進行資料更新與同步
+腳本一次過做齊：
 
-如果你在 `AvianDex` 中更新了鳥類資料，或是手動修改了 JSON 檔案，請按照以下步驟確保 BIRD-DEX 的網頁版正常運作。
+1. 以 AvianDex 名單重建 `birds.json`（583 隻）。
+2. `photoUrl` **編號直對**：`birdcards/<AvianDex NO>.avif`（583/583）。
+   R2 bucket 已按 AvianDex 編號對齊物種——AvianDex `docs/ILLUSTRATION_REPAIRS.md`
+   補咗 29 個改配物種槽位 ＋ 14 個新編號（0570–0583）並由用戶上載；
+   `legacy_birds_569.json` 只做「自id四碼 .avif」完整性核對。
+   詳見 [docs/AVIANDEX_INTEROP.md](docs/AVIANDEX_INTEROP.md) §4。
+3. 推導三問特徵（`size`：體長 ≤15 細 / 16–39 中 / ≥40 大 → 科級後備 → 中；
+   `main_color`：中文名顏色字 → 科級後備 → 啡棕；`beak`：科級嘴形表 → 尖）。
+4. 重建 `nameAliases.json`（英文＋學名＋繁中＋簡中，先到先得去重）。
 
-### 步驟 1：覆蓋 JSON 檔案
-將更新後的 JSON 檔案直接覆蓋到 `skw-birdex2` 的指定路徑：
-- 覆蓋 `skw-birdex2/src/data/birds.json`
-- 覆蓋 `skw-birdex2/src/data/nameAliases.json`
+## 3. 注意事項
 
-> 💡 **自動化建議：**
-> 如果你有寫 Bash 或 Node.js 腳本，可以直接執行類似以下指令：
-> ```bash
-> cp ../AvianDex/src/data/birds.json ./src/data/birds.json
-> cp ../AvianDex/src/data/nameAliases.json ./src/data/nameAliases.json
-> ```
+1. `birds.json` 嘅 `id` 必須係**數字**（唔係 `"0001"` 字串）。
+2. 三問特徵值只准用字彙表內字串（守門：`tests/core.test.mjs`）。
+3. 改咗 JSON 要行 `npm run build` 確認冇 TypeScript 錯誤先好部署。
+4. AvianDex 嗰邊改咗編號／名單 → 更新 reference 快照重跑本腳本；
+   BirdEx 呢邊永遠唔准自行發明編號（互聯紅線見 interop 文檔 §6）。
 
-### 步驟 2：注意事項
-修改或覆蓋 JSON 檔案時，請確保：
-1. `birds.json` 裡的 `id` 欄位必須是**數字 (Number)**（不要用字串 `"0001"`）。
-2. `nameAliases.json` 裡的所有 `aliases` 陣列字串都建議**轉為小寫**，以確保比對時的準確度。
-3. `nameAliases.json` 的 `speciesId` 必須能對應到 `birds.json` 中的 `id`。
+## 4. 內部讀取邏輯（唔使改）
 
-### 步驟 3：重新啟動或建置
-因為 Vite 會快取 JSON 檔案，如果你在本地開發環境 (Dev Server) 運作中修改了 JSON，通常 Vite 會熱更新。
-但如果資料沒有變化，請：
-1. 重啟開發伺服器 `npm run dev`
-2. 或者準備上線前，執行 `npm run build` 確認沒有 TypeScript 錯誤。
-
----
-
-## 🛠️ TypeScript 映射邏輯 (無需修改)
-
-為了讓你知道資料是如何載入的，以下是內部的讀取邏輯（你不需要修改它們）：
-
-*   **`src/data/birdData.ts`**: 會直接 `import birdsJson from './birds.json'` 並轉型為 `BirdSpecies[]` 供全域使用。
-*   **`src/data/nameAliases.ts`**: 會載入 `nameAliases.json` 並在記憶體中建立一個 `Map<string, number>`。當相機辨識到結果時，會丟進 `resolveBirdId()` 函式，自動過濾大小寫與標點符號，回傳對應的圖鑑 ID。
+* `src/data/birdData.ts`：`import birdsJson from './birds.json'` → `BIRD_SPECIES`。
+* `src/data/nameAliases.ts`：載入 `nameAliases.json` 建 `Map`，`resolveBirdId()` 忽略大小寫與標點。
+* 三問過濾：`src/lib/birdFilter.ts`（`matchCandidates` 永遠回 3–5 隻）。
+* 解鎖互聯：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock`）。

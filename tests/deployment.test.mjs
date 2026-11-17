@@ -11,14 +11,14 @@ async function fixture(t) {
   const output = join(root, 'dist');
   const publicDir = join(root, 'public');
   await mkdir(output); await mkdir(publicDir);
-  for (const file of ['favicon.svg', 'manifest.json', 'sw.js', 'registerSW.js']) await writeFile(join(output, file), '');
+  for (const file of ['favicon.svg', 'manifest.json', 'sw.js']) await writeFile(join(output, file), '');
   await writeFile(join(output, 'index.html'), '<link rel="manifest" href="/manifest.json">');
   return { output, publicDir };
 }
 
 test('deployment guard accepts minimal output and rejects leaked source maps/backups', async t => {
   const { output, publicDir } = await fixture(t);
-  assert.equal((await checkDeployment(output, publicDir)).files, 5);
+  assert.equal((await checkDeployment(output, publicDir)).files, 4);
   for (const name of ['app.js.map', 'draft.bak', 'notes.bak.1', 'notes.bak2', 'draft.tmp1', 'debug.log']) {
     await writeFile(join(output, name), 'test');
     await assert.rejects(checkDeployment(output, publicDir), /leaked/);
@@ -57,4 +57,17 @@ test('deployment guard enforces total output budget and the narrow WASM exceptio
   await assert.rejects(checkDeployment(output, publicDir), /dist:.*exceeds/);
   await truncate(wasm, budgets.wasm + 1);
   await assert.rejects(checkDeployment(output, publicDir), /wasm:.*exceeds/);
+});
+
+test('UP1 hard gate: sw.js with unconditional skipWaiting in install is rejected', async t => {
+  const { output, publicDir } = await fixture(t);
+  // 合規：只有 SKIP_WAITING handler 先可以 skipWaiting
+  await writeFile(join(output, 'sw.js'), 'self.addEventListener("message",e=>{if(e.data.type==="SKIP_WAITING")self.skipWaiting()})');
+  await checkDeployment(output, publicDir);
+  // 違規1：install 區無條件 skipWaiting（背景偷換版）
+  await writeFile(join(output, 'sw.js'), 'self.addEventListener("install",()=>{self.skipWaiting()})');
+  await assert.rejects(checkDeployment(output, publicDir), /SKIP_WAITING|skipWaiting/);
+  // 違規2：冇 SKIP_WAITING handler
+  await writeFile(join(output, 'sw.js'), 'self.addEventListener("install",()=>{});self.skipWaiting()');
+  await assert.rejects(checkDeployment(output, publicDir), /SKIP_WAITING/);
 });

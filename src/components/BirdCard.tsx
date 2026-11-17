@@ -1,8 +1,9 @@
+import { useEffect, useState } from 'react';
 import { useBirdImage } from '../hooks/useBirdImage';
 import { BirdSpecies, CaptureRecord, Rarity } from '../types';
 import { RARITY_META } from '../lib/theme';
 import { useCollectionContext } from '../context/CollectionContext';
-import { MapPin, Ruler, Utensils } from 'lucide-react';
+import { MapPin, Ruler, Utensils, ImageIcon } from 'lucide-react';
 import { ivRankLabel } from '../lib/birdStats';
 
 interface BirdCardProps {
@@ -15,6 +16,32 @@ interface BirdCardProps {
   useSticker?: boolean;  // 使用貼圖版
 }
 
+/**
+ * 卡面圖片優先序（精靈球版）：
+ *   貼圖 > 小朋友自己嘅相（預設賽璐璐版，可撳掣切原相） > 舊插畫（異圖/ R2，只有無相舊記錄先見到）
+ * 原相 = 證據，shape／嘴／尾都係真相，唔會改。
+ */
+function useCardImage(bird: BirdSpecies, capture: CaptureRecord | undefined, wantsAltArt: boolean, useSticker: boolean) {
+  const [showOriginal, setShowOriginal] = useState(false);
+  useEffect(() => { setShowOriginal(false); }, [bird.id]);
+
+  const hasMyPhoto = !!(capture?.photo_original_url || capture?.photo_cel_url);
+  const myPhoto = showOriginal
+    ? (capture?.photo_original_url ?? capture?.photo_cel_url ?? null)
+    : (capture?.photo_cel_url ?? capture?.photo_original_url ?? null);
+
+  const { imageUrl: legacyUrl, isSticker: legacySticker, onError, onLoad } =
+    useBirdImage(bird.id, bird.photoUrl, wantsAltArt, useSticker ? capture?.stats?.stickerUrl : null);
+
+  // 除非真係顯示緊貼圖，否則卡面一律用小朋友自己嘅相
+  const usingMyPhoto = hasMyPhoto && !!myPhoto && !legacySticker;
+  const imageUrl = usingMyPhoto ? myPhoto : legacyUrl;
+  const isStickerMode = !usingMyPhoto && legacySticker;
+
+  const togglePhotoMode = () => setShowOriginal(v => !v);
+  return { imageUrl, isStickerMode, usingMyPhoto, showOriginal, canToggle: hasMyPhoto && !legacySticker, togglePhotoMode, onError, onLoad };
+}
+
 export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats, useSticker }: BirdCardProps) {
   const { canShowAltArt } = useCollectionContext();
   const rarity: Rarity = capture?.currentRarity ?? 'UC';
@@ -24,13 +51,25 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
   const stats = capture?.stats ?? capture?.bestStats;
   const ivInfo = stats ? ivRankLabel(stats.iv.percent) : null;
 
-  // 圖片來源優先序：貼圖 > 異圖卡 > 原圖
   const wantsAltArt = canShowAltArt(bird.id, rarity);
-  const { imageUrl: currentImageUrl, isSticker: isStickerMode, onError: handleImgError, onLoad: handleImgLoad } =
-    useBirdImage(bird.id, bird.photoUrl, wantsAltArt, useSticker ? stats?.stickerUrl : null);
+  const {
+    imageUrl: currentImageUrl, isStickerMode, usingMyPhoto, showOriginal,
+    canToggle, togglePhotoMode, onError: handleImgError, onLoad: handleImgLoad,
+  } = useCardImage(bird, capture, wantsAltArt, !!useSticker);
 
   // 是否顯示 IV 數值
   const shouldShowIv = showStats ? true : hideStats ? false : !!stats;
+
+  const photoToggleChip = canToggle && !compact && (
+    <button
+      onClick={e => { e.stopPropagation(); togglePhotoMode(); }}
+      className="absolute right-2 top-1/2 -translate-y-1/2 z-20 px-2 py-1.5 rounded-full bg-black/70 border border-white/25 text-[10px] font-black text-white flex items-center gap-1 backdrop-blur-sm"
+      title={showOriginal ? '轉賽璐璐版' : '睇返原相'}
+    >
+      <ImageIcon size={11} className="text-dex-neon" />
+      {showOriginal ? '原相 · 轉賽璐璐' : '賽璐璐 · 睇原相'}
+    </button>
+  );
 
   if (compact) {
     return (
@@ -104,7 +143,11 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
         <img 
           src={currentImageUrl} 
           alt={bird.name} 
-          className={`absolute inset-0 w-full h-full ${isStickerMode ? 'object-contain p-4' : 'object-cover opacity-60'}`}
+          className={`absolute inset-0 w-full h-full ${
+            isStickerMode ? 'object-contain p-4'
+              : usingMyPhoto ? 'object-cover opacity-95'
+              : 'object-cover opacity-60'
+          }`}
           onError={handleImgError} onLoad={handleImgLoad}/>
       ) : (
         <div className="absolute inset-0 flex items-center justify-center">
@@ -178,6 +221,7 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
       {stats?.isShiny && (
         <div className="absolute top-14 right-3 px-2 py-1 rounded-full bg-amber-400 text-black text-[10px] font-black shadow" style={{ right: isStickerMode ? '62px' : '12px'}}>✨ 色違</div>
       )}
+      {photoToggleChip}
       {isUncaptured && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/60 backdrop-blur-[2px]">
           <div className="text-6xl mb-2 opacity-40">{bird.emoji}</div>

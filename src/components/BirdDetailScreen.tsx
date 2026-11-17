@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { useBirdImage } from '../hooks/useBirdImage';
+import { formatCaptureLocation } from '../lib/captureMemory';
 import { useCollectionContext } from '../context/CollectionContext';
 import { getBirdById } from '../data/birdData';
 import { RARITY_META } from '../lib/theme';
 import { ArrowLeft, Share2, ExternalLink, Image as ImageIcon, Scissors, Download, Trash2, Star, Crown, RefreshCcw } from 'lucide-react';
 import { makeSticker } from '../lib/stickerMaker';
 import { ivRankLabel, natureEffect } from '../lib/birdStats';
+import { birdNo, openAvianDexUnlock } from '../lib/aviandex';
 
 interface BirdDetailScreenProps {
   speciesId: number;
@@ -24,18 +26,29 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   const [stickerBusy, setStickerBusy] = useState(false);
   const [stickerMsg, setStickerMsg] = useState('');
   const [useStickerView, setUseStickerView] = useState(false);
+  const [showOriginalPhoto, setShowOriginalPhoto] = useState(false);
   const [showIvList, setShowIvList] = useState(false);
 
   const wantsAltArt = bird ? canShowAltArt(bird.id, rarity) : false;
   const { imageUrl: heroImageUrl, isSticker: showingSticker, onLoad: handleImageLoad, onError: handleImageError } =
     useBirdImage(speciesId, bird?.photoUrl, wantsAltArt, useStickerView ? stats?.stickerUrl : null);
 
+  // 小朋友自己嘅相優先（預設賽璐璐版；原相＝證據，唔會改）
+  const myPhotoOriginal = capture?.photo_original_url ?? null;
+  const myPhotoCel = capture?.photo_cel_url ?? null;
+  const hasMyPhoto = !!(myPhotoOriginal || myPhotoCel);
+  const myPhoto = showOriginalPhoto
+    ? (myPhotoOriginal ?? myPhotoCel)
+    : (myPhotoCel ?? myPhotoOriginal);
+  const showingMyPhoto = hasMyPhoto && !!myPhoto && !useStickerView;
+  const detailImageUrl = showingMyPhoto ? myPhoto : heroImageUrl;
+
   const handleMakeSticker = async () => {
-    if (!bird || !capture?.photoDataUrl || stickerBusy) return;
+    if (!bird || !capture?.photo_original_url || stickerBusy) return;
     try {
       setStickerBusy(true);
       setStickerMsg('去背中…');
-      const url = await makeSticker(capture.photoDataUrl, setStickerMsg);
+      const url = await makeSticker(capture.photo_original_url, setStickerMsg);
       setCaptureSticker(bird.id, url);
       setUseStickerView(true);
       setStickerMsg('完成！');
@@ -83,9 +96,9 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
       <div className="relative aspect-[3/4] w-full max-w-md mx-auto shrink-0 mt-4 px-4">
         <div className="absolute inset-0 px-4">
           <div className="w-full h-full rounded-2xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.5)] border-4 border-gray-800 bg-gray-900 relative">
-            {heroImageUrl && isCaught ? (
+            {detailImageUrl && isCaught ? (
               <img
-                src={heroImageUrl}
+                src={detailImageUrl}
                 alt={bird.name}
                 className={`w-full h-full ${showingSticker ? 'object-contain p-6' : 'object-cover'}`}
                 onLoad={handleImageLoad}
@@ -141,8 +154,18 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
           <div className="flex gap-2">
             {stats?.stickerUrl && (
               <button onClick={() => setUseStickerView(v => !v)}
-                className={`w-12 h-12 rounded-full backdrop-blur-md border-2 flex items-center justify-center transition shadow-lg ${useStickerView ? 'bg-dex-neon text-black border-dex-neon' : 'bg-black/60 text-white border-white/20'}`} title="貼圖/原圖">
+                className={`w-12 h-12 rounded-full backdrop-blur-md border-2 flex items-center justify-center transition shadow-lg ${useStickerView ? 'bg-dex-neon text-black border-dex-neon' : 'bg-black/60 text-white border-white/20'}`} title="貼圖/卡面">
                 <Scissors size={18} />
+              </button>
+            )}
+            {hasMyPhoto && !useStickerView && (
+              <button
+                onClick={() => setShowOriginalPhoto(v => !v)}
+                className={`h-12 px-3 rounded-full backdrop-blur-md border-2 flex items-center justify-center gap-1.5 text-[11px] font-black transition shadow-lg ${showOriginalPhoto ? 'bg-amber-400/90 border-amber-300 text-black' : 'bg-black/60 text-white border-white/20'}`}
+                title={showOriginalPhoto ? '轉賽璐璐版' : '睇返原相（證據）'}
+              >
+                <ImageIcon size={15} />
+                {showOriginalPhoto ? '原相' : '賽璐璐'}
               </button>
             )}
             {isCaught && (
@@ -173,7 +196,7 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
             ) : <div className="text-[11px] text-gray-500 mb-2">舊記錄，無 IV 資料</div>}
             
             <div className="flex gap-2 text-[11px] flex-wrap mb-2">
-              {capture.photoDataUrl && (
+              {capture.photo_original_url && (
                 <button disabled={stickerBusy} onClick={handleMakeSticker}
                   className="px-3 py-1.5 rounded-lg bg-dex-neon text-dex-bg font-bold disabled:opacity-50 flex items-center gap-1">
                   <RefreshCcw size={12}/> {stats?.stickerUrl ? '重做貼圖' : '生成貼圖'}
@@ -182,7 +205,7 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
               {stats?.stickerUrl && (
                 <>
                 <button onClick={()=>setUseStickerView(v=>!v)} className="px-3 py-1.5 rounded-lg bg-white/10 text-white font-bold border border-white/15">
-                  {useStickerView ? '看原圖' : '看貼圖'}
+                  {useStickerView ? '看返卡面' : '看貼圖'}
                 </button>
                 <button onClick={async ()=>{
                   const res = await fetch(stats.stickerUrl!); const blob = await res.blob();
@@ -251,7 +274,8 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
               <div>
                 <p className="text-xs text-gray-500 font-black tracking-widest mb-1">捕捉紀錄</p>
                 <div className="flex items-baseline gap-2"><span className="text-4xl font-black text-white">{capture.count}</span><span className="text-sm text-gray-400 font-bold">次</span></div>
-                <p className="text-[10px] text-gray-500 mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')}</p>
+                <p className="text-[10px] text-gray-500 mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')} · 最近：{new Date(capture.lastCaptureDate).toLocaleDateString('zh-HK')}</p>
+                <p className="text-[10px] text-gray-500 mt-0.5">📍 {formatCaptureLocation(capture.location)}</p>
                 {allCatches.length > 1 && <p className="text-[10px] text-dex-neon mt-0.5">已記錄 {allCatches.length} 隻不同個體</p>}
               </div>
               <div className="text-right">
@@ -272,6 +296,23 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
             <ExternalLink size={18} />
           </div>
         </button>
+
+        {isCaught && capture && (
+          <button
+            onClick={() => openAvianDexUnlock(capture, bird.name)}
+            className="w-full flex items-center justify-between p-4 rounded-2xl bg-gradient-to-br from-emerald-900 to-gray-900 border border-emerald-500/30 text-white font-bold shadow-lg active:scale-95 transition group"
+          >
+            <div className="text-left">
+              <div className="text-sm font-black text-emerald-400 tracking-widest mb-0.5">
+                解鎖 NO.{birdNo(bird.id)}
+              </div>
+              <div className="text-xs text-gray-300">將呢隻喺 AvianDex 由剪影變做你張卡</div>
+            </div>
+            <div className="w-10 h-10 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 group-hover:bg-emerald-500 group-hover:text-white transition-colors">
+              <ExternalLink size={18} />
+            </div>
+          </button>
+        )}
       </div>
     </div>
   );

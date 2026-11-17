@@ -2,7 +2,8 @@ import { useState, useMemo } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
 import { BirdCard } from './BirdCard';
-import { Search, Filter } from 'lucide-react';
+import { Search } from 'lucide-react';
+import { InstallButton } from './PwaChrome';
 
 interface DexScreenProps {
   onSelectSpecies: (id: number) => void;
@@ -32,16 +33,14 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
     <div className="min-h-full bg-dex-bg pb-24">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-dex-bg/90 backdrop-blur-md border-b border-dex-border px-4 pt-4 pb-3">
-        <div className="flex items-center justify-between mb-3">
-          <div>
+        <div className="flex items-center justify-between gap-2 mb-3">
+          <div className="min-w-0">
             <h1 className="text-xl font-black text-white tracking-wide">鳥精靈圖鑑</h1>
             <p className="text-xs text-dex-muted mt-0.5">
               已收錄 <span className="text-dex-neon font-bold">{caughtCount}</span> / {totalCount} 種
             </p>
           </div>
-          <div className="w-12 h-12 rounded-xl bg-dex-surface border border-dex-border flex items-center justify-center">
-            <Filter size={20} className="text-dex-muted" />
-          </div>
+          <InstallButton compact />
         </div>
 
         <div className="flex gap-2 mb-3">

@@ -1,34 +1,33 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Analytics } from '@vercel/analytics/react';
 import { CollectionProvider, useCollectionContext } from './context/CollectionContext';
-import { View, CaptureResult as CaptureResultType, ThrowSession, CaptureStats } from './types';
+import { View, CaptureResult as CaptureResultType, QuizSession, CaptureStats } from './types';
 import { Navbar } from './components/Navbar';
 import { ScannerScreen } from './components/ScannerScreen';
+import { QuizScreen } from './components/QuizScreen';
 import { DexScreen } from './components/DexScreen';
 import { AlbumScreen } from './components/AlbumScreen';
 import { ProfileScreen } from './components/ProfileScreen';
 import { CaptureResultScreen } from './components/CaptureResultScreen';
 import { BirdDetailScreen } from './components/BirdDetailScreen';
-import { ThrowCaptureScreen } from './components/ThrowCaptureScreen';
 import { MapScreen } from './components/MapScreen';
 import { BattleScreen } from './components/BattleScreen';
 import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
+import { celShadeImage } from './lib/celShade';
+import { PwaChrome } from './components/PwaChrome';
+import { parseIncomingSpecies } from './lib/aviandex';
+import { getBirdById } from './data/birdData';
 
 function AppRouter() {
   const [view, setView] = useState<View>('dex');
   const [selectedSpeciesId, setSelectedSpeciesId] = useState<number | null>(null);
   const [lastCapture, setLastCapture] = useState<CaptureResultType | null>(null);
-  const [throwSession, setThrowSession] = useState<ThrowSession | null>(null);
-  const [throwZoom, setThrowZoom] = useState(1);
+  const [quizSession, setQuizSession] = useState<QuizSession | null>(null);
 
   const [scannerBusy, setScannerBusy] = useState(false);
+  const [picking, setPicking] = useState(false);
   const { captureBird, storageError, retrySave, exportBackup } = useCollectionContext();
-
-  const handleCapture = (result: CaptureResultType) => {
-    setLastCapture(result);
-    setView('capture-result');
-  };
 
   const handleCloseCapture = () => {
     setView(lastCapture?.failed ? 'scanner' : 'album');
@@ -52,30 +51,60 @@ function AppRouter() {
     }
   };
 
-  // Scanner → Throw
-  const handleStartThrow = (session: ThrowSession) => {
-    setThrowSession(session);
-    setThrowZoom(session.zoomLevel ?? 1);
-    setView('throw');
+  // 賽璐璐卡預生成：影完相即刻後台跑，小朋友答三問期間完成 — 揀中即刻入投球動畫
+  const celPromiseRef = useRef<Promise<string | null> | null>(null);
+
+  // Scanner → 三問流程（相只係證據，冇 AI 辨識）
+  const handlePhotoTaken = (session: QuizSession) => {
+    setQuizSession(session);
+    setView('quiz');
+    celPromiseRef.current = celShadeImage(session.photoDataUrl).catch(() => null);
   };
 
-  const handleThrowComplete = (_score: CaptureStats['catchScore'], stats: CaptureStats) => {
-    if (!throwSession) return;
-    const result = captureBird(throwSession.speciesId, {
-      photoDataUrl: throwSession.photoDataUrl,
-      location: throwSession.location ?? null,
-      stats,
-    });
-    setThrowSession(null);
-    setLastCapture(result);
-    setView('capture-result');
+  // 小朋友對卡揀中 → 即刻生成賽璐璐卡 → 捕捉記錄（原相＋賽璐璐一齊 Keep）
+  const handlePick = async (speciesId: number) => {
+    if (!quizSession || picking) return;
+    setPicking(true);
+    try {
+      const stats: CaptureStats = generateCaptureStats({ catchScore: null, zoomLevel: quizSession.zoom });
+      let celUrl: string | null = null;
+      try {
+        // 優先用答問題期間預生成好嘅；未好就即場補做（通常即時 resolve）
+        celUrl = await (celPromiseRef.current ?? celShadeImage(quizSession.photoDataUrl));
+      } catch {
+        celUrl = null; // 轉換失敗都要保住原相（證據優先）
+      }
+      celPromiseRef.current = null;
+      const result = captureBird(speciesId, {
+        photo_original_url: quizSession.photoDataUrl,
+        photo_cel_url: celUrl,
+        location: quizSession.location ?? null,
+        stats,
+      });
+      setQuizSession(null);
+      setLastCapture(result);
+      setView('capture-result');
+    } finally {
+      setPicking(false);
+    }
   };
 
-  const handleThrowSkip = () => {
-    if (!throwSession) return;
-    const stats = generateCaptureStats({ catchScore: null, zoomLevel: throwZoom });
-    handleThrowComplete(null, stats);
+  const handleQuizBack = () => {
+    setQuizSession(null);
+    setView('scanner');
   };
+
+  // 入站深層連結（AvianDex → BirdEx）：?no=0008 / ?species=8 / ?id=0008 直接開呢隻鳥嘅詳頁。
+  // 處理完清走參數，重新整理唔會重開。合約見 docs/AVIANDEX_INTEROP.md §3。
+  useEffect(() => {
+    const incoming = parseIncomingSpecies(window.location.search);
+    if (incoming === null) return;
+    if (getBirdById(incoming)) {
+      setSelectedSpeciesId(incoming);
+      setView('detail');
+    }
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+  }, []);
 
   return (
     <div className="app-shell w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">
@@ -91,17 +120,16 @@ function AppRouter() {
       <div className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden">
         {view === 'scanner' && (
           <ScannerScreen
-            onCapture={handleCapture}
-            onStartThrow={handleStartThrow}
+            onPhotoTaken={handlePhotoTaken}
             onBusyChange={setScannerBusy}
           />
         )}
-        {view === 'throw' && throwSession && (
-          <ThrowCaptureScreen
-            session={throwSession}
-            zoomLevel={throwZoom}
-            onComplete={handleThrowComplete}
-            onSkip={handleThrowSkip}
+        {view === 'quiz' && quizSession && (
+          <QuizScreen
+            session={quizSession}
+            onBack={handleQuizBack}
+            onPick={handlePick}
+            picking={picking}
           />
         )}
         {view === 'dex' && <DexScreen onSelectSpecies={handleSelectSpecies} />}
@@ -117,7 +145,7 @@ function AppRouter() {
         )}
       </div>
 
-      {view !== 'capture-result' && view !== 'detail' && view !== 'throw' && !scannerBusy && (
+      {view !== 'capture-result' && view !== 'detail' && view !== 'quiz' && !scannerBusy && (
         <Navbar current={view} onNavigate={setView} />
       )}
     </div>
@@ -128,6 +156,7 @@ export default function App() {
   return (
     <CollectionProvider>
       <AppRouter />
+      <PwaChrome />
       <Analytics />
     </CollectionProvider>
   );

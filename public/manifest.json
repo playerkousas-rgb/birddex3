@@ -1,11 +1,11 @@
 {
   "name": "BIRD-DEX 3 鳥精靈圖鑑",
   "short_name": "BIRD-DEX",
-  "description": "拍照認鳥 × IV養成 × AR投擲 × 貼圖去背 × 捕捉足跡 · 香港觀鳥 CatchCat！",
+  "description": "影相做證 × 答3問對卡 × 賽璐璐精靈卡 × 原相證據 × IV養成 · 香港觀鳥 CatchCat！",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0B0F19",
-  "theme_color": "#00F0FF",
+  "theme_color": "#0B0F19",
   "orientation": "portrait",
   "icons": [
     {
@@ -21,10 +21,10 @@
       "purpose": "any"
     },
     {
-      "src": "/favicon.svg",
+      "src": "/icon-512.png",
       "sizes": "512x512",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }

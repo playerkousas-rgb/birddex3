@@ -157,3 +157,52 @@ body {
     font-size: 16px; /* Avoid involuntary iOS input zoom without disabling accessibility zoom. */
   }
 }
+
+/* ---------------------------------------------------------------
+   可達性與動效底線（真理倉 design-review house rules 配套）
+   - 鍵盤 focus 一定要睇得見
+   - 尊重系統「減少動態效果」設定： shimmer/scan/pulse 全部收起
+   --------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 共用面板：所有 surface 統一 圓角／邊框／底色，避免每頁自己一套 */
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+}
+
+/* 共用選擇鈕（三問候選等）：統一選中態，唔靠 glow */
+.choice {
+  border: 2px solid var(--border);
+  background: var(--surface);
+  border-radius: 0.75rem;
+  transition: border-color 0.15s ease, background-color 0.15s ease;
+}
+.choice:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+}
+.choice[data-selected='true'] {
+  border-color: var(--neon);
+  background: rgba(0, 240, 255, 0.08);
+}
+
+/* 戶外手機操作：取消雙擊縮放延遲，撳掣即時反應（唔影響捏合縮放） */
+button, a, [role="button"], label, select {
+  touch-action: manipulation;
+}

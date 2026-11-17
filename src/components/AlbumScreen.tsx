@@ -3,7 +3,8 @@ import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
 import { BirdCard } from './BirdCard';
 import { RARITY_ORDER, RARITY_META } from '../lib/theme';
-import { ArrowUpDown } from 'lucide-react';
+import { AVIANDEX_BASE_URL } from '../lib/aviandex';
+import { ArrowUpDown, BookOpen } from 'lucide-react';
 
 interface AlbumScreenProps {
   onSelectSpecies: (id: number) => void;
@@ -42,13 +43,26 @@ export function AlbumScreen({ onSelectSpecies }: AlbumScreenProps) {
               持有 <span className="text-dex-neon font-bold">{captures.length}</span> 種鳥精靈卡
             </p>
           </div>
-          <button
-            onClick={() => setSortBy(prev => prev === 'rarity' ? 'newest' : prev === 'newest' ? 'count' : 'rarity')}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dex-surface border border-dex-border text-xs font-bold text-dex-muted hover:text-white transition"
-          >
-            <ArrowUpDown size={14} />
-            {sortBy === 'rarity' ? '依稀有度' : sortBy === 'newest' ? '依最新' : '依次數'}
-          </button>
+          <div className="flex items-center gap-2">
+            {/* 兄弟互通：收藏 ↔ AvianDex 權威圖鑑 */}
+            <button
+              type="button"
+              onClick={() => window.open(AVIANDEX_BASE_URL, '_blank', 'noopener')}
+              aria-label="開啟 AvianDex 圖鑑"
+              title="AvianDex 圖鑑（權威資料）"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dex-neon/10 border border-dex-neon/40 text-dex-neon text-xs font-black transition"
+            >
+              <BookOpen size={14} aria-hidden="true" />
+              圖鑑
+            </button>
+            <button
+              onClick={() => setSortBy(prev => prev === 'rarity' ? 'newest' : prev === 'newest' ? 'count' : 'rarity')}
+              className="flex items-center gap-1.5 px-3 py-2 rounded-lg bg-dex-surface border border-dex-border text-xs font-bold text-dex-muted hover:text-white transition"
+            >
+              <ArrowUpDown size={14} />
+              {sortBy === 'rarity' ? '依稀有度' : sortBy === 'newest' ? '依最新' : '依次數'}
+            </button>
+          </div>
         </div>
 
         {/* Rarity summary */}
