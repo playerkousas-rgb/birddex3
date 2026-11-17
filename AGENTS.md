@@ -2,6 +2,10 @@
 
 修改本專案前先閱讀 [DEPLOYMENT_GUARDRAILS.md](DEPLOYMENT_GUARDRAILS.md)。
 
+真理倉（所有新規定嘅入口）：https://github.com/playerkousas-rgb/readme
+— S/F/A/W/V 五鐵律 ＋ docs/46 PWA 安裝／更新 ＋ docs/47 README 紀律 ＋ docs/44 雙語等。
+本 repo 對照表見 DEPLOYMENT_GUARDRAILS.md §6；新規定有異動要同步嗰張表。
+
 - 功能、資料、UI 與使用者體驗優先；不可為了縮小體積刪除 AI／去背／PWA／API 或使用者存檔能力。
 - 部署輸出固定 `dist/`，保留 API；維護資料、測試、備份、依賴與快取不得當靜態網頁發佈。
 - 新增資源先查引用與動態 URL；新增依賴先證明必要性，建置工具只放 devDependencies。

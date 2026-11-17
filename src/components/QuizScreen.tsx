@@ -75,7 +75,7 @@ function CandidateCard({
     <button
       onClick={onSelect}
       className={`relative rounded-2xl overflow-hidden text-left transition-all active:scale-[0.98] border-2 ${
-        selected ? 'border-dex-neon shadow-[0_0_20px_rgba(0,240,255,0.45)]' : 'border-dex-border bg-dex-surface'
+        selected ? 'border-dex-neon bg-dex-neon/5' : 'border-dex-border bg-dex-surface'
       }`}
     >
       <div className="relative aspect-square bg-black/40">
@@ -90,7 +90,7 @@ function CandidateCard({
         ) : (
           <div className="absolute inset-0 flex items-center justify-center text-5xl opacity-70">{bird.emoji}</div>
         )}
-        <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/70 text-dex-neon text-[10px] font-black font-mono">
+        <div className="absolute top-1.5 left-1.5 px-1.5 py-0.5 rounded bg-black/70 text-dex-neon text-[10px] font-black">
           NO.{birdNo(bird.id)}
         </div>
         {selected && (
@@ -166,7 +166,7 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
             </h1>
             <p className="text-[11px] text-dex-muted">
               {phase === 'questions'
-                ? '唔使 AI：答案會由 583 隻過濾出 3–5 張卡'
+                ? `已答 ${[answers.size, answers.main_color, answers.beak].filter(Boolean).length} / 3 · 答完由 583 隻過濾出 3–5 張卡`
                 : '最後決定權喺你手上 · 揀中先算捉到'}
             </p>
           </div>
@@ -187,10 +187,7 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
         <div className="px-4 pt-4 space-y-5">
           {/* Q1 大小 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-dex-neon text-dex-bg text-xs font-black flex items-center justify-center">1</span>
-              佢有幾大？
-            </h2>
+            <h2 className="text-base font-black text-white mb-2.5">佢有幾大？</h2>
             <div className="grid grid-cols-3 gap-2">
               {SIZE_OPTIONS.map(size => (
                 <button
@@ -210,10 +207,7 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
 
           {/* Q2 主色 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-dex-neon text-dex-bg text-xs font-black flex items-center justify-center">2</span>
-              佢咩色為主？
-            </h2>
+            <h2 className="text-base font-black text-white mb-2.5">佢咩色為主？</h2>
             <div className="grid grid-cols-4 gap-2">
               {COLOR_OPTIONS.map(color => (
                 <button
@@ -235,10 +229,7 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
 
           {/* Q3 嘴形 */}
           <section>
-            <h2 className="text-base font-black text-white mb-2 flex items-center gap-2">
-              <span className="w-6 h-6 rounded-full bg-dex-neon text-dex-bg text-xs font-black flex items-center justify-center">3</span>
-              佢個嘴係點？
-            </h2>
+            <h2 className="text-base font-black text-white mb-2.5">佢個嘴係點？</h2>
             <div className="grid grid-cols-4 gap-2">
               {BEAK_OPTIONS.map(beak => (
                 <button
@@ -359,7 +350,7 @@ export function QuizScreen({ session, onBack, onPick }: QuizScreenProps) {
 
       {/* 揀中 → 捉到 */}
       {phase === 'candidates' && (
-        <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-gradient-to-t from-dex-bg via-dex-bg/95 to-transparent">
+        <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-dex-bg border-t border-dex-border">
           <button
             disabled={selectedId === null}
             onClick={() => selectedId !== null && onPick(selectedId)}

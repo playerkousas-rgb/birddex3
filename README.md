@@ -64,6 +64,32 @@ IV／CP／性格個體值、稀有度升階（UC→LR）、全息閃卡、去背
 - R2 `birdcards/NNNN.avif` = **AvianDex NO. 編號直對**（AvianDex 側 `ILLUSTRATION_REPAIRS` 已補
   29 個改配物種槽位 ＋ 14 個新編號並上載，583/583 有圖；真相見 interop 文檔 §4）。
 
+## 📲 PWA 安裝與更新（真理倉 docs/46 I／UP）
+
+- **安裝要有掣**：圖鑑頁 header 同訓練師頁有「加主畫面」入口；已加入（standalone）自動隱藏。
+  Android／Chrome 攔住 `beforeinstallprompt`，撳掣先彈系統對話框；iOS 出 Safari 三步教學卡
+  （分享 ⬆ → 加入主畫面 → 加入；唔會叫你裝 Chrome），Esc／點背景／「知道了」都關得。
+- **更新要問過人**：新 Service Worker 停喺 `waiting`，唔會背景偷換版。頂部 banner「已下載新版本
+  → 立即更新／稍後」；「稍後」記住同一個 worker 唔再嘈；「立即更新」走 SKIP_WAITING，
+  並有 2.5 秒 timeout fallback 保證 reload 入新版。
+- 檢查時機：回前景（`visibilitychange`）／恢復連線（`online`）／每 30 分鐘，唔准更頻密輪詢。
+- 守門：`tests/pwa.test.mjs`（靜態流程檢查，做法照真理倉 minigame `verify.mjs`，零依賴）。
+
+## ⚠️ 已知限制（docs/47 原則三：未做要老實列）
+
+- **未做人手真機驗收（I7／UP）**：「安裝 → 主畫面開 → 斷網開」同更新 banner 流程未喺
+  Android Chrome／iOS Safari 各行一次；真機驗收永遠係人做，唔係 README 做。
+- **R2 圖 583 覆蓋未由本沙箱核實**：`r2.dev` 唔在網路白名單，逐個 probe 做唔到；
+  404 會自動跌返 emoji 後備。可用 AvianDex 側 `npm run cards:probe` 出缺圖清單。
+- **雙語 L1 豁免**：`EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 docs/44 定案）— 維持粵語單語`。
+- **圖標未達 docs/33 九檔標準**：只有 `icon-192.png`／`icon-512.png`（manifest 已掛 maskable 512）
+  ＋ `favicon.svg`；缺獨立 maskable 檔、16/32 ICO、og-image。未做原因：沙箱冇圖像工具，
+  唔為咗佢新增圖像依賴。
+- **舊 `alert()`／`confirm()` 仍在**（對戰複製、刪除確認等 11 處）：docs/46 I8 嘅禁令
+  新 PWA 代碼已守（`tests/pwa.test.mjs` 有守門）；全站換 toast 屬後續工作。
+- **W2 生成圖 DCT 隱形水印未做**：賽璐璐卡未落隱形水印（貼圖／名片匯出已有可見 ©）。
+- **`tests/browser-smoke.cjs` 未於本輪執行**：需 repo 外 playwright＋Chromium（CDN 唔在白名單）。
+
 ## 🛠️ 快速開始
 
 ```sh
@@ -79,6 +105,15 @@ npm run build      # 生產建置（含容量守門）
 請先閱讀 [DEPLOYMENT_GUARDRAILS.md](DEPLOYMENT_GUARDRAILS.md)。
 部署採 Vite 原始碼建置、`dist/` 輸出與獨立 Vercel API；鳥卡由 R2 載入。
 交付前必跑 `npm run check`、`npm run lint`、`npm run build` 並如實報告驗證範圍。
+
+## ✅ 最近驗證（2026-11-17）
+
+- `npm run check`：**49/49 pass**（tsc ＋ 全部單元測試，含 `tests/pwa.test.mjs`／`tests/version.test.mjs`
+  ＋ UP1 建置硬閘：dist/sw.js 無條件 `skipWaiting()` 即 build 失敗）
+- `npm run lint`：**0 警告**
+- `npm run build`：容量預算 OK — dist 28,894,405 B / 31,457,280 B；index JS 2,858.87 kB（gzip 546.18）
+  - 相對 main 基線（2,825.41 kB）**+33.5 kB**：精靈球版三問／賽璐璐流程 ＋ PWA 安裝更新流程；無預算放寬
+- 未驗項（真機 I7、R2 逐個 probe、browser-smoke）見上方「已知限制」
 
 ## 版本
 

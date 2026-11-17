@@ -15,6 +15,7 @@ import { BattleScreen } from './components/BattleScreen';
 import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
 import { celShadeImage } from './lib/celShade';
+import { PwaChrome } from './components/PwaChrome';
 
 function AppRouter() {
   const [view, setView] = useState<View>('dex');
@@ -134,6 +135,7 @@ export default function App() {
   return (
     <CollectionProvider>
       <AppRouter />
+      <PwaChrome />
       <Analytics />
     </CollectionProvider>
   );

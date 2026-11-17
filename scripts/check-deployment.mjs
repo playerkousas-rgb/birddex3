@@ -36,8 +36,22 @@ export async function checkDeployment(outputDir = 'dist', publicDir = 'public') 
       if (file.bytes > limit) errors.push(`${label}/${file.path}: ${file.bytes} bytes exceeds ${limit}`);
     }
   }
-  for (const required of ['index.html', 'favicon.svg', 'manifest.json', 'sw.js', 'registerSW.js']) {
+  // registerSW.js 已唔再需要：註冊改由 src/lib/pwa.ts 的 virtual:pwa-register 控制
+  // （docs/46 UP1 prompt 模式，injectRegister:false）。sw.js 仍然係必要 PWA 資產。
+  for (const required of ['index.html', 'favicon.svg', 'manifest.json', 'sw.js']) {
     if (!output.some(file => file.path === required)) errors.push(`dist/${required}: missing required application/PWA asset`);
+  }
+  // docs/46 UP1 硬閘：新 SW 唔准喺 install無條件 skipWaiting()（唔准背景偷換版）。
+  // 合規形態 = skipWaiting() 只出現一次，而且喺 SKIP_WAITING message handler 入面。
+  const swSource = await readFile(resolve(outputDir, 'sw.js'), 'utf8').catch(() => '');
+  if (swSource) {
+    if (!swSource.includes('SKIP_WAITING')) {
+      errors.push('dist/sw.js: missing SKIP_WAITING message handler (docs/46 UP1)');
+    }
+    const skipCalls = swSource.match(/self\.skipWaiting\(\)/g)?.length ?? 0;
+    if (skipCalls > 1) {
+      errors.push('dist/sw.js: skipWaiting() must only live inside the SKIP_WAITING message handler (docs/46 UP1)');
+    }
   }
   const html = await readFile(resolve(outputDir, 'index.html'), 'utf8');
   const manifestLinks = html.match(/<link\b[^>]*\brel=["']manifest["'][^>]*>/g) ?? [];

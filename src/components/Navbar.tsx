@@ -18,23 +18,26 @@ const ITEMS: { key: View; label: string; icon: React.ElementType }[] = [
 
 export function Navbar({ current, onNavigate }: NavbarProps) {
   return (
-    <nav className="shrink-0 min-h-[74px] bg-dex-surface border-t border-dex-border flex items-center justify-around px-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] z-50 select-none">
+    <nav
+      aria-label="主導覽"
+      className="shrink-0 min-h-[68px] bg-dex-surface/95 backdrop-blur border-t border-dex-border flex items-stretch gap-1 px-2 pt-1.5 pb-[max(0.35rem,env(safe-area-inset-bottom))] z-50 select-none"
+    >
       {ITEMS.map(({ key, label, icon: Icon }) => {
         const active = current === key;
-        const isScan = key === 'scanner';
         return (
           <button
             key={key}
+            type="button"
             onClick={() => onNavigate(key)}
-            className={`relative flex flex-col items-center justify-center gap-0.5 px-2 py-2 rounded-xl transition-all duration-200 ${
-              active ? 'text-dex-neon' : 'text-dex-muted hover:text-white'
+            aria-current={active ? 'page' : undefined}
+            className={`flex-1 flex flex-col items-center justify-center gap-1 rounded-2xl transition-colors duration-150 ${
+              active
+                ? 'bg-dex-neon/12 text-dex-neon'
+                : 'text-dex-muted hover:text-white'
             }`}
           >
-            {isScan && active && (
-              <span className="absolute -top-1 w-12 h-12 rounded-full bg-dex-neon/10 blur-md" />
-            )}
-            <Icon size={isScan ? 30 : 22} strokeWidth={active ? 2.5 : 2} />
-            <span className={`text-[9px] font-bold tracking-wider ${active ? 'text-dex-neon' : 'text-dex-muted'}`}>
+            <Icon size={21} strokeWidth={active ? 2.4 : 2} aria-hidden="true" />
+            <span className={`text-[10px] leading-none ${active ? 'font-black' : 'font-bold'}`}>
               {label}
             </span>
           </button>

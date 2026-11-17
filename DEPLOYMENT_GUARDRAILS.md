@@ -98,7 +98,26 @@ PLAYWRIGHT_MODULE=/tmp/birddex-qa/node_modules/playwright node tests/browser-smo
 
 完整本次容量與驗證紀錄見 [瘦身報告](docs/SLIMMING_REPORT.md)。
 
-## 6. 跨版本移植邊界（共有功能升級後新增）
+## 6. 真理倉新規則對照（2026-11-17 同步）
+
+真理倉入口：https://github.com/playerkousas-rgb/readme （S/F/A/W/V 五鐵律以外嘅新增規定）。
+本表係「新規定 → 本 repo 點跟」嘅單一對照；違反＝唔准 deploy。
+
+| 真理倉規則 | 本 repo 狀態 |
+|---|---|
+| **docs/46 PWA I1–I8／UP1–UP5**（安裝要有掣、更新要問過人） | ✅ 已做：`registerType: 'prompt'`（唔准 autoUpdate 背景偷換版）；安裝入口（圖鑑 header＋訓練師頁，standalone 自動隱藏）；iOS 三步教學卡；更新 banner 立即更新／稍後（稍後記住 worker）；SKIP_WAITING＋2.5s timeout fallback；visibility／online／30 分鐘三掛勾。守門 `tests/pwa.test.mjs`。**I7 真機未驗**（README 已知限制） |
+| **docs/13 雙版號 V1–V6** | ✅ `package.json` ↔ `index.html` `<meta name="app-version">` ↔ `src/version.ts` ↔ 訓練師頁尾可見 `v3.1.0` 四處同步；守門 `tests/version.test.mjs`。SPA 冇檔名版號，以 meta＋title＋頁尾代替 |
+| **docs/12 版權 W1／W2** | ✅ W1：`<meta name="copyright">` ＋ 訓練師頁尾可見 ©（`tests/copyright.test.mjs`）。⚠️ W2 生成圖 DCT 隱形水印**未做**（README 已列限制） |
+| **docs/47 README 寫作紀律** | ✅ README 每句「已修」有檢查兜底、「未做」入「已知限制」、冇「理論上應該 work」字樣 |
+| **docs/44 雙語 L1–L6** | `EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 2026-11-08 定案）— 維持粵語單語` |
+| **docs/50／51 App Store 白名單** | 未接入 scoutappstore。如日後要入白名單：本 app 有相機＋SW＋localStorage，iframe 內相機／PWA 安裝受限 → 按 SG 規則評估 `entry-gate` 頂層跳板，唔好直接嵌 |
+| **docs/33 圖標九檔** | 部分合規：192／512 PNG ＋ manifest `maskable` 512 ＋ favicon.svg；缺獨立 maskable 檔、16/32 ICO、og-image（README 已列限制，唔用新圖像依賴硬做） |
+| **docs/04 設定層／隱藏超管** | 不適用：本 repo 係輕量遊戲 App（無帳號後台、無系統級開關面），唔屬「系統級 app」定義 |
+
+守門腳本跟實作調整（唔係放寬）：`registerSW.js` 唔再係 dist 必要檔 —— 註冊改由
+`src/lib/pwa.ts` 的 `virtual:pwa-register` 控制（UP1 prompt 模式必需），`sw.js` 仍然必要。
+
+## 7. 跨版本移植邊界（共有功能升級後新增）
 
 - `skw-birdex2` 與 `birddex3` 是不同進階路線；移植共有相機／圖鑑／存檔／訓練師／PWA 的改善，不代表可整包覆蓋 `types.ts`、`useCollection.ts` 或改 v3 的 IV／CP／色違／投擲規則。
 - **禁止以存檔降級名義自動刪照片、貼圖或個體歷史**。quota 失敗需明示未落盤並提供完整備份；備份內有使用者照片／位置，別放 Git、public 或部署包。

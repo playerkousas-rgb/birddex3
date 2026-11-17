@@ -270,8 +270,8 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
             <div className="corner-bracket corner-br" />
             <div className="scan-line rounded-full" />
             <div className="absolute -bottom-8 left-0 right-0 text-center">
-              <div className="text-[10px] text-dex-neon/80 tracking-[0.3em] font-mono">
-                BIRD-DEX SCAN v3.1
+              <div className="text-[11px] font-black text-dex-neon/90 tracking-wide">
+                鳥精靈掃描 · v3.1
               </div>
             </div>
           </div>
@@ -282,7 +282,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       {phase === 'snapping' && (
         <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] flex flex-col items-center justify-center z-20">
           <div className="w-16 h-16 rounded-full border-4 border-dex-neon/30 border-t-dex-neon animate-spin" style={{ animationDuration: '0.8s' }} />
-          <div className="text-dex-neon font-mono text-xs tracking-widest mt-4 animate-pulse">SNAP…</div>
+          <div className="text-dex-neon font-black text-sm mt-4 animate-pulse">影低緊…</div>
           <div className="text-white/40 text-[10px] mt-2">影低佢做證據</div>
         </div>
       )}
@@ -300,13 +300,14 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       )}
 
       {/* Top HUD */}
-      <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between z-10 bg-gradient-to-b from-black/70 to-transparent text-[11px] font-mono">
+      {/* 相機頂部 HUD（漸層只係相機畫面上嘅可讀性 scrim，唔係裝飾） */}
+      <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between z-10 bg-gradient-to-b from-black/70 to-transparent text-[11px]">
         <div className="flex items-center gap-2 text-dex-neon">
           <Sparkles size={14} />
-          <span className="tracking-widest">CAPTURE</span>
+          <span className="font-black tracking-wide">捕捉模式</span>
           {ready && liveDetectEnabled && (
             <span className={`text-[10px] px-1.5 py-0.5 rounded ${birdDetected ? 'bg-dex-neon text-black' : 'bg-white/10 text-white/70'}`}>
-              {birdDetected ? `${detections.length} BIRD${detections.length>1?'S':''}` : 'SCANNING'} · {fps}fps
+              {birdDetected ? `${detections.length} BIRD${detections.length>1?'S':''}` : '掃描中'} · {fps}fps
             </span>
           )}
           {modelLoading && liveDetectEnabled && (
@@ -353,7 +354,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
               className="w-10 h-10 rounded-full bg-black/55 border border-white/20 flex items-center justify-center text-white active:scale-95">
               <ZoomOut size={18}/>
             </button>
-            <div className="text-[11px] text-white font-mono bg-black/55 px-2 py-0.5 rounded-full border border-white/15">
+            <div className="text-[11px] font-black text-white bg-black/55 px-2 py-0.5 rounded-full border border-white/15">
               {zoom.toFixed(1)}x
             </div>
           </div>
@@ -380,7 +381,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       {/* Bottom controls */}
       {(phase === 'active') && (
         <div className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-3 z-10">
-          <div className="text-[11px] text-white/70 font-mono text-center px-4">
+          <div className="text-[11px] font-bold text-white/75 text-center px-4">
             {birdDetected ? (
               <span className="text-dex-neon font-bold">偵測到 {detections.length} 隻鳥！按下快門捕捉</span>
             ) : liveDetectEnabled ? (

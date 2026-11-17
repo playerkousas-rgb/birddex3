@@ -7,6 +7,8 @@ import type { AltArtMode } from '../hooks/useCollection';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { COPYRIGHT_FULL, COPYRIGHT_SHORT } from '../lib/copyright';
+import { APP_VERSION } from '../version';
+import { InstallButton } from './PwaChrome';
 
 const AVATARS = [
   { emoji: '🥾', unlockLevel: 1, desc: '見習裝備' },
@@ -297,8 +299,13 @@ export function ProfileScreen() {
         </button>
       </div>
 
-      <div className="text-center text-[10px] text-white/30 font-mono pb-8">
-        {COPYRIGHT_FULL}
+      <div className="px-4 pb-8 space-y-3">
+        {/* I1 加入主畫面入口（standalone 自動隱藏） */}
+        <InstallButton />
+        {/* W1 可見頁尾 ＋ V2 用家可見版號 */}
+        <div className="text-center text-[10px] text-white/35 leading-relaxed">
+          {COPYRIGHT_FULL} · BIRD-DEX 3 <strong className="text-white/50">v{APP_VERSION}</strong>
+        </div>
       </div>
 
       {/* Share Card Modal */}
