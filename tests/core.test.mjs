@@ -12,10 +12,9 @@ test('all 583 bird records and alias targets remain intact, with shared NO. numb
   assert.equal(birds.length, 583);
   const ids = new Set(birds.map(bird => bird.id));
   assert.equal(ids.size, 583);
-  // photoUrl 只可以是 null（R2 未有呢個編號）或 birdcards/NO.avif；NO 與 AvianDex 共用。
+  // photoUrl = birdcards/<AvianDex NO>.avif：583/583 必須有圖，檔名 = 自己嘅 NO.（bucket 已按 AvianDex 編號對齊物種）。
   for (const bird of birds) {
-    if (bird.photoUrl === null || bird.photoUrl === undefined) continue;
-    assert.match(bird.photoUrl, /^https:\/\/[^/]+\.r2\.dev\/birdcards\/\d{4}\.avif$/);
+    assert.match(bird.photoUrl, new RegExp(`^https://[^/]+\\.r2\\.dev/birdcards/${String(bird.id).padStart(4, '0')}\\.avif$`));
   }
   for (const entry of aliases.getAllAliases()) assert.ok(ids.has(entry.speciesId));
 });

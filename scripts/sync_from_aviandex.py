@@ -9,9 +9,12 @@ BirdEx 精靈球版：由 AvianDex 的 583 隻權威名單重建 birds.json 與 
   3) explorerIndex.json    體長 len（由 cardCopy 比對而來）＋科名
   4) filterTraits.json     lengthCm（cardCopy 體長中位）＋ IUCN
 
-保留自舊 birds.json（skw-birdex2 時代）：
-  - photoUrl：以「物種」搬運（zh → en → 學名三段配對），因為 R2 birdcards/
-    檔案係按舊編號生成（fix_r2_urls2.cjs + BIRD_ID_MAPPING.csv），編號搬會搬錯圖。
+photoUrl（R2 birdcards/）：
+  - 檔名 = AvianDex NO.（birdcards/NNNN.avif）。AvianDex cardImage.ts 以自家編號取圖，
+    且 docs/ILLUSTRATION_REPAIRS.md 已補上 29 個改配物種槽位 + 14 個新編號（0570–0583）
+    並由用戶上載 R2 —— 即係 bucket 已按 AvianDex 編號對齊物種。
+  - 所以直接 photoUrl = birdcards/<id>.avif（編號直對），唔再按物種名搬運。
+  - 舊快照 legacy_birds_569.json 只用嚟做完整性核對（569 條 URL 必須係自id四碼 .avif）。
   - 其餘欄位係全表均一的佔位值，直接沿用同一套。
 
 三欄新特徵（唔使人手打，由資料推導）：
@@ -47,67 +50,19 @@ def load(name):
 def norm(s):
     return re.sub(r"[^0-9a-z\u4e00-\u9fff]+", "", str(s or "").lower())
 
-# ---------------------------------------------------------------- 配對舊→新
-# 明確的人手對照（只收真正同種異名的對，其餘靠三段自動配對）：
-#   舊名 → 新（AvianDex）名
-OLD_ZH_FIXUP = {
-    "大山雀": "遠東山雀",   # 同種 Parus minor，兩邊命名慣例不同
-    "黑臉噪眉": "黑臉噪鶥",  # 眉/鶥 異體；舊表兩隻都有，先到先得
-}
+# ---------------------------------------------------------------- photoUrl（編號直對）
+_BIRDCARDS_URL = re.compile(r"^.+/birdcards/(\d{4})\.avif$")
 
-def build_old_index(old_birds):
-    """舊 birds.json 建三個索引；中文名精確配對永遠優先於英文名。"""
-    by_zh, by_en, by_sci = {}, {}, {}
+def photo_url(av_id):
+    """R2 圖 = birdcards/<AvianDex NO.>.avif（bucket 已按 AvianDex 編號對齊物種）。"""
+    return f"{R2}/birdcards/{av_id:04d}.avif"
+
+def verify_legacy(old_birds):
+    """舊快照只做完整性核對：569 條 URL 必須全部係『自己id』的四碼 .avif。"""
+    assert len(old_birds) == 569, f"legacy snapshot expected 569, got {len(old_birds)}"
     for b in old_birds:
-        zh = b.get("name")
-        if zh and zh not in by_zh:
-            by_zh[zh] = b
-        en = str(b.get("nameEn") or "").strip().lower()
-        if en and en not in ("unknown species", "") and en not in by_en:
-            by_en[en] = b
-        sci = norm(b.get("scientificName"))
-        if sci and sci not in ("scientific name", "", "unknown") and sci not in by_sci:
-            by_sci[sci] = b
-    return by_zh, by_en, by_sci
-
-def match_all(av_list, taxonomy, old_birds):
-    """全局三段配對（第一段中文名 → 第二段英文名 → 第三段學名）。
-    每段內先到先得：同一隻舊鳥只准認領一次，避免 en 誤配搶走 zh 的正確配對。"""
-    by_zh, by_en, by_sci = build_old_index(old_birds)
-    used = set()
-    result = {}
-
-    def claim(av_id, old):
-        if old is None or id(old) in used:
-            return False
-        used.add(id(old))
-        result[av_id] = old
-        return True
-
-    # P0：人手 fixup（最高優先）
-    zh_to_av = {b.get("name"): int(b["id"]) for b in av_list}
-    for old_zh, new_zh in OLD_ZH_FIXUP.items():
-        av_id = zh_to_av.get(new_zh)
-        if av_id is not None:
-            claim(av_id, by_zh.get(old_zh))
-
-    passes = [
-        # (av_key_fn, old_table)
-        (lambda a: a.get("name"), by_zh),
-        (lambda a: norm(a.get("name")), {norm(k): v for k, v in by_zh.items()}),
-        (lambda a: str(a.get("en") or "").strip().lower(), by_en),
-        (lambda a: norm(a.get("en")), {norm(k): v for k, v in by_en.items()}),
-        (lambda a: norm(taxonomy.get(str(a["id"]), {}).get("sciName")), by_sci),
-    ]
-    for key_fn, table in passes:
-        for av in av_list:
-            av_id = int(av["id"])
-            if av_id in result:
-                continue
-            key = key_fn(av)
-            if key:
-                claim(av_id, table.get(key))
-    return result
+        m = _BIRDCARDS_URL.match(b.get("photoUrl") or "")
+        assert m and int(m.group(1)) == b["id"], f"legacy id {b['id']} URL not self-id: {b.get('photoUrl')}"
 
 # ---------------------------------------------------------------- 三欄特徵
 SIZE_LARGE_FAMILIES = {
@@ -213,15 +168,13 @@ def alias_keys(zh, en, sci):
 
 # ---------------------------------------------------------------- main
 def main():
-    # 舊 569 名單快照（來自改造前的 birds.json）——photoUrl 物種搬運的來源。
-    # 用快照而唔係現行 birds.json，令本腳本可重跑（idempotent）。
+    # 舊 569 名單快照——只用嚟核對 URL 模式（idempotent 嘅同時守住模板假設）。
     old_birds = json.load(open(os.path.join(REF, "legacy_birds_569.json"), encoding="utf-8"))
+    verify_legacy(old_birds)
     av_list = load("aviandex_birds.json")
     taxonomy = load("birdTaxonomy.json")
     explorer = load("explorerIndex.json")
     filter_traits = load("filterTraits.json")
-
-    matched_old = match_all(av_list, taxonomy, old_birds)
 
     # 體長：filterTraits ∪ explorer（按科分組都留一份，方便無體長的同科鳥）
     lengths_by_zh, lengths_by_family = {}, {}
@@ -252,8 +205,7 @@ def main():
         en = av.get("en") or tax.get("comName") or ""
         sci = tax.get("sciName") or ""
 
-        old = matched_old.get(i)
-        photo = (old or {}).get("photoUrl")
+        photo = photo_url(i)
 
         size = derive_size(zh, family_lat, {**lengths_by_family, **lengths_by_zh})
         color = derive_color(zh, family_lat)
@@ -311,7 +263,7 @@ def main():
         json.dump(aliases_out, f, ensure_ascii=False, indent=2)
         f.write("\n")
 
-    print(f"birds.json: {len(new_birds)} 隻（photoUrl 搬運 {carried}，無圖 {missing_photo}）")
+    print(f"birds.json: {len(new_birds)} 隻（photoUrl 編號直對 {carried}，無圖 {missing_photo}）")
     print("traits:", json.dumps(trait_stats, ensure_ascii=False))
     print(f"nameAliases.json: {len(aliases_out)} 條 / {sum(len(a['aliases']) for a in aliases_out)} 別名")
 

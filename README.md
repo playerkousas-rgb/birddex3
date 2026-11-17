@@ -61,7 +61,8 @@ IV／CP／性格個體值、稀有度升階（UC→LR）、全息閃卡、去背
 - `src/data/birds.json`：583 隻（AvianDex 編號權威）＋推導特徵三欄。
 - `scripts/sync_from_aviandex.py`：可重跑同步（輸入快照喺 `scripts/reference_data/`）。
 - `src/data/nameAliases.json`：由新名單重建，供 Merlin 後備嘅名稱／學名查找。
-- R2 `birdcards/` 圖以**物種**搬運（資料夾係舊編號生成，原因見 interop 文檔 §4）。
+- R2 `birdcards/NNNN.avif` = **AvianDex NO. 編號直對**（AvianDex 側 `ILLUSTRATION_REPAIRS` 已補
+  29 個改配物種槽位 ＋ 14 個新編號並上載，583/583 有圖；真相見 interop 文檔 §4）。
 
 ## 🛠️ 快速開始
 

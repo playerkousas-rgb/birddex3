@@ -35,18 +35,18 @@ https://avian-dex.vercel.app/?unlock=0008[&search=中文名]
   2. 鳥種詳頁（已捕捉）「解鎖 NO.NNNN」。
 - 實作：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock` / `toInteropRecord`）。
 
-## 4. ⚠️ R2 `birdcards/` 編號真相（重要發現，2026-11-17）
+## 4. R2 `birdcards/` 編號真相（2026-11-17 更新：bucket 已按 AvianDex 編號對齊）
 
-- `birdcards/` 569 張插畫係**按舊 BirdEx（skw-birdex2）編號**生成：
-  證據 = 本 repo `fix_r2_urls2.cjs`（以舊 `birds.json` id 寫 photoUrl）同 `BIRD_ID_MAPPING.csv`。
-- AvianDex 而家係用 `birdcards/<AvianDex NO>.avif` 載入（`src/config.ts`）。
-  **兩邊編號有 162 處曾錯位**（舊 BirdEx 569 vs AvianDex 583）→ AvianDex 按自己 NO. 讀呢個資料夾，
-  錯位嘅編號會顯示到第二隻鳥嘅畫。
-- **BirdEx 已改用 AvianDex 編號，並以「物種」搬運 photoUrl**（例如白腰文鳥 NO.0014 繼續指向 `birdcards/0010.avif`），
-  所以卡面對物種永遠啱。
-- **AvianDex 嗰邊建議跟同一招**（按物種搬 URL，或重新用 AvianDex 編號上傳整個 `birdcards/`），
-  兩邊先會永遠對得返。AvianDex 570–583 冇 birdcards 檔（56 個編號係 null）→ 兩邊都要靠 emoji／後備圖。
-- 任何一邊重新上傳 `birdcards/` 後，請通知另一邊重跑同步腳本。
+- **結論：`birdcards/NNNN.avif` = AvianDex NO. NNNN，583/583 編號直對。**
+  BirdEx `photoUrl = birdcards/<id>.avif`（`scripts/sync_from_aviandex.py` 一步生成，無配對）。
+- 演變：資料夾最初按舊 BirdEx 569 編號生成，兩邊曾有 162 處錯位；
+  AvianDex `docs/ILLUSTRATION_REPAIRS.md` 已補 **29 個改配物種槽位 ＋ 14 個新編號（0570–0583）**，
+  用戶回報全部上載 R2——即 bucket 品種內容已跟 AvianDex 編號。
+- 舊嘅「按物種搬運」規則（白腰文鳥 0014 指去 0010.avif 之类）**已廢除**：
+  它會令改配槽位雙雙錯圖（該拿的拿不到、不該拿的拿錯）。
+- 唯一未核實：沙箱連唔到 r2.dev，無法即時 probe 每個物件係咪 200。
+  AvianDex 側可用 `npm run cards:probe` 出缺圖清單；任一邊重新上傳後通知另一邊重跑同步腳本。
+- 載入失誤（404）自動跌返 emoji 後備（`useBirdImage` onError），唔會出破圖。
 
 ## 5. PostMessage 載荷（遞相片，AvianDex 未聽都無害）
 

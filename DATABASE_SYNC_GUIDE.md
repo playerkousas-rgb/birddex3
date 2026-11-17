@@ -12,7 +12,7 @@ BirdEx 嘅核心資料係 **JSON**，同兄弟專案 **AvianDex** 共用同一�
 | `scripts/reference_data/aviandex_birds.json` | AvianDex 名單快照（編號權威） |
 | `scripts/reference_data/birdTaxonomy.json` | 583 隻目／科（推導特徵用） |
 | `scripts/reference_data/explorerIndex.json` ＋ `filterTraits.json` | 體長資料（推導 `size` 用） |
-| `scripts/reference_data/legacy_birds_569.json` | 改造前 569 名單快照（R2 圖「按物種搬運」嘅來源） |
+| `scripts/reference_data/legacy_birds_569.json` | 改造前 569 名單快照——只用嚟核對 URL 模式（自id四碼 .avif） |
 
 > `scripts/reference_data/` 喺 Git 保留、部署排除（見 DEPLOYMENT_GUARDRAILS §2）。
 
@@ -29,9 +29,11 @@ npm run check && npm run lint && npm run build
 腳本一次過做齊：
 
 1. 以 AvianDex 名單重建 `birds.json`（583 隻）。
-2. `photoUrl` **以物種搬運**（中文 → 英文 → 學名三段全局配對，先到先得；
-   `大山雀→遠東山雀` 等異名手動對照喺 `OLD_ZH_FIXUP`）。R2 `birdcards/` 檔案係舊編號生成，
-   按編號搬會搬錯圖，詳見 [docs/AVIANDEX_INTEROP.md](docs/AVIANDEX_INTEROP.md) §4。
+2. `photoUrl` **編號直對**：`birdcards/<AvianDex NO>.avif`（583/583）。
+   R2 bucket 已按 AvianDex 編號對齊物種——AvianDex `docs/ILLUSTRATION_REPAIRS.md`
+   補咗 29 個改配物種槽位 ＋ 14 個新編號（0570–0583）並由用戶上載；
+   `legacy_birds_569.json` 只做「自id四碼 .avif」完整性核對。
+   詳見 [docs/AVIANDEX_INTEROP.md](docs/AVIANDEX_INTEROP.md) §4。
 3. 推導三問特徵（`size`：體長 ≤15 細 / 16–39 中 / ≥40 大 → 科級後備 → 中；
    `main_color`：中文名顏色字 → 科級後備 → 啡棕；`beak`：科級嘴形表 → 尖）。
 4. 重建 `nameAliases.json`（英文＋學名＋繁中＋簡中，先到先得去重）。
