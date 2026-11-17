@@ -4,10 +4,11 @@ import { CaptureResult } from '../types';
 import { BirdCard } from './BirdCard';
 import { RARITY_META } from '../lib/theme';
 import { BIRD_SPECIES } from '../data/birdData';
-import { Star, Sparkles, ChevronRight, XCircle, Scissors, Download, Share2 } from 'lucide-react';
+import { Star, Sparkles, ChevronRight, XCircle, Scissors, Download, Share2, ExternalLink } from 'lucide-react';
 import { ivRankLabel, natureEffect } from '../lib/birdStats';
 import { makeSticker } from '../lib/stickerMaker';
 import { useCollectionContext } from '../context/CollectionContext';
+import { openAvianDexUnlock } from '../lib/aviandex';
 
 interface CaptureResultScreenProps {
   result: CaptureResult;
@@ -25,7 +26,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
   const { species, isNew, oldRarity, newRarity, xpGained, record, failed, failReason, failKind, captureStats, isBestIndividual } = result;
   const rarityMeta = RARITY_META[newRarity];
 
-  const photoForSticker = record?.photoDataUrl || null;
+  const photoForSticker = record?.photo_original_url || null;
 
   const handleMakeSticker = async () => {
     if (!species || !photoForSticker || stickerBusy) return;
@@ -354,6 +355,20 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
           >
             收入收藏冊
           </button>
+
+          {/* 兄弟 App：解鎖 AvianDex 同一個 NO.（卡面預設賽璐璐，撳卡上掣可睇原相） */}
+          {record && (
+            <button
+              onClick={() => species && openAvianDexUnlock(record, species.name)}
+              className="w-full py-3 mt-2 rounded-xl border border-blue-400/40 bg-blue-500/10 text-blue-200 font-black text-sm tracking-wide flex items-center justify-center gap-2 hover:bg-blue-500/20 active:scale-[0.98] transition"
+            >
+              <ExternalLink size={15} />
+              跳去 AvianDex 解鎖 NO.{record.no}
+            </button>
+          )}
+          <p className="text-[10px] text-dex-muted text-center pt-0.5">
+            原相＝證據同步 Keep 埋 · 卡面撳「賽璐璐 ⇄ 原相」隨時轉
+          </p>
         </motion.div>
       )}
     </div>

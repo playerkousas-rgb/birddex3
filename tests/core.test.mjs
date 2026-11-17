@@ -8,12 +8,27 @@ const stats = loadTs('src/lib/birdStats.ts');
 const aliases = loadTs('src/data/nameAliases.ts');
 const birds = JSON.parse(readFileSync('src/data/birds.json', 'utf8'));
 
-test('all 569 bird records and alias targets remain intact, with R2 images', () => {
-  assert.equal(birds.length, 569);
+test('all 583 bird records and alias targets remain intact, with shared NO. numbering', () => {
+  assert.equal(birds.length, 583);
   const ids = new Set(birds.map(bird => bird.id));
-  assert.equal(ids.size, 569);
-  for (const bird of birds) assert.match(bird.photoUrl, /^https:\/\/[^/]+\.r2\.dev\/birdcards\/\d{4}\.avif$/);
+  assert.equal(ids.size, 583);
+  // photoUrl 只可以是 null（R2 未有呢個編號）或 birdcards/NO.avif；NO 與 AvianDex 共用。
+  for (const bird of birds) {
+    if (bird.photoUrl === null || bird.photoUrl === undefined) continue;
+    assert.match(bird.photoUrl, /^https:\/\/[^/]+\.r2\.dev\/birdcards\/\d{4}\.avif$/);
+  }
   for (const entry of aliases.getAllAliases()) assert.ok(ids.has(entry.speciesId));
+});
+
+test('every bird carries quiz traits (size/main_color/beak) from the shared vocabulary', () => {
+  const SIZES = new Set(['細', '中', '大']);
+  const COLORS = new Set(['黑白', '白', '黑', '啡棕', '灰', '綠藍', '紅黃']);
+  const BEAKS = new Set(['尖', '長', '闊', '鉤']);
+  for (const bird of birds) {
+    assert.ok(SIZES.has(bird.size), `${bird.id} size=${bird.size}`);
+    assert.ok(COLORS.has(bird.main_color), `${bird.id} main_color=${bird.main_color}`);
+    assert.ok(BEAKS.has(bird.beak), `${bird.id} beak=${bird.beak}`);
+  }
 });
 
 test('existing exact and punctuation-normalized name matches remain unchanged', () => {

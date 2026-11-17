@@ -1,38 +1,31 @@
 import { useRef, useState, useEffect, useCallback } from 'react';
-import { analyzeImageDetailed } from '../lib/aiClient';
 import { CameraSession, cameraCrop, drawCameraFrame, sharpness } from '../lib/camera';
-import { recognitionCandidates, AUTO_CAPTURE_CONFIDENCE, type RecognitionCandidate } from '../lib/recognitionCandidates';
-import { Camera, Zap, AlertTriangle, ZoomIn, ZoomOut, MapPin, Sparkles, Eye, EyeOff } from 'lucide-react';
-import { CaptureResult, ThrowSession } from '../types';
+import { Camera, AlertTriangle, ZoomIn, ZoomOut, MapPin, Sparkles, Eye, EyeOff } from 'lucide-react';
+import { QuizSession } from '../types';
 import { useLiveBirdDetector } from '../lib/liveDetect';
 
 interface ScannerScreenProps {
-  onCapture: (result: CaptureResult) => void;
+  /** 影完相 → 交俾三問流程（相只係證據，唔經 AI 辨識） */
+  onPhotoTaken: (session: QuizSession) => void;
   onBusyChange: (busy: boolean) => void;
-  onStartThrow: (session: ThrowSession) => void;
 }
 
-type ScanPhase = 'idle' | 'starting' | 'active' | 'countdown' | 'snapping' | 'analyzing' | 'found' | 'missed' | 'candidate' | 'error';
+type ScanPhase = 'idle' | 'starting' | 'active' | 'snapping' | 'error';
 
-export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: ScannerScreenProps) {
+export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const cameraRef = useRef(new CameraSession());
   const mountedRef = useRef(false);
   const captureLock = useRef(false);
-  const abortRef = useRef<AbortController | null>(null);
   const requestRef = useRef(0);
   const effectiveZoom = useRef({ total: 1, digital: 1 });
-  const textTimerRef = useRef<ReturnType<typeof setInterval>>();
   const zoomQueue = useRef(Promise.resolve());
-  const pendingPhoto = useRef<{ photoDataUrl: string; location: { lat: number; lng: number } | null; zoom: number } | null>(null);
-  const [candidates, setCandidates] = useState<RecognitionCandidate[]>([]);
   const pinchStartDist = useRef<number | null>(null);
   const pinchStartZoom = useRef(1);
 
   const [phase, setPhase] = useState<ScanPhase>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [analyzingText, setAnalyzingText] = useState('初始化影像...');
 
   // Zoom
   const [zoomCap, setZoomCap] = useState<{ min: number; max: number; step: number } | null>(null);
@@ -52,7 +45,7 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
   );
   const birdDetected = detections.length > 0;
 
-  const busy = phase === 'snapping' || phase === 'analyzing' || phase === 'candidate';
+  const busy = phase === 'snapping';
   useEffect(() => { onBusyChange(busy); return () => onBusyChange(false); }, [busy, onBusyChange]);
 
   const applyZoom = useCallback((z: number) => {
@@ -116,8 +109,6 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
     return () => {
       mountedRef.current = false;
       requests.current++;
-      abortRef.current?.abort();
-      clearInterval(textTimerRef.current);
       camera.stop();
     };
   }, [startCamera]);
@@ -166,41 +157,20 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
     };
   }, [zoom, applyZoom]);
 
-  const cancelAnalysis = () => {
-    requestRef.current++;
-    abortRef.current?.abort();
-    clearInterval(textTimerRef.current);
-    captureLock.current = false;
-    pendingPhoto.current = null;
-    setCandidates([]);
-    setPhase('active');
-  };
-
-  const beginThrow = (candidate: RecognitionCandidate) => {
-    const photo = pendingPhoto.current;
-    if (!photo || !mountedRef.current) return;
-    pendingPhoto.current = null; // double-click cannot start two sessions
-    onStartThrow({ speciesId: candidate.bird.id, species: candidate.bird, analyzeResult: candidate.result,
-      photoDataUrl: photo.photoDataUrl, location: photo.location, zoomLevel: photo.zoom });
-  };
-
   const snap = async () => {
     if (!videoRef.current || !canvasRef.current || phase !== 'active' || captureLock.current) return;
     captureLock.current = true;
     const request = ++requestRef.current;
-    const controller = new AbortController();
-    abortRef.current = controller;
-    const current = () => mountedRef.current && requestRef.current === request && !controller.signal.aborted;
+    const current = () => mountedRef.current && requestRef.current === request;
     const video = videoRef.current;
     const canvas = canvasRef.current;
-    let textTimer: ReturnType<typeof setInterval> | undefined;
     const viewport = { width: video.clientWidth, height: video.clientHeight };
     setPhase('snapping');
     try {
       await zoomQueue.current;
       if (!current()) return;
       const photoZoom = { ...effectiveZoom.current };
-      // A small three-frame burst, preserving the full visible crop for v3 stickers.
+      // 三連拍取最Sharp一張：張相只係「證據」，唔經 AI 辨識，直接入三問流程。
       const probe = document.createElement('canvas'); probe.width = 64; probe.height = 64;
       const probeContext = probe.getContext('2d');
       const best = document.createElement('canvas');
@@ -219,43 +189,18 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
         if (i < 2) await new Promise(resolve => setTimeout(resolve, 70));
       }
       if (!current()) return;
-      setPhase('analyzing');
-      const texts = ['特徵提取...', '比對圖鑑資料庫...', '神經網路辨識...', '搜尋香港鳥種...', '信心度評估...'];
-      let ti = 0;
-      textTimerRef.current = textTimer = setInterval(() => { if (current()) setAnalyzingText(texts[ti++ % texts.length]); }, 520);
-      const blob = await new Promise<Blob | null>(resolve => best.toBlob(resolve, 'image/jpeg', 0.92));
-      if (!current()) return;
-      if (!blob) throw new Error('照片生成失敗');
-      const data = await analyzeImageDetailed(blob, controller.signal);
-      if (!current()) return;
-      const results = data.results || [];
-      const fail = (reason: string, kind: NonNullable<CaptureResult['failKind']>) => {
-        onCapture({ record: null, isNew: false, oldRarity: 'UC', newRarity: 'UC', xpGained: 0,
-          species: null, failed: true, failReason: reason, failKind: kind });
-      };
-      if (data.notBird) {
-        const guess = data.topGuess ? `（看起來像「${data.topGuess}」）` : '';
-        fail(`畫面中沒有偵測到鳥類${guess}，請對準鳥類再試。`, 'not-bird'); return;
-      }
-      const choices = recognitionCandidates(results);
-      if (!choices.length) {
-        fail(results[0]?.score >= AUTO_CAPTURE_CONFIDENCE
-          ? `偵測到「${results[0].label}」，但這隻鳥不在 BIRD-DEX 圖鑑中。`
-          : '辨識信心度不足，請靠近一點或在光線充足處再試。',
-        results[0]?.score >= AUTO_CAPTURE_CONFIDENCE ? 'not-in-dex' : 'escaped');
-        return;
-      }
-      pendingPhoto.current = { photoDataUrl: best.toDataURL('image/jpeg', 0.72), location, zoom: photoZoom.total };
-      // Keep the original automatic path only for a confident top-1. Lower/other matches require consent.
-      if (choices[0].result === results[0] && choices[0].result.score >= AUTO_CAPTURE_CONFIDENCE) beginThrow(choices[0]);
-      else { setCandidates(choices); setPhase('candidate'); }
+      onPhotoTaken({
+        photoDataUrl: best.toDataURL('image/jpeg', 0.72),
+        location,
+        zoom: photoZoom.total,
+      });
     } catch (err: any) {
       if (!current()) return;
       setPhase('error');
-      setErrorMsg(err.message || '辨識過程發生錯誤');
+      setErrorMsg(err.message || '拍攝過程發生錯誤');
     } finally {
-      clearInterval(textTimer);
-      if (requestRef.current === request) { abortRef.current = null; captureLock.current = false; }
+      if (requestRef.current === request) captureLock.current = false;
+      if (mountedRef.current && requestRef.current === request) setPhase('active');
     }
   };
 
@@ -326,41 +271,19 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
             <div className="scan-line rounded-full" />
             <div className="absolute -bottom-8 left-0 right-0 text-center">
               <div className="text-[10px] text-dex-neon/80 tracking-[0.3em] font-mono">
-                BIRD-DEX SCAN v3.0
+                BIRD-DEX SCAN v3.1
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Analyzing */}
-      {phase === 'analyzing' && (
-        <div className="absolute inset-0 bg-dex-bg/90 backdrop-blur-md flex flex-col items-center justify-center z-20">
-          <div className="relative w-24 h-24 mb-6">
-            <div className="absolute inset-0 border-4 border-dex-neon/20 rounded-full animate-spin" style={{ animationDuration: '2s' }} />
-            <div className="absolute inset-2 border-4 border-t-dex-neon border-r-transparent border-b-dex-neon/30 border-l-transparent rounded-full animate-spin" />
-            <Zap className="absolute inset-0 m-auto text-dex-neon" size={32} />
-          </div>
-          <div className="text-dex-neon font-mono text-sm tracking-widest mb-2 animate-pulse">AI ANALYZING</div>
-          <div className="text-white/60 text-xs font-mono">{analyzingText}</div>
-          <div className="text-white/30 text-[10px] mt-3">Zoom {zoom.toFixed(1)}x · {location ? 'GPS OK' : 'GPS --'}</div>
-          <button onClick={cancelAnalysis} className="mt-6 px-5 py-3 rounded-xl border border-dex-border text-white text-sm">取消辨識</button>
-        </div>
-      )}
-
-      {phase === 'candidate' && (
-        <div className="absolute inset-0 bg-dex-bg/95 z-20 flex flex-col justify-center p-6 gap-3 overflow-y-auto">
-          <h2 className="text-lg font-bold text-white">請確認候選鳥種</h2>
-          {pendingPhoto.current && <img src={pendingPhoto.current.photoDataUrl} alt="待確認的拍攝照片" className="max-h-40 w-full object-contain rounded-xl" />}
-          <p className="text-xs text-dex-muted">辨識尚未確定。選擇相符鳥種後才進入投擲；不相符請重新拍攝。</p>
-          {candidates.map(candidate => (
-            <button key={candidate.bird.id} className="rounded-xl border border-dex-neon/40 bg-dex-surface p-4 text-left text-white"
-              onClick={() => beginThrow(candidate)}>
-              <span className="font-bold">{candidate.bird.name}</span>
-              <span className="block text-xs text-dex-muted mt-1">{candidate.bird.nameEn} · {(candidate.result.score * 100).toFixed(0)}%</span>
-            </button>
-          ))}
-          <button onClick={cancelAnalysis} className="py-3 text-dex-neon">重新拍攝</button>
+      {/* 拍攝中（三連拍，約 0.2s）—— 唔使 AI，影完即入三問 */}
+      {phase === 'snapping' && (
+        <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] flex flex-col items-center justify-center z-20">
+          <div className="w-16 h-16 rounded-full border-4 border-dex-neon/30 border-t-dex-neon animate-spin" style={{ animationDuration: '0.8s' }} />
+          <div className="text-dex-neon font-mono text-xs tracking-widest mt-4 animate-pulse">SNAP…</div>
+          <div className="text-white/40 text-[10px] mt-2">影低佢做證據</div>
         </div>
       )}
 
@@ -461,16 +384,16 @@ export function ScannerScreen({ onCapture, onStartThrow, onBusyChange }: Scanner
             {birdDetected ? (
               <span className="text-dex-neon font-bold">偵測到 {detections.length} 隻鳥！按下快門捕捉</span>
             ) : liveDetectEnabled ? (
-              ready ? 'AI 即時偵測中 · 對準鳥類' : modelLoading ? 'AI 模型載入中…' : '即時偵測暫時無法使用 · 仍可拍攝辨識'
+              ready ? 'AI 即時偵測中 · 對準鳥類' : modelLoading ? 'AI 模型載入中…' : '即時偵測暫時無法使用 · 仍可拍攝'
             ) : (
               '即時偵測已關閉 · 對準鳥類拍攝'
             )}
             <br />
-            <span className="text-white/40">雙指縮放 / 滑桿調整 · 遠距離開 Zoom</span>
+            <span className="text-white/40">影完答 3 條問題自己對卡 · 雙指縮放</span>
           </div>
           <button
             onClick={snap}
-            aria-label="拍照辨識"
+            aria-label="拍照"
             className={`relative w-[78px] h-[78px] rounded-full flex items-center justify-center shadow-lg active:scale-95 transition-transform ${birdDetected ? 'bg-dex-neon' : 'bg-white'}`}
           >
             {birdDetected && <span className="pulse-ring absolute inset-0 rounded-full" style={{borderColor:'#00F0FF'}} />}

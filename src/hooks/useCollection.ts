@@ -1,8 +1,10 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { CaptureRecord, TrainerProfile, Rarity, CaptureResult, CaptureStats } from '../types';
 import { BIRD_SPECIES } from '../data/birdData';
 import { readJSON, saveJSON, savedDataForBackup } from '../lib/storage';
 import { getRarityFromCount, xpForCapture, getLevelFromXp } from '../lib/theme';
+import { birdNo } from '../lib/aviandex';
+import { celShadeImage } from '../lib/celShade';
 
 const STORAGE_KEY = 'bd_collection_v3';
 const PROFILE_KEY = 'bd_profile_v1';
@@ -44,8 +46,31 @@ const DEFAULT_ALTART: AltArtState = {
 };
 
 const isObject = (value: unknown): value is Record<string, unknown> => !!value && typeof value === 'object' && !Array.isArray(value);
-const isCollection = (value: unknown) => isObject(value) && Array.isArray(value.captures) && value.captures.every(c =>
+const isCollection = (value: unknown): value is Record<string, unknown> => isObject(value) && Array.isArray(value.captures) && value.captures.every(c =>
   isObject(c) && Number.isInteger(c.speciesId) && typeof c.count === 'number' && ['UC','C','R','SR','SSR','UR','LR'].includes(String(c.currentRarity)));
+
+/**
+ * v3 → v4 捕捉記錄遷移（精靈球版）：
+ *   photoDataUrl（舊） → photo_original_url（原相＝證據）
+ *   補 no（NO. NNNN）/ method: 'photo' / photo_cel_url（賽璐璐版，稍後背景生成）
+ * 一次過做、跌資料就 fail closed（照舊交俾 storageError 橫幅）。
+ */
+function migrateRecord(raw: unknown): CaptureRecord | null {
+  if (!isObject(raw) || !Number.isInteger(raw.speciesId)) return null;
+  const record = raw as unknown as CaptureRecord;
+  const legacyPhoto = typeof (raw as { photoDataUrl?: unknown }).photoDataUrl === 'string'
+    ? (raw as { photoDataUrl: string }).photoDataUrl
+    : null;
+  const original = typeof record.photo_original_url === 'string' ? record.photo_original_url : legacyPhoto;
+  const cel = typeof record.photo_cel_url === 'string' ? record.photo_cel_url : null;
+  return {
+    ...record,
+    no: typeof record.no === 'string' && record.no ? record.no : birdNo(record.speciesId),
+    method: 'photo',
+    photo_original_url: original,
+    photo_cel_url: cel,
+  };
+}
 
 function loadSettings(): AppSettings {
   return { ...DEFAULT_SETTINGS, ...readJSON(SETTINGS_KEY, {}, value => isObject(value) && (value.altArtMode === undefined || ['off','high-rarity','all'].includes(String(value.altArtMode)))) };
@@ -54,9 +79,16 @@ function loadSettings(): AppSettings {
 // Read-only initialization: a full disk must not turn a valid v2 save into an empty v3 save.
 function loadStored(): StoredData {
   const current = readJSON<StoredData | null>(STORAGE_KEY, null, isCollection);
-  if (current) return current;
-  const old = readJSON<StoredData | null>('bd_collection_v2', null, isCollection);
-  return old ? { ...old, version: 3 } : { captures: [], version: 3 };
+  const source = current
+    ?? (() => {
+      const old = readJSON<StoredData | null>('bd_collection_v2', null, isCollection);
+      return old;
+    })();
+  if (!source) return { captures: [], version: 4 };
+  const migrated = source.captures
+    .map(migrateRecord)
+    .filter((r): r is CaptureRecord => r !== null);
+  return { captures: migrated, version: 4 };
 }
 
 function loadAltArt(): AltArtState {
@@ -81,10 +113,30 @@ export function useCollection() {
     const failed = !saveJSON(key, value);
     setStorageErrors(prev => prev[key] === failed ? prev : { ...prev, [key]: failed });
   }, []);
-  useEffect(() => { persist(STORAGE_KEY, { captures, version: 3 }); }, [captures, persist]);
+  useEffect(() => { persist(STORAGE_KEY, { captures, version: 4 }); }, [captures, persist]);
   useEffect(() => { persist(PROFILE_KEY, profile); }, [profile, persist]);
   useEffect(() => { persist(SETTINGS_KEY, settings); }, [settings, persist]);
   useEffect(() => { persist(ALTART_KEY, altArt); }, [altArt, persist]);
+
+  // 賽璐璐版補生成：v3 舊存檔只有原相 → 每次一隻、背景慢慢補齊。
+  // 失敗唔重試無限循環（attemptedRef 記住），照舊顯示原相。
+  const celAttempted = useRef<Set<number>>(new Set());
+  useEffect(() => {
+    const pending = captures.find(c =>
+      !!c.photo_original_url && !c.photo_cel_url && !celAttempted.current.has(c.speciesId));
+    if (!pending?.photo_original_url) return;
+    const speciesId = pending.speciesId;
+    celAttempted.current.add(speciesId);
+    let cancelled = false;
+    celShadeImage(pending.photo_original_url)
+      .then(cel => {
+        if (cancelled) return;
+        setCaptures(prev => prev.map(c =>
+          c.speciesId === speciesId && !c.photo_cel_url ? { ...c, photo_cel_url: cel } : c));
+      })
+      .catch(() => { /* 原相永遠優先保留；轉換失敗就算數 */ });
+    return () => { cancelled = true; };
+  }, [captures]);
   const storageError = Object.values(storageErrors).some(Boolean);
   useEffect(() => {
     if (!storageError) return;
@@ -93,13 +145,13 @@ export function useCollection() {
     return () => window.removeEventListener('beforeunload', warn);
   }, [storageError]);
   const retrySave = () => {
-    persist(STORAGE_KEY, { captures, version: 3 }); persist(PROFILE_KEY, profile);
+    persist(STORAGE_KEY, { captures, version: 4 }); persist(PROFILE_KEY, profile);
     persist(SETTINGS_KEY, settings); persist(ALTART_KEY, altArt);
   };
   const exportBackup = () => ({
     format: 'birddex-backup', version: 1, exportedAt: new Date().toISOString(),
     // Full in-memory state, including photos, IV histories and stickers, never a slimmed copy.
-    current: { [STORAGE_KEY]: { captures, version: 3 }, [PROFILE_KEY]: profile, [SETTINGS_KEY]: settings, [ALTART_KEY]: altArt },
+    current: { [STORAGE_KEY]: { captures, version: 4 }, [PROFILE_KEY]: profile, [SETTINGS_KEY]: settings, [ALTART_KEY]: altArt },
     saved: savedDataForBackup(),
   });
 
@@ -170,7 +222,8 @@ export function useCollection() {
   const captureBird = useCallback((
     speciesId: number,
     opts?: {
-      photoDataUrl?: string;
+      photo_original_url?: string | null; // 原相＝證據
+      photo_cel_url?: string | null;      // 賽璐璐版＝精靈卡
       location?: { lat: number; lng: number } | null;
       stats?: CaptureStats;
     }
@@ -200,7 +253,8 @@ export function useCollection() {
         count: newCount,
         currentRarity: newRarity,
         lastCaptureDate: now,
-        photoDataUrl: opts?.photoDataUrl ?? existing.photoDataUrl,
+        photo_original_url: opts?.photo_original_url ?? existing.photo_original_url ?? null,
+        photo_cel_url: opts?.photo_cel_url ?? existing.photo_cel_url ?? null,
         location: opts?.location ?? existing.location,
         stats: stats ?? existing.stats,
         bestStats,
@@ -209,13 +263,16 @@ export function useCollection() {
     } else {
       record = {
         speciesId,
+        no: birdNo(speciesId),
+        method: 'photo',
         capturedAt: now,
         count: 1,
         currentRarity: getRarityFromCount(1),
         firstCaptureDate: now,
         lastCaptureDate: now,
         location: opts?.location ?? null,
-        photoDataUrl: opts?.photoDataUrl ?? null,
+        photo_original_url: opts?.photo_original_url ?? null,
+        photo_cel_url: opts?.photo_cel_url ?? null,
         stats,
         bestStats,
         allCatches: stats ? [stats] : [],
@@ -336,12 +393,15 @@ export function useCollection() {
       const now = new Date().toISOString();
       const allRecords: CaptureRecord[] = BIRD_SPECIES.map(b => ({
         speciesId: b.id,
+        no: birdNo(b.id),
+        method: 'photo',
         capturedAt: now,
         count: 25,
         currentRarity: 'LR',
         firstCaptureDate: now,
         lastCaptureDate: now,
-        photoDataUrl: null,
+        photo_original_url: null,
+        photo_cel_url: null,
       }));
       setCaptures(allRecords);
       setProfile({

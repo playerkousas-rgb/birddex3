@@ -1,16 +1,17 @@
 // Optional QA tool, deliberately not an application dependency. See DEPLOYMENT_GUARDRAILS.md.
+// 精靈球版：mock 相機 → 三問 → 候選對卡 → 揀中 → 賽璐璐卡 + 原相持久化（全程零 AI 辨識）。
 const { chromium: playwright } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 (async () => {
   const browser = await playwright.launch({ executablePath: process.env.CHROMIUM_EXECUTABLE_PATH, args: ['--no-sandbox', '--disable-dev-shm-usage'], headless: true });
   const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
   // Remote images/tiles are not part of this local production smoke test.
-  await context.route(/https:\/\//, route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"/>' }));
+  await context.route(/https:\\/\\//, route => route.fulfill({ status: 200, contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"/>' }));
   const page = await context.newPage();
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(process.env.PREVIEW_URL || 'http://127.0.0.1:4173');
   await page.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
-  assert.match(await page.locator('body').innerText(), /569/);
+  assert.match(await page.locator('body').innerText(), /583/);
   assert.equal(await page.locator('link[rel="manifest"]').count(), 1);
   await page.getByPlaceholder('搜尋鳥名、英文或學名...').fill('not-a-real-bird');
   await page.getByText('沒有符合條件的鳥精靈').waitFor();
@@ -20,14 +21,17 @@ const assert = require('node:assert/strict');
     await page.waitForTimeout(100);
     console.log('Navigation OK:', label);
   }
-  // Seed a v2 save to verify automatic v3 migration and populated views.
+  // Seed a v2 save to verify automatic v4 migration (photoDataUrl → photo_original_url) and populated views.
   const birds = require('../src/data/birds.json');
   const stats = { iv: { hp: 31, atk: 31, def: 31, spd: 31, sta: 31, total: 155, percent: 100 }, cp: 650, nature: '勇敢', trait: '愛鳴唱', sizeVariant: 'M', isShiny: false, catchScore: 'Great', catchDistance: 2 };
   const captures = birds.slice(0, 2).map(bird => ({ speciesId: bird.id, count: 12, currentRarity: 'UR', capturedAt: new Date().toISOString(), firstCaptureDate: new Date().toISOString(), lastCaptureDate: new Date().toISOString(), location: { lat: 22.3, lng: 114.2 }, stats, bestStats: stats, allCatches: [stats] }));
   await page.evaluate(captures => { localStorage.removeItem('bd_collection_v3'); localStorage.setItem('bd_collection_v2', JSON.stringify({ captures, version: 2 })); }, captures);
   await page.reload();
   await page.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
-  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')).version), 3);
+  const migrated = await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')));
+  assert.equal(migrated.version, 4);
+  assert.equal(migrated.captures[0].no, String(migrated.captures[0].speciesId).padStart(4, '0'));
+  assert.equal(migrated.captures[0].method, 'photo');
   await page.getByRole('button', { name: '已捕捉', exact: true }).click();
   await page.getByText(birds[0].name, { exact: true }).first().click();
   await page.waitForTimeout(100);
@@ -53,29 +57,34 @@ const assert = require('node:assert/strict');
       return canvas.captureStream(10);
     };
   });
-  let aiResult = { mediaType: 'image', engine: 'mock', results: [{ label: 'Spotted Dove', score: 0.99 }] };
-  await context.route('**/api/analyze', route => route.fulfill({ json: aiResult }));
   await page.reload();
   await page.locator('nav').getByRole('button', { name: '捕捉', exact: true }).click();
   const shutter = page.locator('button').filter({ has: page.locator('svg.lucide-camera') });
   await shutter.waitFor();
   await page.getByRole('button', { name: '2x', exact: true }).click();
+  // 影相 → 三問（零 AI：冇 /api/analyze、冇自動辨識）
   await shutter.click();
-  await page.getByRole('button', { name: '投出精靈球！', exact: true }).click();
+  await page.getByRole('heading', { name: '答 3 條問題，對返你張相' }).waitFor({ timeout: 15000 });
+  assert.match(await page.locator('body').innerText(), /唔肯定？試下用 Merlin 影相認/);
+  await page.locator('button').filter({ hasText: '白鴿咁大' }).click();   // size: 中 → 命中珠頸斑鳩
+  await page.locator('button').filter({ hasText: '啡棕' }).first().click(); // main_color: 啡棕
+  await page.locator('button').filter({ hasText: '尖' }).first().click();   // beak: 尖
+  await page.getByRole('button', { name: /彈出候選卡/ }).click();
+  await page.getByRole('heading', { name: '邊隻最似你影嗰隻？' }).waitFor();
+  await page.locator('button').filter({ hasText: birds[0].name }).first().click();
+  await page.locator('button').filter({ hasText: '精靈球捕捉 GO' }).click();
   await page.getByRole('button', { name: '收入收藏冊', exact: true }).click({ timeout: 15000 });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')));
-  assert.equal(saved.captures[0].count, 13);
-  assert.equal(saved.captures[0].stats.catchDistance, 2);
-  assert.equal(saved.captures[0].allCatches.length, 2);
-  assert.ok(saved.captures[0].photoDataUrl.startsWith('data:image/jpeg'));
+  const caught = saved.captures.find(c => c.speciesId === birds[0].id);
+  assert.equal(caught.count, 13);
+  assert.equal(caught.stats.catchDistance, 2);
+  assert.equal(caught.allCatches.length, 2);
+  assert.equal(caught.no, '0001');
+  assert.equal(caught.method, 'photo');
+  assert.ok(caught.photo_original_url.startsWith('data:image/jpeg'));
+  assert.ok(caught.photo_cel_url.startsWith('data:image/jpeg'));
   assert.ok(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_profile_v1')).xp > 0));
-  // Rejected photo must not add a capture or XP.
-  aiResult = { mediaType: 'image', engine: 'gate', notBird: true, topGuess: 'cat', results: [] };
-  await page.locator('nav').getByRole('button', { name: '捕捉', exact: true }).click();
-  await shutter.click();
-  await page.getByRole('button', { name: '返回繼續尋找', exact: true }).waitFor({ timeout: 15000 });
-  assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')).captures[0].count), 13);
-  console.log('PASS: mock camera + AI -> zoom/photo -> throw -> capture/XP/persistence; non-bird rejection; offline live model graceful fallback.');
+  console.log('PASS: mock camera -> three questions -> candidate compare -> cel card + original photo persisted; no AI recognition calls.');
   assert.deepEqual(errors, []);
   console.log('PASS: mobile navigation, search, v2 migration/persistence, detail IV/CP, populated album/battle/map, manifest; zero JS page errors.');
   const offlineContext = await browser.newContext();

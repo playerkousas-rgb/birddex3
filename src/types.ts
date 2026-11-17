@@ -1,5 +1,24 @@
 export type Rarity = 'UC' | 'C' | 'R' | 'SR' | 'SSR' | 'UR' | 'LR';
 
+// ---- 精靈球版：三問對卡特徵（由 scripts/sync_from_aviandex.py 推導，全表必填）----
+export type BirdSize = '細' | '中' | '大';
+export type MainColor = '黑白' | '白' | '黑' | '啡棕' | '灰' | '綠藍' | '紅黃';
+export type BeakShape = '尖' | '長' | '闊' | '鉤';
+
+/** 小朋友答嘅三條問題（三問 → 由 583 隻過濾出 3–5 張候選卡） */
+export interface QuizAnswers {
+  size: BirdSize;
+  main_color: MainColor;
+  beak: BeakShape;
+}
+
+/** 影完相、未答問題之前的暫存（張相只係證據，唔係俾 AI 睇） */
+export interface QuizSession {
+  photoDataUrl: string;
+  location: { lat: number; lng: number } | null;
+  zoom: number;
+}
+
 export interface Hotspot {
   name: string;
   nameEn?: string;
@@ -21,7 +40,9 @@ export interface BirdSpecies {
   familyEn?: string;
   order?: string;
 
-  size: string;
+  size: BirdSize;          // 細 / 中 / 大（過濾用，唔係 cm）
+  main_color: MainColor;   // 主色（過濾用）
+  beak: BeakShape;         // 嘴形（過濾用）
   habitat: string[];
   diet: string;
   features: string;
@@ -87,14 +108,17 @@ export interface CaptureStats {
 
 export interface CaptureRecord {
   speciesId: number;
-  capturedAt: string;     // ISO date
+  no: string;              // NO. NNNN — 與 AvianDex 共用的圖鑑編號（'0008'）
+  method: 'photo';         // 捕捉方式：影相（本版唯一方式）
+  capturedAt: string;     // ISO date（＝ interchange 嘅 captured_at）
   count: number;        // total captures
   currentRarity: Rarity;
   firstCaptureDate: string;
   lastCaptureDate: string;
   location?: { lat: number; lng: number } | null;
-  photoDataUrl?: string | null; // 使用者拍的照片
-  
+  photo_original_url?: string | null; // 原相 = 證據（小朋友自己影嘅真相，唔會改）
+  photo_cel_url?: string | null;      // 賽璐璐版 = 精靈卡（前端 Canvas 即時生成，預設顯示）
+
   // v3 CatchCat
   stats?: CaptureStats; // 最新一次捕捉的個體數值
   bestStats?: CaptureStats; // 歷史最佳個體
@@ -133,7 +157,7 @@ export interface CaptureResult {
   isBestIndividual?: boolean;
 }
 
-export type View = 'scanner' | 'dex' | 'album' | 'profile' | 'detail' | 'capture-result' | 'audio' | 'map' | 'battle' | 'throw';
+export type View = 'scanner' | 'dex' | 'album' | 'profile' | 'detail' | 'capture-result' | 'audio' | 'map' | 'battle' | 'throw' | 'quiz';
 
 // Throw game
 export interface ThrowSession {

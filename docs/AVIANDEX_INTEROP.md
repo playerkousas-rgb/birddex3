@@ -1,0 +1,80 @@
+# BirdEx ↔ AvianDex 互聯合約（兄弟 App 一直互通指引）
+
+> **一句話**：兩個 App 唯一駁位係 **`NO. NNNN`**；AvianDex 嘅 `birds.json`（583 隻）係編號真相，
+> BirdEx 由 `scripts/sync_from_aviandex.py` 同步佢。改編號只准改 AvianDex，唔准兩邊各改各。
+
+## 1. 分工（唔好撈亂）
+
+| | AvianDex（圖鑑） | BirdEx / BIRD-DEX（精靈球） |
+|---|---|---|
+| 職責 | 睇得到、學得到：權威資料、卡面文字唔由 AI 生成 | 野外「捉」：影相 → 答 3 條問題 → 對卡 → 解鎖 |
+| 資料 | 583 隻名單、NO. 編號、分類權威 | 同一套 NO.；捕捉記錄存 localStorage |
+| 卡面 | 插畫／資訊卡（程式排版） | 小朋友自己嘅相：原相（證據）＋ 賽璐璐版（精靈卡） |
+
+## 2. 編號同步（真相流程）
+
+1. **權威**：`AvianDex/src/data/birds.json`（`id: "0001"…"0583"`）。
+2. **同步**：`python3 scripts/sync_from_aviandex.py`
+   - 輸入（收喺 `scripts/reference_data/`，Git 保留、部署排除）：
+     `aviandex_birds.json` · `birdTaxonomy.json` · `explorerIndex.json` · `filterTraits.json` · `legacy_birds_569.json`
+   - 輸出：`src/data/birds.json`（583 隻 ＋ `size`/`main_color`/`beak` 三欄）、`src/data/nameAliases.json`（重建）。
+   - **photoUrl 以「物種」搬運，唔係以編號搬**（原因見 §4）；腳本可重跑（idempotent）。
+3. **守門**：`tests/core.test.mjs` 斷言 583 隻、編號唯一、traits 全填、alias 目標存在。
+   任何一邊改名單都要重跑腳本 ＋ 更新快照，先過 `npm run check`。
+
+## 3. 解鎖深層連結（AvianDex 已實作）
+
+```
+https://avian-dex.vercel.app/?unlock=0008[&search=中文名]
+```
+
+- AvianDex 收到後：寫入自己 localStorage `aviandex.capture-unlocks.v1`
+  `{ no, unlocked_at, source: 'birddex3' }`，並直接打開該鳥（`?id=`/`?search=` 亦支援）。
+- BirdEx 嘅觸發點：
+  1. 捕捉結果頁「跳去 AvianDex 解鎖 NO.NNNN」；
+  2. 鳥種詳頁（已捕捉）「解鎖 NO.NNNN」。
+- 實作：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock` / `toInteropRecord`）。
+
+## 4. ⚠️ R2 `birdcards/` 編號真相（重要發現，2026-11-17）
+
+- `birdcards/` 569 張插畫係**按舊 BirdEx（skw-birdex2）編號**生成：
+  證據 = 本 repo `fix_r2_urls2.cjs`（以舊 `birds.json` id 寫 photoUrl）同 `BIRD_ID_MAPPING.csv`。
+- AvianDex 而家係用 `birdcards/<AvianDex NO>.avif` 載入（`src/config.ts`）。
+  **兩邊編號有 162 處曾錯位**（舊 BirdEx 569 vs AvianDex 583）→ AvianDex 按自己 NO. 讀呢個資料夾，
+  錯位嘅編號會顯示到第二隻鳥嘅畫。
+- **BirdEx 已改用 AvianDex 編號，並以「物種」搬運 photoUrl**（例如白腰文鳥 NO.0014 繼續指向 `birdcards/0010.avif`），
+  所以卡面對物種永遠啱。
+- **AvianDex 嗰邊建議跟同一招**（按物種搬 URL，或重新用 AvianDex 編號上傳整個 `birdcards/`），
+  兩邊先會永遠對得返。AvianDex 570–583 冇 birdcards 檔（56 個編號係 null）→ 兩邊都要靠 emoji／後備圖。
+- 任何一邊重新上傳 `birdcards/` 後，請通知另一邊重跑同步腳本。
+
+## 5. PostMessage 載荷（遞相片，AvianDex 未聽都無害）
+
+BirdEx 開 unlock 彈窗後會重試三次：
+
+```json
+{
+  "source": "birddex3",
+  "type": "capture-unlock",
+  "record": {
+    "no": "0008",
+    "captured_at": "2026-11-17T10:00:00.000Z",
+    "location": { "lat": 22.3, "lng": 114.1 },
+    "method": "photo",
+    "photo_original_url": "data:image/jpeg;base64,…",
+    "photo_cel_url": "data:image/jpeg;base64,…"
+  }
+}
+```
+
+- `targetOrigin` 固定 `https://avian-dex.vercel.app`。
+- AvianDex 想喺剪影格直接顯示小朋友張卡：掛 `message` listener 檢查
+  `event.data?.source === 'birddex3' && event.data?.type === 'capture-unlock'`，
+  按 `record.no` 對返圖鑑格即可（`?unlock=` 已夠觸發進度，postMessage 只係加料）。
+- 語言／版本演進只准 **加欄位**，唔准改 `no` 格式（永遠 4 位數字字串）。
+
+## 6. 互通紅線
+
+- 唔准 BirdEx 自行發明編號、自行開 eBird API、或將捕捉進度寫去 AvianDex 嘅 storage（origin 不同，做不到）。
+- 唔准為「方便」複製另一邊整份資料落自己 repo 後各改各；同步只准經 §2 腳本。
+- 進度一律 localStorage ＋ 備份檔（`bd_*` keys），冇 login、冇 Backend。
