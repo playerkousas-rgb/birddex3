@@ -14,8 +14,10 @@ import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
 import { celShadeImage } from './lib/celShade';
 import { PwaChrome } from './components/PwaChrome';
+import { StoreSupportButton } from './components/StoreSupportButton';
 import { parseIncomingSpecies } from './lib/aviandex';
 import { getBirdById } from './data/birdData';
+import { makeDemoPhoto } from './lib/demoPhoto';
 
 function AppRouter() {
   const [view, setView] = useState<View>('dex');
@@ -49,17 +51,17 @@ function AppRouter() {
     }
   };
 
-  // 賽璐璐卡預生成：影完相即刻後台跑，小朋友答三問期間完成 — 揀中即刻入投球動畫
+  // 賽璐璐卡預生成：影完相即刻後台跑，小朋友答五問期間完成 — 揀中即刻入投球動畫
   const celPromiseRef = useRef<Promise<string | null> | null>(null);
 
-  // Scanner → 三問流程（相只係證據，冇 AI 辨識）
+  // Scanner → 五問流程（相只係證據，冇 AI 辨識）
   const handlePhotoTaken = (session: QuizSession) => {
     setQuizSession(session);
     setView('quiz');
     celPromiseRef.current = celShadeImage(session.photoDataUrl).catch(() => null);
   };
 
-  // 小朋友對卡揀中 → 即刻生成賽璐璐卡 → 捕捉記錄（原相＋賽璐璐一齊 Keep）
+  // 小朋友對卡揀中 → 即刻生成賽璐璐卡 → 拍攝記錄（原相＋賽璐璐一齊 Keep）
   const handlePick = async (speciesId: number) => {
     if (!quizSession || picking) return;
     setPicking(true);
@@ -104,8 +106,20 @@ function AppRouter() {
     window.history.replaceState(null, '', window.location.pathname + window.location.hash);
   }, []);
 
+  // 無相機都要預覽五問：?demo=quiz 用一張手繪示範相直接入問卷（唔入收藏、唔影響真實流程）
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get('demo') !== 'quiz') return;
+    const photo = makeDemoPhoto();
+    if (photo) {
+      setQuizSession({ photoDataUrl: photo, location: null, zoom: 1 });
+      setView('quiz');
+    }
+    window.history.replaceState(null, '', window.location.pathname + window.location.hash);
+  }, []);
+
   return (
     <div className="app-shell w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">
+      <StoreSupportButton />
       {storageError && (
         <div role="alert" className="shrink-0 bg-amber-950 text-amber-100 px-3 py-2 text-xs z-[60]">
           <p>儲存空間不足或瀏覽器禁止儲存。新資料暫存於此頁，請勿關閉；照片與既有存檔未被刪除。</p>

@@ -17,7 +17,7 @@ interface BirdCardProps {
 }
 
 /**
- * 卡面圖片優先序（精靈球版）：
+ * 卡面圖片優先序（快門版）：
  *   貼圖 > 小朋友自己嘅相（預設賽璐璐版，可撳掣切原相） > 舊插畫（異圖/ R2，只有無相舊記錄先見到）
  * 原相 = 證據，shape／嘴／尾都係真相，唔會改。
  */
@@ -206,7 +206,7 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
 
         {capture && (
           <div className="mt-2 flex items-center justify-between text-[10px]">
-            <div className="text-dex-muted">已捕捉 <span className="text-dex-neon font-bold">{capture.count}</span> 次</div>
+            <div className="text-dex-muted">已拍攝 <span className="text-dex-neon font-bold">{capture.count}</span> 次</div>
             <div className="text-dex-gold">
               {capture.count >= 20 ? '傳說級夥伴' : capture.count >= 5 ? '親密夥伴' : '新夥伴'}
               {stats && shouldShowIv && ` · CP ${stats.cp}`}
@@ -228,7 +228,7 @@ export function BirdCard({ bird, capture, compact, onClick, showStats, hideStats
           <div className="text-lg font-black text-white/90">{bird.name}</div>
           <div className="text-xs text-white/60 mb-3">{bird.nameEn}</div>
           <div className="px-3 py-1 rounded bg-white/10 text-[10px] text-white/70 font-black tracking-widest border border-white/20">
-            尚未捕捉
+            尚未拍攝
           </div>
         </div>
       )}

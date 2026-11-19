@@ -3,9 +3,10 @@ import { CameraSession, cameraCrop, drawCameraFrame, sharpness } from '../lib/ca
 import { Camera, AlertTriangle, ZoomIn, ZoomOut, MapPin, Sparkles, Eye, EyeOff } from 'lucide-react';
 import { QuizSession } from '../types';
 import { useLiveBirdDetector } from '../lib/liveDetect';
+import { makeDemoPhoto } from '../lib/demoPhoto';
 
 interface ScannerScreenProps {
-  /** 影完相 → 交俾三問流程（相只係證據，唔經 AI 辨識） */
+  /** 影完相 → 交俾五問流程（相只係證據，唔經 AI 辨識） */
   onPhotoTaken: (session: QuizSession) => void;
   onBusyChange: (busy: boolean) => void;
 }
@@ -195,7 +196,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       await zoomQueue.current;
       if (!current()) return;
       const photoZoom = { ...effectiveZoom.current };
-      // 三連拍取最Sharp一張：張相只係「證據」，唔經 AI 辨識，直接入三問流程。
+      // 三連拍取最Sharp一張：張相只係「證據」，唔經 AI 辨識，直接入五問流程。
       const probe = document.createElement('canvas'); probe.width = 64; probe.height = 64;
       const probeContext = probe.getContext('2d');
       const best = document.createElement('canvas');
@@ -296,14 +297,14 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
             <div className="scan-line rounded-full" />
             <div className="absolute -bottom-8 left-0 right-0 text-center">
               <div className="text-[11px] font-black text-dex-neon/90 tracking-wide">
-                鳥精靈掃描 · v3.1
+                鳥掃描 · v3.1
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* 拍攝中（三連拍，約 0.2s）—— 唔使 AI，影完即入三問 */}
+      {/* 拍攝中（三連拍，約 0.2s）—— 唔使 AI，影完即入五問 */}
       {phase === 'snapping' && (
         <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] flex flex-col items-center justify-center z-20">
           <div className="w-16 h-16 rounded-full border-4 border-dex-neon/30 border-t-dex-neon animate-spin" style={{ animationDuration: '0.8s' }} />
@@ -317,9 +318,19 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
         <div className="absolute inset-0 bg-dex-bg/95 flex flex-col items-center justify-center z-20 px-6">
           <AlertTriangle className="text-dex-accent mb-3" size={48} />
           <div className="text-lg font-bold text-dex-text mb-2">掃描器異常</div>
-          <div className="text-sm text-dex-muted text-center mb-6">{errorMsg}</div>
+          <div className="text-sm text-dex-muted text-center mb-4">{errorMsg}</div>
           <button onClick={startCamera} className="px-6 py-3 rounded-xl bg-dex-neon text-dex-ink font-bold text-sm">
             重新啟動相機
+          </button>
+          <button
+            onClick={() => {
+              const photo = makeDemoPhoto();
+              if (photo) onPhotoTaken({ photoDataUrl: photo, location: null, zoom: 1 });
+              else setErrorMsg('呢個瀏覽器唔支援畫布，無法產生示範相');
+            }}
+            className="mt-3 px-5 py-2.5 rounded-xl bg-dex-surface border border-dex-border text-dex-text font-bold text-sm hover:border-dex-neon transition"
+          >
+            冇相機？用示範相睇五問
           </button>
         </div>
       )}
@@ -329,7 +340,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       <div className="absolute top-0 left-0 right-0 p-3 flex items-center justify-between z-10 bg-gradient-to-b from-black/70 to-transparent text-[11px]">
         <div className="flex items-center gap-2 text-dex-neon">
           <Sparkles size={14} />
-          <span className="font-black tracking-wide">捕捉模式</span>
+          <span className="font-black tracking-wide">拍攝模式</span>
           {ready && liveDetectEnabled && (
             <span className={`text-[10px] px-1.5 py-0.5 rounded ${birdDetected ? 'bg-dex-neon text-black' : 'bg-white/10 text-white/70'}`}>
               {birdDetected ? `${detections.length} BIRD${detections.length>1?'S':''}` : '掃描中'} · {fps}fps
@@ -408,14 +419,14 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
         <div className="absolute bottom-6 left-0 right-0 flex flex-col items-center gap-3 z-10">
           <div className="text-[11px] font-bold text-white/75 text-center px-4">
             {birdDetected ? (
-              <span className="text-dex-neon font-bold">偵測到 {detections.length} 隻鳥！按下快門捕捉</span>
+              <span className="text-dex-neon font-bold">偵測到 {detections.length} 隻鳥！按下快門拍攝</span>
             ) : liveDetectEnabled ? (
               ready ? 'AI 即時偵測中 · 對準鳥類' : modelLoading ? 'AI 模型載入中…' : '即時偵測暫時無法使用 · 仍可拍攝'
             ) : (
               '即時偵測已關閉 · 對準鳥類拍攝'
             )}
             <br />
-            <span className="text-white/40">影完答 3 條問題自己對卡 · 雙指縮放</span>
+            <span className="text-white/40">影完答 5 條問題自己對卡 · 雙指縮放</span>
           </div>
           <button
             onClick={snap}

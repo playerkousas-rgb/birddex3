@@ -3,10 +3,11 @@
 """
 BIRD-DEX 3 圖標產生器（零新依賴：純 stdlib zlib/struct）。
 
-圖標概念：**精靈球 × 鳥** —— 紅白精靈球（＝捕捉），中心鈕內嵌鳥頭側影（＝雀），
-16px 讀到球、32px+ 讀到鳥，一看就知道係「捕捉鳥類／精靈」。
+圖標概念（2026-11-19 去 Pokémon 化）：**雙筒望遠鏡 × 小鳥**
+—— 金/奶白圓底（同 AvianDex「前往 BIRD-DEX 3 拍鳥」連結一致），
+深綠雙筒望遠鏡＋上方小鳥剪影，一看就知係「觀鳥／拍鳥」，唔再係精靈球。
 
-產出（全部對應同一設計，坐標系 64×64，球直徑 59% ≤ maskable 66% 安全区）：
+產出（全部對應同一設計，坐標系 64×64，圓直徑 59% ≤ maskable 66% 安全區）：
   public/icon-16.png    public/icon-32.png    public/icon-180.png
   public/icon-192.png   public/icon-512.png   public/favicon.ico (16+32 PNG-in-ICO)
 
@@ -20,40 +21,47 @@ import zlib
 HERE = os.path.dirname(os.path.abspath(__file__))
 PUBLIC = os.path.join(os.path.dirname(HERE), "public")
 
-BG = (11, 15, 25)          # #0B0F19 app 背景
-RED = (255, 59, 78)        # 球上半 #FF3B4E
-WHITE = (242, 244, 248)    # 球下半 / 眼白 #F2F4F8
-INK = (20, 22, 28)         # 帶 / 鈕環 / 鳥 #14161C
+BG = (11, 15, 25)        # #0B0F19 app 背景
+CREAM = (246, 229, 191)  # #F6E5BF 上半圓（跟 AvianDex 連結掣）
+GOLD = (201, 178, 120)   # #C9B278 下半圓
+INK = (38, 53, 40)       # #263528 望遠鏡／鳥
+LENS = (168, 205, 187)   # 鏡片高光
 
-CX, CY, R = 32.0, 33.0, 19.0   # 球
-BAND_TOP, BAND_BOT = 30.0, 36.0
-BTN_R, MED_R = 7.5, 5.5        # 鈕環 / 白色獎章
-HEAD_CX, HEAD_R = 30.8, 3.1    # 鳥頭
-BEAK = ((33.0, 31.6), (36.9, 33.0), (33.0, 34.4))
-EYE = (31.5, 32.1, 0.75)
+CX, CY, R = 32.0, 33.0, 19.0
+BEAK = ((30.0, 21.4), (26.4, 22.3), (30.0, 23.0))
+TAIL = ((36.0, 22.6), (40.0, 20.4), (38.5, 23.6))
+EYE = (31.0, 21.4, 0.5)
 
 
 def _in_tri(px, py, tri):
-    (x1, y1), (x2, y2), (x3, y3) = tri
-    d1 = (px - x2) * (y1 - y2) - (x1 - x2) * (py - y2)
-    d2 = (px - x3) * (y2 - y3) - (x2 - x3) * (py - y3)
-    d3 = (px - x1) * (y3 - y1) - (x3 - x1) * (py - y1)
+    (ax, ay), (bx, by), (cx, cy) = tri
+    def side(x1, y1, x2, y2):
+        return (px - x2) * (y1 - y2) - (x1 - x2) * (py - y2)
+    d1 = side(ax, ay, bx, by)
+    d2 = side(bx, by, cx, cy)
+    d3 = side(cx, cy, ax, ay)
     neg = (d1 < 0) or (d2 < 0) or (d3 < 0)
     pos = (d1 > 0) or (d2 > 0) or (d3 > 0)
     return not (neg and pos)
 
 
+def _in_rect(px, py, x0, y0, x1, y1, radius):
+    if not (x0 <= px <= x1 and y0 <= py <= y1):
+        return False
+    rx = min(px - x0, x1 - px)
+    ry = min(py - y0, y1 - py)
+    if rx >= radius or ry >= radius:
+        return True
+    return (radius - rx) ** 2 + (radius - ry) ** 2 <= radius ** 2
+
+
 def _in_round_rect(px, py, w, h, radius):
     if px < 0 or py < 0 or px >= w or py >= h:
         return False
-    rx = min(px, w - 1 - px)
-    ry = min(py, h - 1 - py)
-    if rx >= radius or ry >= radius:
-        return True
-    return (radius - rx) ** 2 + (radius - ry) ** 2 <= radius * radius
+    return _in_rect(px, py, 0, 0, w - 1, h - 1, radius)
 
 
-def sample(x, y, rounded_bg):
+def sample(x, y, rounded_bg=False):
     """(x, y) 係 64×64 座標系；rounded_bg=False 用於 PNG（全出血，maskable 要求）。"""
     if rounded_bg:
         if not _in_round_rect(x, y, 64, 64, 14):
@@ -63,22 +71,20 @@ def sample(x, y, rounded_bg):
     col = BG
     d = math.hypot(x - CX, y - CY)
     if d <= R:
-        col = WHITE
-        if y <= CY:
-            col = RED
-    if BAND_TOP <= y <= BAND_BOT and d <= R:
-        col = INK
-    bd = math.hypot(x - CX, y - CY)
-    if bd <= BTN_R:
-        col = INK
-    if bd <= MED_R:
-        col = WHITE
-    if math.hypot(x - HEAD_CX, y - CY) <= HEAD_R:
-        col = INK
-    if _in_tri(x, y, BEAK):
-        col = INK
-    if math.hypot(x - EYE[0], y - EYE[1]) <= EYE[2]:
-        col = WHITE
+        col = CREAM if y <= CY + 3 else GOLD
+        if d <= R - 0.5:
+            # 小鳥頭（望遠鏡上方）：圓頭＋尖嘴＋眼，16px 都讀到
+            if math.hypot(x - 32.0, y - 22.0) <= 2.6 or _in_tri(x, y, BEAK):
+                col = INK
+            if math.hypot(x - EYE[0], y - EYE[1]) <= EYE[2]:
+                col = CREAM
+            # 雙筒望遠鏡：兩支鏡筒＋橋
+            if (_in_rect(x, y, 18.0, 29.0, 30.0, 46.0, 3.0)
+                    or _in_rect(x, y, 34.0, 29.0, 46.0, 46.0, 3.0)
+                    or _in_rect(x, y, 29.0, 35.0, 35.0, 40.0, 1.5)):
+                col = INK
+            if math.hypot(x - 24.0, y - 43.0) <= 3.4 or math.hypot(x - 40.0, y - 43.0) <= 3.4:
+                col = LENS
     return col
 
 

@@ -13,7 +13,7 @@ third-party material.
 
 ## 維護位置
 
-- `src/lib/copyright.ts`：訓練師頁、分享／下載名片的共用版權字串。
+- `src/lib/copyright.ts`：觀鳥達人頁、分享／下載名片的共用版權字串。
 - `index.html`：author、copyright metadata；由自動測試確認與共用字串一致。
 - README 與本文件：專案層級說明。
 

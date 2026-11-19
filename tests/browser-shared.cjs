@@ -51,7 +51,7 @@ const capture = { speciesId: 1, count: 12, currentRarity: 'UR', capturedAt: new 
       try { await route.fulfill({ json }); } catch { /* an intentionally aborted request may no longer exist */ }
     });
     await page.goto(base);
-    await page.getByRole('heading',{name:'鳥精靈圖鑑'}).waitFor();
+    await page.getByRole('heading',{name:'鳥類圖鑑'}).waitFor();
     // Previously uncaught cards were not clickable.
     await page.getByText('珠頸斑鳩',{exact:true}).first().click();
     await page.getByRole('heading',{name:'珠頸斑鳩'}).waitFor();
@@ -64,12 +64,12 @@ const capture = { speciesId: 1, count: 12, currentRarity: 'UR', capturedAt: new 
     await page.reload();
     const nav = name => page.locator('nav').getByRole('button',{name,exact:true});
     assert.equal(await page.getByPlaceholder('搜尋鳥名、英文或學名...').evaluate(input => getComputedStyle(input).fontSize),'16px');
-    await nav('訓練師').click();
+    await nav('觀鳥員').click();
     assert.equal(await page.getByRole('progressbar').getAttribute('aria-valuenow'),'50');
     assert.equal(await page.evaluate(() => Math.round(document.querySelector('.app-shell').getBoundingClientRect().height)),844);
 
     await page.evaluate(() => { window.__denyCamera = true; });
-    await nav('捕捉').click();
+    await nav('拍攝').click();
     await page.getByText('相機權限被拒絕，請在瀏覽器設定中允許相機。').waitFor();
     await page.evaluate(() => { window.__denyCamera = false; });
     await page.getByRole('button',{name:'重新啟動相機'}).click();
@@ -96,22 +96,22 @@ const capture = { speciesId: 1, count: 12, currentRarity: 'UR', capturedAt: new 
 
     mode = 'delay';
     const arrival = new Promise(resolve => { responseArrived = resolve; });
-    await nav('捕捉').click(); await shutter.click(); await arrival;
+    await nav('拍攝').click(); await shutter.click(); await arrival;
     assert.equal(await page.locator('nav').count(),0);
     await page.getByRole('button',{name:'取消辨識',exact:true}).click();
-    await nav('訓練師').click();
+    await nav('觀鳥員').click();
     releaseResponse(); await page.waitForTimeout(200);
     assert.equal(await page.getByRole('progressbar').count(),1);
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')).captures[0].count),1);
     // Permission dialog completes only after the user leaves the scanner.
     await page.evaluate(() => { window.__delayCamera = true; });
-    await nav('捕捉').click();
+    await nav('拍攝').click();
     await page.waitForFunction(() => typeof window.__releaseCamera === 'function');
     await nav('圖鑑').click();
     await page.evaluate(() => window.__releaseCamera());
     await page.waitForFunction(() => window.__streams === window.__stops);
     await page.evaluate(() => { window.__delayCamera = false; });
-    mode = 'notBird'; await nav('捕捉').click(); await shutter.click();
+    mode = 'notBird'; await nav('拍攝').click(); await shutter.click();
     await page.getByRole('button',{name:'返回繼續尋找',exact:true}).click({timeout:15000});
     await shutter.waitFor();
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')).captures[0].count),1);

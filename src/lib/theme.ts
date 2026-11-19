@@ -125,7 +125,7 @@ export const LEVEL_TITLES = [
   { level: 8, title: '羽翼收藏家', xp: 3000 },
   { level: 9, title: '天空領航員', xp: 4000 },
   { level: 10, title: '傳說鳥王', xp: 5500 },
-  { level: 11, title: '鳥精靈大師', xp: 7500 },
+  { level: 11, title: '鳥大師', xp: 7500 },
   { level: 12, title: '飛羽傳奇', xp: 10000 },
 ];
 
@@ -156,7 +156,7 @@ export function xpForCapture(rarity: Rarity): number {
 }
 
 export function getCaptureMessage(rarity: Rarity, isNew: boolean): string {
-  if (isNew) return '首次發現！新鳥精靈入隊！';
+  if (isNew) return '首次發現！新鳥入隊！';
   switch (rarity) {
     case 'UC': return '又見到了，觀察力 +1';
     case 'C': return '老朋友再次相遇！';

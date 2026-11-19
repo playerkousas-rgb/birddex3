@@ -1,4 +1,6 @@
 import { useState, useMemo } from 'react';
+import { AppLogo } from './AppLogo';
+import { TrainerTierBadge } from './TrainerTierBadge';
 import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
 import { BirdCard } from './BirdCard';
@@ -10,7 +12,7 @@ interface DexScreenProps {
 }
 
 export function DexScreen({ onSelectSpecies }: DexScreenProps) {
-  const { captures, hasCaptured } = useCollectionContext();
+  const { captures, hasCaptured, profile } = useCollectionContext();
   const [query, setQuery] = useState('');
   const [filter, setFilter] = useState<'all' | 'caught' | 'uncaught'>('all');
 
@@ -34,12 +36,14 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
       {/* Header */}
       <div className="sticky top-0 z-30 bg-dex-bg/90 backdrop-blur-md border-b border-dex-border px-4 pt-4 pb-3">
         <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="min-w-0">
-            <h1 className="text-xl font-black text-dex-text tracking-wide">鳥精靈圖鑑</h1>
+          <AppLogo size={38} />
+          <div className="min-w-0 flex-1">
+            <h1 className="text-xl font-black text-dex-text tracking-wide">鳥類圖鑑</h1>
             <p className="text-xs text-dex-muted mt-0.5">
               已收錄 <span className="text-dex-neon font-bold">{caughtCount}</span> / {totalCount} 種
             </p>
           </div>
+          <TrainerTierBadge level={profile.level} size={44} className="shrink-0" />
           <InstallButton compact />
         </div>
 
@@ -54,7 +58,7 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
                   : 'bg-dex-surface text-dex-muted border border-dex-border'
               }`}
             >
-              {k === 'all' ? '全部' : k === 'caught' ? '已捕捉' : '未發現'}
+              {k === 'all' ? '全部' : k === 'caught' ? '已拍攝' : '未發現'}
             </button>
           ))}
         </div>
@@ -89,7 +93,7 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
 
       {filtered.length === 0 && (
         <div className="py-20 text-center text-dex-muted text-sm">
-          沒有符合條件的鳥精靈
+          沒有符合條件的鳥
         </div>
       )}
     </div>

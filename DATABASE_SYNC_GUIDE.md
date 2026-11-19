@@ -1,4 +1,4 @@
-# BIRD-DEX 資料庫同步與維護指南（精靈球版）
+# BIRD-DEX 資料庫同步與維護指南（快門版）
 
 BirdEx 嘅核心資料係 **JSON**，同兄弟專案 **AvianDex** 共用同一套 `NO. NNNN` 編號。
 **AvianDex 嘅 583 隻名單係編號真相**；BirdEx 唔再各自維護一份。

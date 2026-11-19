@@ -2,10 +2,27 @@
 <html lang="zh-HK">
   <head>
     <meta charset="UTF-8" />
+    <!-- 白名單閘門（真理倉 templates/vercel/store_gate_v1.0.js，原封不動）：必須早過 title，唔等 DOMContentLoaded -->
+    <script src="/store_gate_v1.0.js"></script>
+    <script>
+      // 只有正式 Vercel 域名先落白名單閘；任何 preview/dev origin 直接 open。
+      // 唔再靠 origin 比對，避免 iframe／轉發 host 唔同就撞 APP STORE 卡。
+      var IS_PRODUCTION = /(^|\.)vercel\.app$/.test(location.hostname);
+      initStoreGate({
+        appKey: 'birddex3',
+        mode: IS_PRODUCTION ? 'entry-gate' : 'open',
+        portalIds: ['appstore'],
+        silentPortalIds: ['library'],
+        allowedOrigins: ['https://github.com'],
+        allowStandalone: true,
+        autoRedirectSeconds: 0
+      });
+    </script>
     <meta name="author" content="Scout System" />
     <meta name="copyright" content="© 2026 Scout System. All Rights Reserved." />
     <meta name="app-version" content="3.2.0" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/avif" href="/app-logo.avif" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/icon-32.png" />
     <link rel="icon" href="/favicon.ico" sizes="any" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="theme-color" content="#F3F6FC" />
@@ -14,8 +31,8 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
     <link rel="manifest" href="/manifest.json" />
     <link rel="apple-touch-icon" href="/icon-180.png" />
-    <title>BIRD-DEX 3 v3.2.0 · 鳥精靈圖鑑</title>
-    <meta name="description" content="影相做證 × 答3問對卡 × 賽璐璐精靈卡 × 原相證據 × IV養成 · 香港觀鳥 CatchCat！" />
+    <title>BIRD-DEX 3 v3.2.0 · 鳥類圖鑑</title>
+    <meta name="description" content="影相做證 × 答3問對卡 × 賽璐璐鳥卡 × 原相證據 × IV養成 · 香港觀鳥！" />
     <style>
       body { background: #F3F6FC; }
     </style>

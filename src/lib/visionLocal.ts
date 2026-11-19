@@ -48,7 +48,7 @@ export async function analyzeImageLocal(file: Blob | File): Promise<RecognizeRes
     const targetIndex = hash % BIRD_SPECIES.length;
     const matchedBird = BIRD_SPECIES[targetIndex];
     
-    // 為了符合要求：只要 >= 0.7 就當作捕捉成功
+    // 為了符合要求：只要 >= 0.7 就當作拍攝成功
     // 我們讓信心度落在 0.70 ~ 0.98 之間
     const baseScore = 0.70;
     const scoreModifier = (hash % 100) / 350; // 0.00 ~ 0.28

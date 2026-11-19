@@ -4,7 +4,7 @@ import { CaptureResult } from '../types';
 import { BirdCard } from './BirdCard';
 import { RARITY_META } from '../lib/theme';
 import { BIRD_SPECIES } from '../data/birdData';
-import { Star, Sparkles, ChevronRight, XCircle, Scissors, Download, Share2, ExternalLink } from 'lucide-react';
+import { Star, Sparkles, ChevronRight, XCircle, Scissors, Download, Share2, ExternalLink, Trash2, Camera } from 'lucide-react';
 import { ivRankLabel, natureEffect } from '../lib/birdStats';
 import { makeSticker } from '../lib/stickerMaker';
 import { useCollectionContext } from '../context/CollectionContext';
@@ -22,7 +22,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
   const [stickerMsg, setStickerMsg] = useState('');
   const [stickerUrl, setStickerUrl] = useState<string | null>(result.captureStats?.stickerUrl ?? null);
   const [showSticker, setShowSticker] = useState(false);
-  const { setCaptureSticker } = useCollectionContext();
+  const { setCaptureSticker, deleteCatchRecord, deleteCapture } = useCollectionContext();
   
   const { species, isNew, oldRarity, newRarity, xpGained, record, failed, failReason, failKind, captureStats, isBestIndividual } = result;
   const rarityMeta = RARITY_META[newRarity];
@@ -159,23 +159,22 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                 initial={phase === 'throw' ? { y: 300, scale: 2, rotate: -45 } : false}
                 animate={
                   phase === 'throw' ? { y: 0, scale: 1, rotate: 0 } :
-                  phase === 'wiggle' ? {
-                    rotate: [0, -20, 0, 20, 0, -20, 0, 20, 0],
-                    transition: { duration: failed ? 1.4 : 2, times: [0, 0.1, 0.2, 0.4, 0.5, 0.7, 0.8, 0.9, 1] }
-                  } : { scale: 0, opacity: 0 }
+                  phase === 'wiggle' ? { scale: [1, 0.92, 1], opacity: 1 } : { scale: 0, opacity: 0 }
                 }
-                transition={{ type: phase === 'throw' ? 'spring' : 'tween', bounce: 0.4, duration: phase === 'throw' ? 0.6 : (failed ? 1.4 : 2)}}
+                transition={{ type: phase === 'throw' ? 'spring' : 'tween', bounce: 0.3, duration: phase === 'throw' ? 0.6 : 0.4 }}
                 className="relative w-24 h-24"
               >
-                <div className={`absolute inset-0 bg-gradient-to-b ${failed && phase === 'wiggle' ? 'from-gray-500' : 'from-dex-accent'} to-white rounded-full border-4 border-dex-border shadow-[0_0_30px_rgba(255,51,102,0.5)] flex items-center justify-center overflow-hidden`}>
-                  <div className="absolute top-1/2 left-0 right-0 h-2 bg-dex-border -translate-y-1/2" />
-                  <div className="relative w-8 h-8 bg-dex-border rounded-full flex items-center justify-center z-10">
-                    <motion.div className="w-4 h-4 bg-white rounded-full"
-                      animate={{ backgroundColor: ['#ffffff', '#FF3366', '#ffffff'] }}
-                      transition={{ repeat: Infinity, duration: 0.6 }}
-                    />
-                  </div>
+                <div className="absolute inset-0 bg-dex-surface rounded-3xl border-4 border-dex-border shadow-[0_0_30px_rgba(15,169,88,0.35)] flex items-center justify-center">
+                  <Camera size={44} className="text-dex-text" strokeWidth={1.8} aria-hidden="true" />
                 </div>
+                {phase === 'wiggle' && (
+                  <motion.div
+                    className="absolute -right-4 -top-4 w-10 h-10 rounded-full bg-white blur-[2px]"
+                    initial={{ opacity: 0, scale: 0.4 }}
+                    animate={{ opacity: [0, 0.9, 0], scale: [0.4, 1.5] }}
+                    transition={{ duration: failed ? 1.4 : 1.8 }}
+                  />
+                )}
               </motion.div>
             )}
             {phase === 'caught' && (
@@ -183,14 +182,14 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
                 className="absolute inset-0 flex items-center justify-center">
                 <div className="w-32 h-32 rounded-full border-[10px] border-dex-neon shadow-[0_0_50px_#00F0FF]" />
                 <div className="absolute w-full text-center mt-32">
-                  <h2 className="text-3xl font-black text-white text-shadow-glow tracking-widest">GOTCHA!</h2>
+                  <h2 className="text-3xl font-black text-white text-shadow-glow tracking-widest">拍到！</h2>
                 </div>
               </motion.div>
             )}
             {phase === 'escaped' && (
               <motion.div initial={{ scale: 0, opacity: 1 }} animate={{ scale: [0, 1.2, 1.5], opacity: [1, 1, 0] }} transition={{ duration: 0.8 }}
                 className="absolute inset-0 flex items-center justify-center">
-                <div className="text-7xl">💨</div>
+                <div className="text-7xl">📸💨</div>
               </motion.div>
             )}
           </motion.div>
@@ -201,7 +200,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}
           className="text-center z-10 pointer-events-auto">
           <XCircle size={64} className="text-white/70 mx-auto mb-4" />
-          <h2 className="text-2xl font-black text-white mb-2">鳥兒逃走了！</h2>
+          <h2 className="text-2xl font-black text-white mb-2">拍不到，再試一次！</h2>
           <p className="text-sm text-white/70 mb-8 max-w-[280px]">
             {failReason || '可能是因為畫面太模糊、光線太暗，或距離太遠。再試著靠近一點拍攝吧！'}
           </p>
@@ -280,7 +279,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
             </div>
           </div>
 
-          {/* 紀念條：捕捉日期 ＋ 地點（原相＋賽璐璐卡已永久保存，呢行要睇得到） */}
+          {/* 紀念條：拍攝日期 ＋ 地點（原相＋賽璐璐卡已永久保存，呢行要睇得到） */}
           {record && (
             <div className="flex items-center justify-center gap-2 text-[11px] text-white/85 bg-black/40 border border-white/15 rounded-full px-3.5 py-1.5">
               <span aria-hidden="true">📅</span>
@@ -296,7 +295,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
             <div className="bg-black/40 backdrop-blur border border-white/15 rounded-2xl p-3">
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-xs font-bold text-white flex items-center gap-1.5"><Scissors size={13}/> 鳥精靈貼圖</div>
+                  <div className="text-xs font-bold text-white flex items-center gap-1.5"><Scissors size={13}/> 鳥卡貼圖</div>
                   <div className="text-[10px] text-white/70 mt-0.5">{stickerMsg || (stickerUrl ? '已生成透明 PNG' : '手動去背，生成可分享貼圖')}</div>
                 </div>
                 {!stickerUrl ? (
@@ -367,6 +366,22 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
           >
             收入收藏冊
           </button>
+
+          {/* 完美主義救星：相拍得唔好即場刪除，唔使留低唔想要嘅紀錄 */}
+          {record && species && (
+            <button
+              onClick={() => {
+                if (!confirm('刪除呢次拍攝紀錄？原相同 IV 都會移除，不能復原。')) return;
+                const idx = Math.max(0, (record.allCatches?.length ?? 1) - 1);
+                if (record.allCatches?.length) deleteCatchRecord(species.id, idx);
+                else deleteCapture(species.id);
+                onClose();
+              }}
+              className="w-full py-2.5 mt-1 rounded-xl border border-white/20 text-white/70 text-xs font-bold flex items-center justify-center gap-2 min-h-[40px] hover:bg-white/10 transition"
+            >
+              <Trash2 size={14} /> 拍得唔好？刪除呢次拍攝
+            </button>
+          )}
 
           {/* 兄弟 App：解鎖 AvianDex 同一個 NO.（卡面預設賽璐璐，撳卡上掣可睇原相） */}
           {record && (
