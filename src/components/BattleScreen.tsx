@@ -155,7 +155,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
       <div className="min-h-full bg-dex-bg flex flex-col items-center justify-center p-6 text-center">
         <Swords size={48} className="text-dex-muted mb-3"/>
         <div className="text-lg font-black text-white mb-1">對戰室尚未開放</div>
-        <div className="text-sm text-dex-muted mb-4">至少捕捉 2 隻有個體值的鳥才能對戰<br/>或匯入朋友的隊伍來打</div>
+        <div className="text-sm text-dex-muted mb-4">至少拍攝 2 隻有個體值的鳥才能對戰<br/>或匯入朋友的隊伍來打</div>
         <div className="flex gap-2">
           <button onClick={onBack} className="px-5 py-2.5 rounded-xl bg-dex-surface border border-dex-border text-white">返回</button>
           <button onClick={()=>setShowTeamIO(true)} className="px-5 py-2.5 rounded-xl bg-dex-neon text-dex-ink font-black">匯入隊伍</button>
@@ -169,7 +169,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
   return (
     <div className="min-h-full bg-dex-bg">
       <div className="sticky top-0 z-30 bg-dex-bg/90 backdrop-blur border-b border-dex-border px-4 py-3 flex items-center justify-between">
-        <h1 className="text-lg font-black text-white flex items-center gap-2"><Swords size={18}/> 鳥雀對戰 {useRival && <span className="text-[10px] text-dex-neon font-mono">ASYNC</span>}</h1>
+        <h1 className="text-lg font-black text-white flex items-center gap-2"><Swords size={18}/> 鳥雀對戰</h1>
         <div className="flex gap-2 text-xs">
           <button onClick={()=>setShowTeamIO(true)} className="px-2.5 py-1.5 rounded-lg bg-white/10 border border-dex-border text-white">隊伍匯出/入</button>
           <button onClick={onBack} className="text-dex-muted">關閉</button>
@@ -247,7 +247,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
 
         <div className="mt-4 text-[11px] text-dex-muted text-center pb-6">
           非同步對戰：匯出隊伍給朋友，對方匯入即可挑戰你的影子隊。<br/>
-          {useRival ? <>目前對手：{rivalTeam?.meta.name} Lv.{rivalTeam?.meta.level} · <button onClick={()=>{setRivalTeam(null); setRightIdx(1);}} className="underline text-dex-neon">清除對手</button></> : <>訓練師 {profile.name} · Lv.{profile.level}</>}
+          {useRival ? <>目前對手：{rivalTeam?.meta.name} Lv.{rivalTeam?.meta.level} · <button onClick={()=>{setRivalTeam(null); setRightIdx(1);}} className="underline text-dex-neon">清除對手</button></> : <>觀鳥員 {profile.name} · Lv.{profile.level}</>}
         </div>
       </div>
 
@@ -272,7 +272,7 @@ export function BattleScreen({ onBack }: BattleScreenProps) {
                   <Copy size={13}/> 複製代碼
                 </button>
                 <button onClick={async ()=>{
-                  if (navigator.share) { try { await navigator.share({ title: 'BIRD-DEX 對戰挑戰', text: `來挑戰我的鳥精靈隊伍！代碼：${exp.code}`, url: location.href }); } catch {} }
+                  if (navigator.share) { try { await navigator.share({ title: 'BIRD-DEX 對戰挑戰', text: `來挑戰我的鳥隊伍！代碼：${exp.code}`, url: location.href }); } catch {} }
                 }} className="px-3 py-2 rounded-lg bg-white/10 text-white text-xs border border-dex-border">
                   <Share2 size={13}/>
                 </button>

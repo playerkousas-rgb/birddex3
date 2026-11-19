@@ -3,16 +3,17 @@ import {
   ArrowLeft, Camera, ChevronRight, ExternalLink, HelpCircle, Image as ImageIcon,
   RotateCcw, Search, Sparkles, Target,
 } from 'lucide-react';
-import type { BeakShape, BirdSize, BirdSpecies, MainColor, QuizAnswers, QuizSession } from '../types';
+import type { BeakShape, BirdSize, BirdSpecies, BirdType, MainColor, QuizAnswers, QuizSession, TailStyle } from '../types';
 import { BIRD_SPECIES, getBirdById } from '../data/birdData';
 import { resolveBirdId } from '../data/nameAliases';
-import { BEAK_OPTIONS, COLOR_OPTIONS, SIZE_OPTIONS, matchCandidates } from '../lib/birdFilter';
+import { BEAK_OPTIONS, COLOR_OPTIONS, SIZE_OPTIONS, candidateResult, MAX_CANDIDATES } from '../lib/birdFilter';
+import { TAIL_OPTIONS, TYPE_OPTIONS } from '../data/quizTraits';
 import { birdNo } from '../lib/aviandex';
 
 interface QuizScreenProps {
   session: QuizSession;
   onBack: () => void;
-  /** 小朋友自己對卡揀中 → 上級直接生成賽璐璐卡並捕捉 */
+  /** 小朋友自己對卡揀中 → 上級直接生成賽璐璐卡並拍攝 */
   onPick: (speciesId: number) => void;
   /** 生成賽璐璐卡中：GO 鈕出 loading，唔畀重複撳 */
   picking?: boolean;
@@ -37,6 +38,20 @@ const COLOR_DOT: Record<MainColor, string> = {
 };
 
 const BEAK_EMOJI: Record<BeakShape, string> = { '尖': '📌', '長': '🥢', '闊': '🦆', '鉤': '🪝' };
+
+const TYPE_HINT: Record<BirdType, string> = {
+  '水鳥': '🦆 游水／浮水面', '海鳥': '🌊 海邊盤旋',
+  '涉禽': '🦶 長腳企水邊', '猛禽': '🦅 鉤嘴利爪',
+  '陸鳥': '🐔 地面／林下', '飛行鳥': '🕊️ 空中飛得快',
+  '鶲類': '🪰 捕蟲小鳥', '柳鶯': '🌿 幼細柳枝雀',
+  '蘆鶯': '🌾 蘆葦叢雀', '雀鳥': '🐤 食籽小雀',
+  '鶇鶥': '🐦 較圓身鳴禽', '其他鳥': '❓ 唔肯定先揀呢個',
+};
+
+const TAIL_HINT: Record<TailStyle, string> = {
+  '叉尾': '像燕仔開叉', '尖長尾': '幼幼長長',
+  '短圓尾': '短短圓圓', '扇尾': '打開似扇', '中尾': '唔長唔短',
+};
 
 /** 手動揀 NO.：編號 → 精確別名（Merlin 認完嘅學名/英文名）→ 名稱包含搜尋 */
 function resolveManualQuery(query: string): BirdSpecies[] {
@@ -129,17 +144,15 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [merlinOpen, setMerlinOpen] = useState(false);
   const [query, setQuery] = useState('');
+  const [visibleCount, setVisibleCount] = useState(12);
 
-  const complete = !!(answers.size && answers.main_color && answers.beak);
+  const complete = !!(answers.size && answers.main_color && answers.beak && answers.birdType && answers.tail);
   const queryResults = useMemo(() => resolveManualQuery(query), [query]);
-  const candidates = useMemo(() => {
-    if (phase !== 'candidates' || !complete) return [];
-    return matchCandidates(BIRD_SPECIES, answers as QuizAnswers);
-  }, [phase, complete, answers]);
-  const rankedForHint = useMemo(() => {
-    if (!complete) return 0;
-    return matchCandidates(BIRD_SPECIES, answers as QuizAnswers).length;
+  const result = useMemo(() => {
+    if (!complete) return { birds: [], exact: false, truncated: false };
+    return candidateResult(BIRD_SPECIES, answers as QuizAnswers);
   }, [complete, answers]);
+  const candidates = phase === 'candidates' ? result.birds : [];
 
   const setAnswer = <K extends keyof QuizAnswers>(key: K, value: QuizAnswers[K]) => {
     setAnswers(prev => ({ ...prev, [key]: value }));
@@ -164,12 +177,12 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
           </button>
           <div className="min-w-0">
             <h1 className="text-lg font-black text-dex-text leading-tight">
-              {phase === 'questions' ? '答 3 條問題，對返你張相' : '邊隻最似你影嗰隻？'}
+              {phase === 'questions' ? '答 5 條問題，對返你張相' : '邊隻最似你影嗰隻？'}
             </h1>
             <p className="text-[11px] text-dex-muted">
               {phase === 'questions'
-                ? `已答 ${[answers.size, answers.main_color, answers.beak].filter(Boolean).length} / 3 · 答完由 583 隻過濾出 3–5 張卡`
-                : '最後決定權喺你手上 · 揀中先算捉到'}
+                ? `已答 ${[answers.size, answers.main_color, answers.beak, answers.birdType, answers.tail].filter(Boolean).length} / 5 · 答完最多 3 頁，揀你認為見到嗰隻`
+                : '最後決定權喺你手上 · 揀中先算拍到'}
             </p>
           </div>
         </div>
@@ -248,6 +261,45 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
             </div>
           </section>
 
+          {/* Q4 體態／類群：將最大組再拆幼，保持全中 ≤ 26 隻 */}
+          <section>
+            <h2 className="text-base font-black text-dex-text mb-1">佢似邊一類？</h2>
+            <p className="text-[10px] text-dex-muted mb-2">唔肯定揀「其他鳥」都得，之後仲可以手動揀 NO.</p>
+            <div className="grid grid-cols-2 gap-2">
+              {TYPE_OPTIONS.map(type => (
+                <button
+                  key={type}
+                  onClick={() => setAnswer('birdType', type)}
+                  className={`rounded-xl border-2 px-3 py-2 text-left transition ${
+                    answers.birdType === type ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
+                  }`}
+                >
+                  <div className="text-sm font-black text-dex-text">{TYPE_HINT[type]}</div>
+                  <div className="text-[10px] text-dex-muted">{type}</div>
+                </button>
+              ))}
+            </div>
+          </section>
+
+          {/* Q5 尾形：最後一刀，將「細／啡棕／尖」柳鶯組再拆開 */}
+          <section>
+            <h2 className="text-base font-black text-dex-text mb-2.5">佢條尾點樣？</h2>
+            <div className="grid grid-cols-3 gap-2">
+              {TAIL_OPTIONS.map(tail => (
+                <button
+                  key={tail}
+                  onClick={() => setAnswer('tail', tail)}
+                  className={`rounded-xl border-2 p-2.5 text-center transition ${
+                    answers.tail === tail ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
+                  }`}
+                >
+                  <div className="text-sm font-black text-dex-text">{tail}</div>
+                  <div className="text-[10px] text-dex-muted">{TAIL_HINT[tail]}</div>
+                </button>
+              ))}
+            </div>
+          </section>
+
           {/* Merlin 後備（細掣，唔係主流） */}
           <div className="pt-1">
             <button
@@ -297,7 +349,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
           <div className="sticky bottom-20 z-20">
             <button
               disabled={!complete}
-              onClick={() => { setSelectedId(null); setPhase('candidates'); }}
+              onClick={() => { setSelectedId(null); setVisibleCount(12); setPhase('candidates'); }}
               className={`w-full py-4 rounded-2xl font-black tracking-wide flex items-center justify-center gap-2 shadow-lg transition ${
                 complete
                   ? 'bg-dex-neon text-dex-ink active:scale-[0.98]'
@@ -307,12 +359,12 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
               {complete ? (
                 <>
                   <Target size={18} />
-                  彈出候選卡（{rankedForHint} 隻）
+                  彈出候選卡（{result.birds.length} 隻）
                 </>
               ) : (
                 <>
                   <Sparkles size={16} />
-                  三條問題都未答完
+                  五條問題都未答完
                 </>
               )}
             </button>
@@ -324,10 +376,14 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
         <div className="px-4 pt-4">
           <div className="flex items-center gap-2 mb-3 text-[11px] text-dex-muted">
             <ImageIcon size={13} className="text-dex-neon shrink-0" />
-            <span>上圖係你嘅原相；下邊 {candidates.length} 張係候選 — 對吓 shape、嘴同尾</span>
+            <span>
+              上圖係你嘅原相；{result.exact
+                ? `以下 ${candidates.length} 隻全部符合你答嘅 5 個特徵（常見嘅排前面）`
+                : `冇雀 5 項全中，以下係最接近嘅 ${candidates.length} 隻${result.truncated ? `（最多 ${MAX_CANDIDATES} 隻）` : ''}`} — 對吓形、嘴同尾
+            </span>
           </div>
           <div className="grid grid-cols-2 gap-3">
-            {candidates.map(bird => (
+            {candidates.slice(0, visibleCount).map(bird => (
               <CandidateCard
                 key={bird.id}
                 bird={bird}
@@ -338,19 +394,28 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
             ))}
           </div>
 
+          {visibleCount < candidates.length && (
+            <button
+              onClick={() => setVisibleCount(v => v + 12)}
+              className="w-full py-3 mt-3 rounded-xl border border-dex-border bg-dex-surface text-dex-text text-xs font-bold"
+            >
+              顯示更多（仲有 {candidates.length - visibleCount} 隻）
+            </button>
+          )}
+
           <div className="flex items-center justify-center gap-2 my-4 text-[10px] text-dex-muted">
-            <span>計分：體型 4 分 · 主色 3 分 · 嘴形 3 分</span>
+            <span>搵唔到？按下方「重答」改答案，或用 Merlin／NO. 編號手動揀</span>
           </div>
           <button
             onClick={() => setPhase('questions')}
             className="w-full py-2.5 rounded-xl border border-dex-border text-dex-muted text-xs font-bold flex items-center justify-center gap-1.5"
           >
-            <RotateCcw size={13} /> 重答三條問題
+            <RotateCcw size={13} /> 重答五條問題
           </button>
         </div>
       )}
 
-      {/* 揀中 → 捉到 */}
+      {/* 揀中 → 拍到 */}
       {phase === 'candidates' && (
         <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-dex-bg border-t border-dex-border">
           <button
@@ -368,7 +433,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
                 <span className="w-4 h-4 rounded-full border-2 border-dex-muted border-t-dex-neon animate-spin" aria-hidden="true" />
                 生成賽璐璐卡…
               </>
-            ) : selectedId !== null ? '就係呢隻！精靈球捕捉 GO 🎯' : '先揀一張最似嘅卡'}
+            ) : selectedId !== null ? '就係呢隻！快門一按 📸' : '先揀一張最似嘅卡'}
           </button>
         </div>
       )}

@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "check": "tsc --noEmit && tsc --project tsconfig.node.json --noEmit && node --test tests/*.test.mjs",
-    "check:size": "node scripts/check-deployment.mjs"
+    "check:size": "node scripts/check-deployment.mjs",
+    "preflight": "node scripts/preflight.mjs"
   },
   "dependencies": {
     "@imgly/background-removal": "^1.5.7",

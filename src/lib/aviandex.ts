@@ -5,7 +5,7 @@
 //   GET https://avian-dex.vercel.app/?unlock=0008[&search=中文名]
 //   → AvianDex 記入 localStorage 'aviandex.capture-unlocks.v1'
 //     { no, unlocked_at, source: 'birddex3' }，並直接打開該鳥。
-// 另外用 postMessage 順手遞完整捕捉記錄（含原相／賽璐璐 dataURL），
+// 另外用 postMessage 順手遞完整拍攝記錄（含原相／賽璐璐 dataURL），
 // AvianDex 一邊遲早收得到；未實作 listening 都唔會出事（送錯冇人聽）。
 // NO. 編號 = 雙方唯一駁位，詳見 docs/AVIANDEX_INTEROP.md。
 // ============================================================
@@ -18,7 +18,7 @@ export function birdNo(speciesId: number): string {
   return String(Math.max(0, Math.floor(speciesId))).padStart(4, '0');
 }
 
-/** brief 指定嘅跨 App 捕捉記錄形狀 */
+/** brief 指定嘅跨 App 拍攝記錄形狀 */
 export interface InteropCaptureRecord {
   no: string;
   captured_at: string;
@@ -40,7 +40,7 @@ export function toInteropRecord(record: CaptureRecord): InteropCaptureRecord {
 }
 
 /**
- * 入站深層連結（AvianDex → BirdEx）：AvianDex 嘅「精靈球」掣而家開 base URL，
+ * 入站深層連結（AvianDex → BirdEx）：AvianDex 嘅「快門」掣而家開 base URL，
  * 日後只要帶 `?no=0008`（或 `?species=8`／`?id=0008`）就會直接開返呢隻鳥嘅詳頁。
  * 合約已寫入 docs/AVIANDEX_INTEROP.md；`?unlock=` 屬出站方向，呢度唔會誤讀。
  */
@@ -63,7 +63,7 @@ export function aviandexUnlockUrl(no: string, name?: string): string {
 }
 
 /**
- * 打開 AvianDex 解鎖連結，並把捕捉記錄 postMessage 過去。
+ * 打開 AvianDex 解鎖連結，並把拍攝記錄 postMessage 過去。
  * 重試幾次係因為對方 App 要時間先掛到 message listener。
  */
 export function openAvianDexUnlock(record: CaptureRecord, name?: string): void {

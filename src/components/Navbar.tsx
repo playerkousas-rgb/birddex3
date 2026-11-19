@@ -9,9 +9,9 @@ interface NavbarProps {
 
 const ITEMS: { key: View; label: string; icon: React.ElementType }[] = [
   { key: 'dex', label: '圖鑑', icon: LayoutGrid },
-  { key: 'scanner', label: '捕捉', icon: ScanLine },
+  { key: 'scanner', label: '拍攝', icon: ScanLine },
   { key: 'album', label: '收藏', icon: Images },
-  { key: 'profile', label: '訓練師', icon: User },
+  { key: 'profile', label: '觀鳥員', icon: User },
 ];
 
 export function Navbar({ current, onNavigate }: NavbarProps) {

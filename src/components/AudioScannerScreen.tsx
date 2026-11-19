@@ -19,20 +19,15 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
   const chunksRef = useRef<Blob[]>([]);
   const [phase, setPhase] = useState<AudioPhase>('idle');
   const [errorMsg, setErrorMsg] = useState('');
-  const [analyzingText, setAnalyzingText] = useState('');
   const [recSec, setRecSec] = useState(0);
   const timerRef = useRef<any>(null);
   const { captureBird } = useCollectionContext();
 
   const processAudio = useCallback(async (blob: Blob) => {
     setPhase('analyzing');
-    const texts = ['聲音頻譜分析...', '特徵比對中...', '查詢鳥鳴圖鑑...', 'AI 推理中...'];
-    let ti = 0;
-    const tInt = setInterval(() => { setAnalyzingText(texts[ti % texts.length]); ti++; }, 700);
     try {
       const results = await analyzeAudio(blob);
-      clearInterval(tInt);
-      if (!results.length || results[0].score < 0.4) {
+        if (!results.length || results[0].score < 0.4) {
         setPhase('missed');
         return;
       }
@@ -46,8 +41,7 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
       const captureResult = captureBird(speciesId);
       onCapture(captureResult);
     } catch (err: any) {
-      clearInterval(tInt);
-      setPhase('error');
+        setPhase('error');
       setErrorMsg(err.message || '分析過程發生錯誤');
     }
   }, [captureBird, onCapture]);
@@ -105,8 +99,6 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
         <ArrowLeft size={20} />
       </button>
 
-      <div className="text-xs font-mono text-dex-neon tracking-widest mb-8">AUDIO SCANNER</div>
-
       {phase === 'idle' && (
         <div className="flex flex-col items-center gap-6 w-full max-w-xs">
           <div className="relative">
@@ -116,7 +108,6 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
           </div>
           <div className="text-center">
             <p className="text-white font-bold mb-1">聽聲認鳥</p>
-            <p className="text-xs text-dex-muted">按住下方按鈕錄下鳥叫聲，或上傳錄音檔</p>
           </div>
 
           <button
@@ -154,8 +145,6 @@ export function AudioScannerScreen({ onCapture, onBack }: AudioScannerProps) {
             <div className="absolute inset-2 border-4 border-t-dex-neon border-r-transparent border-b-dex-neon/30 border-l-transparent rounded-full animate-spin" />
             <Zap className="absolute inset-0 m-auto text-dex-neon" size={32} />
           </div>
-          <div className="text-dex-neon font-mono text-sm tracking-widest animate-pulse">AI ANALYZING</div>
-          <div className="text-white/60 text-xs font-mono mt-2">{analyzingText}</div>
         </div>
       )}
 

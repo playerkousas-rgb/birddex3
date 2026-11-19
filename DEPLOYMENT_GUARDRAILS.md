@@ -89,7 +89,7 @@ PLAYWRIGHT_MODULE=/tmp/birddex-qa/node_modules/playwright node tests/browser-smo
 - [ ] 相機授權／拒絕、光學／數位縮放、GPS、即時框、AI 成功／非鳥／低信心／備援。
 - [ ] 投擲按鈕正常點擊、跳過、IV/CP/稀有度/XP、收藏落盤與重新整理；不清除既有存檔。
 - [ ] 貼圖實際下載模型、CPU/WebGPU 推論、去背／PNG 下載／分享。
-- [ ] 收藏排序、個體代表／刪除、地圖圖磚與足跡、訓練師設定／改名。
+- [ ] 收藏排序、個體代表／刪除、地圖圖磚與足跡、觀鳥達人設定／改名。
 - [ ] 對戰、本機／匯入對手 IV、隊伍匯出入、QR 與結果匯圖／原生分享。
 - [ ] PWA 安裝、舊版本升級、離線再次開啟；注意離線 app shell 不代表線上辨識也能離線。
 - [ ] `/api/analyze` 在 Vercel 實際回 JSON，不被 SPA rewrite 吞掉；正式金鑰只放後端。
@@ -105,21 +105,27 @@ PLAYWRIGHT_MODULE=/tmp/birddex-qa/node_modules/playwright node tests/browser-smo
 
 | 真理倉規則 | 本 repo 狀態 |
 |---|---|
-| **docs/46 PWA I1–I8／UP1–UP5**（安裝要有掣、更新要問過人） | ✅ 已做：`registerType: 'prompt'`（唔准 autoUpdate 背景偷換版）；安裝入口（圖鑑 header＋訓練師頁，standalone 自動隱藏）；iOS 三步教學卡；更新 banner 立即更新／稍後（稍後記住 worker）；SKIP_WAITING＋2.5s timeout fallback；visibility／online／30 分鐘三掛勾。守門 `tests/pwa.test.mjs`。**I7 真機未驗**（README 已知限制） |
-| **docs/13 雙版號 V1–V6** | ✅ `package.json` ↔ `index.html` `<meta name="app-version">` ↔ `src/version.ts` ↔ 訓練師頁尾可見 `v3.1.0` 四處同步；守門 `tests/version.test.mjs`。SPA 冇檔名版號，以 meta＋title＋頁尾代替 |
-| **docs/12 版權 W1／W2** | ✅ W1：`<meta name="copyright">` ＋ 訓練師頁尾可見 ©（`tests/copyright.test.mjs`）。⚠️ W2 生成圖 DCT 隱形水印**未做**（README 已列限制） |
+| **docs/46 PWA I1–I8／UP1–UP5**（安裝要有掣、更新要問過人） | ✅ 已做：`registerType: 'prompt'`（唔准 autoUpdate 背景偷換版）；安裝入口（圖鑑 header＋觀鳥達人頁，standalone 自動隱藏）；iOS 三步教學卡；更新 banner 立即更新／稍後（稍後記住 worker）；SKIP_WAITING＋2.5s timeout fallback；visibility／online／30 分鐘三掛勾。守門 `tests/pwa.test.mjs`。**I7 真機未驗**（README 已知限制） |
+| **docs/13 雙版號 V1–V6** | ✅ `package.json` ↔ `index.html` `<meta name="app-version">` ↔ `src/version.ts` ↔ 觀鳥達人頁尾可見 `v3.2.0` 四處同步；守門 `tests/version.test.mjs`。SPA 冇檔名版號，以 meta＋title＋頁尾代替 |
+| **docs/12 版權 W1／W2** | ✅ W1：`<meta name="copyright">` ＋ 觀鳥達人頁尾可見 ©（`tests/copyright.test.mjs`）。⚠️ W2 生成圖 DCT 隱形水印**未做**（README 已列限制） |
 | **docs/47 README 寫作紀律** | ✅ README 每句「已修」有檢查兜底、「未做」入「已知限制」、冇「理論上應該 work」字樣 |
 | **docs/44 雙語 L1–L6** | `EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 2026-11-08 定案）— 維持粵語單語` |
-| **docs/50／51 App Store 白名單** | 未接入 scoutappstore。如日後要入白名單：本 app 有相機＋SW＋localStorage，iframe 內相機／PWA 安裝受限 → 按 SG 規則評估 `entry-gate` 頂層跳板，唔好直接嵌 |
-| **docs/33 圖標九檔** | 大部分合規（2026-11-17 重做）：統一「精靈球×鳥頭」標誌 —— favicon.svg／favicon.ico(16+32)／icon-16·32·180·192·512 PNG，全部由 `scripts/gen-icons.py`（純 stdlib）產生；manifest maskable 掛 512（球 59% < 66% 安全區）。缺 og-image ＋獨立 maskable 檔（README 已列限制） |
+| **docs/50／51 App Store 白名單** | 2026-11-19 接入 `entry-gate`：`public/store_gate_v1.0.js`（真理倉 sha256 `45de189d…e3d5b`，原封不動）＋根目錄 `index.html` 掛載；`portalIds: ['appstore']`、`silentPortalIds: ['library']`、`allowStandalone: true`、`autoRedirectSeconds: 0`、`supportNudge` 關。SG18 頂欄 `#storeSupportTop` 用 `ScoutStoreGate.getAppStoreUrl('birddex3')`（slug 對 `website/migrations/20261116-app-slug-seed.sql` L21），零 Supabase 直連。本 app 有相機／PWA／本機紀錄，頂層 `entry-gate` 先係安全做法，唔用 `iframe-only`。本機模擬 7 項 PASS，真機未做 |
+| **docs/33 圖標九檔** | 大部分合規（2026-11-17 重做）：統一「快門×鳥頭」標誌 —— favicon.svg／favicon.ico(16+32)／icon-16·32·180·192·512 PNG，全部由 `scripts/gen-icons.py`（純 stdlib）產生；manifest maskable 掛 512（球 59% < 66% 安全區）。缺 og-image ＋獨立 maskable 檔（README 已列限制） |
 | **docs/04 設定層／隱藏超管** | 不適用：本 repo 係輕量遊戲 App（無帳號後台、無系統級開關面），唔屬「系統級 app」定義 |
+
+**EXCEPTION: S7 — 真理倉 `guard.mjs` 嘅 5MB dist／2MB bundle 通用上限不適用於本 repo**：貼圖去背用嘅
+`ort-wasm-simd-threaded.jsep-*.wasm` 單檔約 23.9MB，屬既有功能必需（S/F/A/W/V：唔准為縮體積刪去背）。
+本 repo 沿用 §4 自己嘅 30MB 輸出預算＋24MB WASM 特例，由 `scripts/check-deployment.mjs` 守門；唔改真理倉門檻。
+其餘 guard 項目已修：`.env.example` 補回；CI actions 已釘 commit SHA（A16）。
+本機另加零依賴 `npm run preflight`（`scripts/preflight.mjs`）做白名單／版號／storage key 靜態檢查。
 
 守門腳本跟實作調整（唔係放寬）：`registerSW.js` 唔再係 dist 必要檔 —— 註冊改由
 `src/lib/pwa.ts` 的 `virtual:pwa-register` 控制（UP1 prompt 模式必需），`sw.js` 仍然必要。
 
 ## 7. 跨版本移植邊界（共有功能升級後新增）
 
-- `skw-birdex2` 與 `birddex3` 是不同進階路線；移植共有相機／圖鑑／存檔／訓練師／PWA 的改善，不代表可整包覆蓋 `types.ts`、`useCollection.ts` 或改 v3 的 IV／CP／色違／投擲規則。
+- `skw-birdex2` 與 `birddex3` 是不同進階路線；移植共有相機／圖鑑／存檔／觀鳥達人／PWA 的改善，不代表可整包覆蓋 `types.ts`、`useCollection.ts` 或改 v3 的 IV／CP／色違／投擲規則。
 - **禁止以存檔降級名義自動刪照片、貼圖或個體歷史**。quota 失敗需明示未落盤並提供完整備份；備份內有使用者照片／位置，別放 Git、public 或部署包。
 - PWA PNG 已補齊，`public` 約 339 KiB；未提高 512 KiB 上限，往後不要重複加入原稿。
 - 跨版本或相機／存檔變更後，除 Node 測試外，請重跑 `tests/browser-smoke.cjs` 與 `tests/browser-shared.cjs`（使用 repo 外 QA 依賴），特別檢查取消、quota、圖片 fallback 和 v3 接續投擲。

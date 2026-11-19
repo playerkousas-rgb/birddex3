@@ -50,7 +50,7 @@ const isCollection = (value: unknown): value is Record<string, unknown> => isObj
   isObject(c) && Number.isInteger(c.speciesId) && typeof c.count === 'number' && ['UC','C','R','SR','SSR','UR','LR'].includes(String(c.currentRarity)));
 
 /**
- * v3 → v4 捕捉記錄遷移（精靈球版）：
+ * v3 → v4 拍攝記錄遷移（快門版）：
  *   photoDataUrl（舊） → photo_original_url（原相＝證據）
  *   補 no（NO. NNNN）/ method: 'photo' / photo_cel_url（賽璐璐版，稍後背景生成）
  * 一次過做、跌資料就 fail closed（照舊交俾 storageError 橫幅）。
@@ -97,7 +97,7 @@ function loadAltArt(): AltArtState {
 
 function loadProfile(): TrainerProfile {
   return readJSON(PROFILE_KEY, {
-    name: '見習訓練師', xp: 0, level: 1, title: '見習觀鳥員', totalCaptures: 0,
+    name: '見習觀鳥員', xp: 0, level: 1, title: '見習觀鳥員', totalCaptures: 0,
     uniqueSpecies: 0, joinedAt: new Date().toISOString(), avatar: '🥾',
   }, value => isObject(value) && typeof value.name === 'string' && typeof value.xp === 'number' && Number.isFinite(value.xp) && typeof value.level === 'number');
 }
@@ -236,7 +236,11 @@ export function useCollection() {
     const now = new Date().toISOString();
 
     // IV handling
-    const stats = opts?.stats;
+    const rawStats = opts?.stats;
+    // 每次拍攝都記低「邊日、邊度、影到咩雀」：足跡放落從前嘅 allCatches，唔改 storage key。
+    const stats: CaptureStats | undefined = rawStats
+      ? { ...rawStats, capturedAt: now, location: opts?.location ?? null }
+      : undefined;
     const allCatches = existing?.allCatches ? [...existing.allCatches] : [];
     if (stats) allCatches.push(stats);
 
@@ -359,22 +363,28 @@ export function useCollection() {
     }));
   }, []);
 
-  // 刪除指定捕捉紀錄（用於清理不想要的個體）
+  // 刪除指定拍攝紀錄（例如相拍得唔好）。deleteLast=true 時可以清到最後一筆，
+  // 該品種會由圖鑑移除 —— 唔再強迫保留 1 隻「唔想要」嘅紀錄。
   const deleteCatchRecord = useCallback((speciesId: number, catchIndex: number) => {
-    setCaptures(prev => prev.map(c => {
-      if (c.speciesId !== speciesId || !c.allCatches) return c;
-      const all = c.allCatches.filter((_, i) => i !== catchIndex);
-      if (all.length === 0) return c;
+    setCaptures(prev => prev.flatMap(c => {
+      if (c.speciesId !== speciesId) return [c];
+      const all = (c.allCatches ?? []).filter((_, i) => i !== catchIndex);
+      if (all.length === 0) return []; // 最後一筆：連品種紀錄一齊移除
       const best = all.reduce((mx, x) => x.cp > mx.cp ? x : mx, all[0]);
-      return { ...c, allCatches: all, stats: best, bestStats: best, count: Math.max(1, c.count - 1) };
+      return [{ ...c, allCatches: all, stats: best, bestStats: best, count: Math.max(1, c.count - 1) }];
     }));
   }, []);
 
+  /** 一次過刪除某品種嘅全部拍攝紀錄（相／IV／貼圖都唔再保留）。 */
+  const deleteCapture = useCallback((speciesId: number) => {
+    setCaptures(prev => prev.filter(c => c.speciesId !== speciesId));
+  }, []);
+
   const resetAll = useCallback(() => {
-    if (typeof window !== 'undefined' && window.confirm('確定要重置所有捕捉記錄與等級？此動作無法復原！')) {
+    if (typeof window !== 'undefined' && window.confirm('確定要重置所有拍攝記錄與等級？此動作無法復原！')) {
       setCaptures([]);
       setProfile({
-        name: '見習訓練師',
+        name: '見習觀鳥員',
         xp: 0,
         level: 1,
         title: '見習觀鳥員',
@@ -443,6 +453,7 @@ export function useCollection() {
     setCaptureSticker,
     setBestIndividual,
     deleteCatchRecord,
+    deleteCapture,
     resetAll,
     unlockAll,
     totalUnique,

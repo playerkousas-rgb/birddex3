@@ -1,12 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
-  <!-- BIRD-DEX 3 favicon：精靈球（捉）× 中心鳥頭側影（雀）。與 scripts/gen-icons.py 同一設計。 -->
+  <!-- BIRD-DEX 3 favicon：金/奶白圓底＋雙筒望遠鏡＋小鳥（去精靈球化；同 scripts/gen-icons.py 一致） -->
+  <defs><clipPath id="disc"><circle cx="32" cy="33" r="19"/></clipPath></defs>
   <rect width="64" height="64" rx="14" fill="#0B0F19"/>
-  <circle cx="32" cy="33" r="19" fill="#F2F4F8"/>
-  <path d="M13 33a19 19 0 0 1 38 0z" fill="#FF3B4E"/>
-  <rect x="13" y="30" width="38" height="6" fill="#14161C"/>
-  <circle cx="32" cy="33" r="7.5" fill="#14161C"/>
-  <circle cx="32" cy="33" r="5.5" fill="#F2F4F8"/>
-  <circle cx="30.8" cy="33" r="3.1" fill="#14161C"/>
-  <path d="M33 31.6 36.9 33 33 34.4z" fill="#14161C"/>
-  <circle cx="31.5" cy="32.1" r="0.75" fill="#F2F4F8"/>
+  <circle cx="32" cy="33" r="19" fill="#F6E5BF"/>
+  <g clip-path="url(#disc)">
+    <rect x="13" y="36" width="38" height="18" fill="#C9B278"/>
+    <!-- 小鳥剪影 -->
+    <circle cx="32" cy="22" r="2.6" fill="#263528"/>
+    <path d="M30 21.4 26.4 22.3 30 23z" fill="#263528"/>
+    <circle cx="31" cy="21.4" r="0.5" fill="#F6E5BF"/>
+    <!-- 雙筒望遠鏡 -->
+    <rect x="18" y="29" width="12" height="17" rx="3" fill="#263528"/>
+    <rect x="34" y="29" width="12" height="17" rx="3" fill="#263528"/>
+    <rect x="29" y="35" width="6" height="5" rx="1.5" fill="#263528"/>
+    <circle cx="24" cy="43" r="3.4" fill="#A8CDBB"/>
+    <circle cx="40" cy="43" r="3.4" fill="#A8CDBB"/>
+  </g>
 </svg>

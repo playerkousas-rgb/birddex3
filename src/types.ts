@@ -1,15 +1,19 @@
 export type Rarity = 'UC' | 'C' | 'R' | 'SR' | 'SSR' | 'UR' | 'LR';
 
-// ---- 精靈球版：三問對卡特徵（由 scripts/sync_from_aviandex.py 推導，全表必填）----
+// ---- 快門版：五問對卡特徵（由 scripts/sync_from_aviandex.py 推導，全表必填）----
 export type BirdSize = '細' | '中' | '大';
 export type MainColor = '黑白' | '白' | '黑' | '啡棕' | '灰' | '綠藍' | '紅黃';
 export type BeakShape = '尖' | '長' | '闊' | '鉤';
+export type BirdType = '水鳥' | '海鳥' | '涉禽' | '猛禽' | '陸鳥' | '飛行鳥' | '鶲類' | '柳鶯' | '蘆鶯' | '雀鳥' | '鶇鶥' | '其他鳥';
+export type TailStyle = '叉尾' | '尖長尾' | '短圓尾' | '扇尾' | '中尾';
 
-/** 小朋友答嘅三條問題（三問 → 由 583 隻過濾出 3–5 張候選卡） */
+/** 小朋友答嘅五條問題（5 問 → 全部答中最多 26 隻，3 頁 × 12 隻搞掂） */
 export interface QuizAnswers {
   size: BirdSize;
   main_color: MainColor;
   beak: BeakShape;
+  birdType: BirdType;
+  tail: TailStyle;
 }
 
 /** 影完相、未答問題之前的暫存（張相只係證據，唔係俾 AI 睇） */
@@ -101,15 +105,19 @@ export interface CaptureStats {
   sizeVariant: 'XS' | 'S' | 'M' | 'L' | 'XL'; // 體型
   isShiny: boolean;     // 色異個體 ~1/512
   catchScore: 'Nice' | 'Great' | 'Excellent' | null;
-  catchDistance: number; // 捕捉時 zoom 倍率
+  catchDistance: number; // 拍攝時 zoom 倍率
   // Sticker
   stickerUrl?: string | null; // 去背 PNG dataURL
+
+  // 每次拍攝的觀鳥足跡（可選；舊紀錄未必有，唔影響相容）
+  capturedAt?: string;                       // 呢一筆拍攝時間
+  location?: { lat: number; lng: number } | null; // 呢一筆拍攝地點
 }
 
 export interface CaptureRecord {
   speciesId: number;
   no: string;              // NO. NNNN — 與 AvianDex 共用的圖鑑編號（'0008'）
-  method: 'photo';         // 捕捉方式：影相（本版唯一方式）
+  method: 'photo';         // 拍攝方式：影相（本版唯一方式）
   capturedAt: string;     // ISO date（＝ interchange 嘅 captured_at）
   count: number;        // total captures
   currentRarity: Rarity;
@@ -120,7 +128,7 @@ export interface CaptureRecord {
   photo_cel_url?: string | null;      // 賽璐璐版 = 精靈卡（前端 Canvas 即時生成，預設顯示）
 
   // v3 CatchCat
-  stats?: CaptureStats; // 最新一次捕捉的個體數值
+  stats?: CaptureStats; // 最新一次拍攝的個體數值
   bestStats?: CaptureStats; // 歷史最佳個體
   allCatches?: CaptureStats[]; // 所有個體記錄
 }
@@ -143,7 +151,7 @@ export interface RecognizeResult {
 }
 
 export interface CaptureResult {
-  record: CaptureRecord | null; // 如果是 null 代表捕捉失敗
+  record: CaptureRecord | null; // 如果是 null 代表拍攝失敗
   isNew: boolean;
   oldRarity: Rarity;
   newRarity: Rarity;

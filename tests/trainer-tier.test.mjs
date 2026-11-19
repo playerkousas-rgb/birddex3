@@ -37,3 +37,15 @@ test('band 名稱齊全', () => {
   assert.equal(t.getTrainerTier(8).band, '金章');
   assert.equal(t.getTrainerTier(11).band, '傳說章');
 });
+
+test('進化譜系：12 級由蛋一步步變成白腹海鵰（圖鑑 NO.274）', () => {
+  assert.equal(t.EVOLUTION_STAGES.length, 12);
+  assert.deepEqual(t.EVOLUTION_STAGES.map(s => s.level), Array.from({ length: 12 }, (_, i) => i + 1));
+  assert.match(t.EVOLUTION_STAGES[0].name, /蛋/);
+  assert.equal(t.EVOLUTION_STAGES[11].speciesId, 274);
+  assert.match(t.EVOLUTION_STAGES[11].name, /白腹海鵰/);
+  const raptorSpecies = t.EVOLUTION_STAGES.filter(s => s.speciesId).map(s => s.speciesId);
+  assert.deepEqual(raptorSpecies, [311, 272, 260, 578, 274]);
+  assert.equal(t.getTrainerTier(12).stage.name, t.EVOLUTION_STAGES[11].name);
+  assert.equal(t.getTrainerTier(1).stage.name, t.EVOLUTION_STAGES[0].name);
+});

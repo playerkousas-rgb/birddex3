@@ -8,6 +8,7 @@ import { ArrowLeft, Share2, ExternalLink, Image as ImageIcon, Scissors, Download
 import { makeSticker } from '../lib/stickerMaker';
 import { ivRankLabel, natureEffect } from '../lib/birdStats';
 import { birdNo, openAvianDexUnlock } from '../lib/aviandex';
+import { shareCaptureImage } from '../lib/shareCapture';
 
 interface BirdDetailScreenProps {
   speciesId: number;
@@ -16,7 +17,7 @@ interface BirdDetailScreenProps {
 
 export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   const bird = getBirdById(speciesId);
-  const { captures, canShowAltArt, altArt, setCaptureSticker, setBestIndividual, deleteCatchRecord } = useCollectionContext();
+  const { captures, canShowAltArt, altArt, setCaptureSticker, setBestIndividual, deleteCatchRecord, deleteCapture } = useCollectionContext();
   const capture = captures.find(c => c.speciesId === speciesId);
   const isCaught = !!capture;
 
@@ -76,8 +77,8 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
   const handleShare = async () => {
     const st = stats;
     const text = st
-      ? `我在 BIRD-DEX 捕捉到 ${bird.name}！CP ${st.cp} · IV ${st.iv.percent}% · ${st.nature} · ${capture?.count}次`
-      : `我在 BIRD-DEX 捕捉到了 ${bird.name}！`;
+      ? `我在 BIRD-DEX 拍攝到 ${bird.name}！CP ${st.cp} · IV ${st.iv.percent}% · ${st.nature} · ${capture?.count}次`
+      : `我在 BIRD-DEX 拍攝到了 ${bird.name}！`;
     if (navigator.share) {
       try { await navigator.share({ title: `BIRD-DEX · ${bird.name}`, text, url: window.location.href }); return; } catch {}
     }
@@ -218,6 +219,18 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
                   className="px-2.5 py-1.5 rounded-lg bg-dex-bg text-dex-muted text-[10px]"><Trash2 size={11}/></button>
                 </>
               )}
+              {myPhoto && (
+                <button
+                  onClick={() => shareCaptureImage(
+                    myPhoto,
+                    `${bird.name}_${showOriginalPhoto ? '原相' : '鳥卡'}.png`,
+                    `BIRD-DEX · ${bird.name}`,
+                  )}
+                  className="px-3 py-1.5 rounded-lg bg-dex-bg text-dex-text flex items-center gap-1 border border-dex-border"
+                >
+                  <Share2 size={12}/> 分享{showOriginalPhoto ? '原相' : '鳥卡'}
+                </button>
+              )}
             </div>
             {stickerMsg && <div className="text-[10px] text-dex-neon mb-2">{stickerMsg}</div>}
 
@@ -247,9 +260,11 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
                           )}
                           {isBest && <span className="text-[10px] text-dex-neon font-bold">★代表</span>}
                           <button onClick={()=>{
-                            if (allCatches.length <= 1) { alert('至少保留 1 隻個體'); return; }
-                            if (confirm('刪除這隻個體紀錄？')) deleteCatchRecord(bird.id, i);
-                          }} className="text-dex-muted hover:text-red-400"><Trash2 size={12}/></button>
+                            const msg = allCatches.length <= 1
+                              ? '呢個品種只餘下呢一筆拍攝紀錄；刪除後會變回「未拍到」。確定？'
+                              : '刪除呢次拍攝紀錄？不能復原。';
+                            if (confirm(msg)) deleteCatchRecord(bird.id, i);
+                          }} aria-label="刪除呢次拍攝紀錄" className="text-dex-muted hover:text-red-400"><Trash2 size={12}/></button>
                         </div>
                       );
                     })}
@@ -260,29 +275,44 @@ export function BirdDetailScreen({ speciesId, onBack }: BirdDetailScreenProps) {
           </div>
         )}
         
-        {/* 捕捉統計 */}
+        {/* 拍攝統計 */}
         <div className="bg-dex-surface border border-dex-border rounded-2xl p-5 shadow-lg relative overflow-hidden">
           <div className="absolute -right-10 -bottom-10 opacity-5"><ImageIcon size={150} /></div>
           {!isCaught ? (
             <div className="flex flex-col items-center text-center gap-3 py-2 relative z-10">
               <div className="w-16 h-16 rounded-full bg-dex-bg border-2 border-dex-border flex items-center justify-center text-3xl">🔒</div>
-              <div><p className="text-lg font-black text-dex-text mb-1">尚未捕獲</p>
+              <div><p className="text-lg font-black text-dex-text mb-1">尚未拍到</p>
               <p className="text-xs text-dex-muted">去戶外尋找牠的蹤跡吧！</p></div>
             </div>
           ) : (
-            <div className="flex items-center justify-between relative z-10">
-              <div>
-                <p className="text-xs text-dex-muted font-black tracking-widest mb-1">捕捉紀錄</p>
-                <div className="flex items-baseline gap-2"><span className="text-4xl font-black text-dex-text">{capture.count}</span><span className="text-sm text-dex-muted font-bold">次</span></div>
-                <p className="text-[10px] text-dex-muted mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')} · 最近：{new Date(capture.lastCaptureDate).toLocaleDateString('zh-HK')}</p>
-                <p className="text-[10px] text-dex-muted mt-0.5">📍 {formatCaptureLocation(capture.location)}</p>
-                {allCatches.length > 1 && <p className="text-[10px] text-dex-neon mt-0.5">已記錄 {allCatches.length} 隻不同個體</p>}
+            <>
+              <div className="flex items-center justify-between relative z-10">
+                <div>
+                  <p className="text-xs text-dex-muted font-black tracking-widest mb-1">拍攝紀錄</p>
+                  <div className="flex items-baseline gap-2"><span className="text-4xl font-black text-dex-text">{capture.count}</span><span className="text-sm text-dex-muted font-bold">次</span></div>
+                  <p className="text-[10px] text-dex-muted mt-1">首次：{new Date(capture.firstCaptureDate).toLocaleDateString('zh-HK')} · 最近：{new Date(capture.lastCaptureDate).toLocaleDateString('zh-HK')}</p>
+                  <p className="text-[10px] text-dex-muted mt-0.5">📍 {formatCaptureLocation(capture.location)}</p>
+                  {allCatches.length > 1 && <p className="text-[10px] text-dex-neon mt-0.5">已記錄 {allCatches.length} 隻不同個體</p>}
+                </div>
+                <div className="text-right">
+                  <p className="text-xs text-dex-muted font-black tracking-widest mb-1">當前階級</p>
+                  <p className="text-xl font-black" style={{ color: rarityMeta?.color }}>{rarityMeta?.labelZh}</p>
+                </div>
               </div>
-              <div className="text-right">
-                <p className="text-xs text-dex-muted font-black tracking-widest mb-1">當前階級</p>
-                <p className="text-xl font-black" style={{ color: rarityMeta?.color }}>{rarityMeta?.labelZh}</p>
+              <div className="relative z-10 mt-3 pt-3 border-t border-dex-border flex justify-end">
+                <button
+                  onClick={() => {
+                    if (confirm('刪除呢種鳥嘅全部拍攝紀錄？原相、IV 同貼圖都會移除，不能復原。')) {
+                      deleteCapture(bird.id);
+                      onBack();
+                    }
+                  }}
+                  className="px-3 py-2 rounded-lg border border-red-400/40 text-red-500 text-[11px] font-bold flex items-center gap-1.5 min-h-[40px]"
+                >
+                  <Trash2 size={12} /> 刪除全部拍攝紀錄
+                </button>
               </div>
-            </div>
+            </>
           )}
         </div>
 

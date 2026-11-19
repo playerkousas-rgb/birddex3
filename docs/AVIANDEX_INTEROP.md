@@ -5,10 +5,10 @@
 
 ## 1. 分工（唔好撈亂）
 
-| | AvianDex（圖鑑） | BirdEx / BIRD-DEX（精靈球） |
+| | AvianDex（圖鑑） | BirdEx / BIRD-DEX（快門） |
 |---|---|---|
-| 職責 | 睇得到、學得到：權威資料、卡面文字唔由 AI 生成 | 野外「捉」：影相 → 答 3 條問題 → 對卡 → 解鎖 |
-| 資料 | 583 隻名單、NO. 編號、分類權威 | 同一套 NO.；捕捉記錄存 localStorage |
+| 職責 | 睇得到、學得到：權威資料、卡面文字唔由 AI 生成 | 野外「捉」：影相 → 答 5 條問題 → 對卡 → 解鎖 |
+| 資料 | 583 隻名單、NO. 編號、分類權威 | 同一套 NO.；拍攝記錄存 localStorage |
 | 卡面 | 插畫／資訊卡（程式排版） | 小朋友自己嘅相：原相（證據）＋ 賽璐璐版（精靈卡） |
 
 ## 2. 編號同步（真相流程）
@@ -31,10 +31,10 @@ https://avian-dex.vercel.app/?unlock=0008[&search=中文名]
 - AvianDex 收到後：寫入自己 localStorage `aviandex.capture-unlocks.v1`
   `{ no, unlocked_at, source: 'birddex3' }`，並直接打開該鳥（`?id=`/`?search=` 亦支援）。
 - BirdEx 嘅觸發點：
-  1. 捕捉結果頁「跳去 AvianDex 解鎖 NO.NNNN」；
-  2. 鳥種詳頁（已捕捉）「解鎖 NO.NNNN」；
+  1. 拍攝結果頁「跳去 AvianDex 解鎖 NO.NNNN」；
+  2. 鳥種詳頁（已拍攝）「解鎖 NO.NNNN」；
   3. 收藏冊 header「圖鑑」掣（開 AvianDex 首頁，唔帶參數）。
-- 導航行為：優先 `window.open(..., '_blank')` ＋ postMessage 遞捕捉記錄（0／800／2500ms 三次）；
+- 導航行為：優先 `window.open(..., '_blank')` ＋ postMessage 遞拍攝記錄（0／800／2500ms 三次）；
   **彈窗被擋（例如 iframe 內）就退回同一分頁 `location.assign`** —— `?unlock=` 參數本身已經齊，
   頂層導航照樣生效（docs/50 頂層跳板精神）。
 - 實作：`src/lib/aviandex.ts`（`birdNo` / `aviandexUnlockUrl` / `openAvianDexUnlock` / `toInteropRecord` / `parseIncomingSpecies`）。
@@ -46,7 +46,7 @@ https://birddex3.vercel.app/?no=0008     （亦支援 ?species=8 / ?id=0008）
 ```
 
 - BirdEx 收到後直接打開該鳥詳頁，處理完 `history.replaceState` 清走參數（重新整理唔會重開）。
-- **AvianDex 現況**：佢嘅「精靈球」掣（`src/App.tsx`／`PokedexDevice.tsx`）而家只開
+- **AvianDex 現況**：佢嘅「快門」掣（`src/App.tsx`／`PokedexDevice.tsx`）而家只開
   `BIRD_CAPTURE_APP_URL` base URL，冇帶參數 —— AvianDex 嗰邊日後只要喺 URL 後面加
   `?no=NNNN`（例如由邊隻鳥嘅詳頁開過嚟就帶邊隻），BirdEx 呢邊已經接得住。
 - `?unlock=` 屬出站方向，入站解析會忽略佢，唔會誤讀。
@@ -92,6 +92,6 @@ BirdEx 開 unlock 彈窗後會重試三次：
 
 ## 6. 互通紅線
 
-- 唔准 BirdEx 自行發明編號、自行開 eBird API、或將捕捉進度寫去 AvianDex 嘅 storage（origin 不同，做不到）。
+- 唔准 BirdEx 自行發明編號、自行開 eBird API、或將拍攝進度寫去 AvianDex 嘅 storage（origin 不同，做不到）。
 - 唔准為「方便」複製另一邊整份資料落自己 repo 後各改各；同步只准經 §2 腳本。
 - 進度一律 localStorage ＋ 備份檔（`bd_*` keys），冇 login、冇 Backend。

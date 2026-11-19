@@ -166,7 +166,7 @@ export function ThrowCaptureScreen({ session, zoomLevel, onComplete, onSkip }: P
             onClick={doThrow}
             className="w-full py-4 rounded-2xl bg-dex-neon text-dex-ink font-black tracking-wider shadow-lg shadow-dex-neon/20 active:scale-[0.98]"
           >
-            投出精靈球！
+            按下快門！
           </button>
         ) : (
           <div className="w-full py-4 rounded-2xl bg-white/10 text-white/70 text-center text-sm font-bold">
@@ -174,7 +174,7 @@ export function ThrowCaptureScreen({ session, zoomLevel, onComplete, onSkip }: P
           </div>
         )}
         <button onClick={onSkip} className="w-full mt-2 py-2 text-xs text-white/40 flex items-center justify-center gap-1">
-          <RotateCcw size={12}/> 跳過投擲，直接捕捉
+          <RotateCcw size={12}/> 跳過投擲，直接拍攝
         </button>
       </div>
     </div>

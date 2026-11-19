@@ -22,7 +22,7 @@ export default defineConfig({
       // index.html links to the canonical public/manifest.json. Do not inject a second manifest.
       manifest: false,
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,avif,ico,woff,woff2}'],
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
       },
       devOptions: { enabled: false }

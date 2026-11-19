@@ -1,5 +1,5 @@
 // Optional QA tool, deliberately not an application dependency. See DEPLOYMENT_GUARDRAILS.md.
-// 精靈球版：mock 相機 → 三問 → 候選對卡 → 揀中 → 賽璐璐卡 + 原相持久化（全程零 AI 辨識）。
+// 快門版：mock 相機 → 五問 → 候選對卡 → 揀中 → 賽璐璐卡 + 原相持久化（全程零 AI 辨識）。
 const { chromium: playwright } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const assert = require('node:assert/strict');
 (async () => {
@@ -10,13 +10,13 @@ const assert = require('node:assert/strict');
   const page = await context.newPage();
   const errors = []; page.on('pageerror', error => errors.push(error.message));
   await page.goto(process.env.PREVIEW_URL || 'http://127.0.0.1:4173');
-  await page.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
+  await page.getByRole('heading', { name: '鳥類圖鑑' }).waitFor();
   assert.match(await page.locator('body').innerText(), /583/);
   assert.equal(await page.locator('link[rel="manifest"]').count(), 1);
   await page.getByPlaceholder('搜尋鳥名、英文或學名...').fill('not-a-real-bird');
-  await page.getByText('沒有符合條件的鳥精靈').waitFor();
+  await page.getByText('沒有符合條件的鳥').waitFor();
   await page.getByPlaceholder('搜尋鳥名、英文或學名...').fill('');
-  for (const label of ['收藏', '訓練師', '對戰', '地圖', '圖鑑']) {
+  for (const label of ['收藏', '觀鳥員', '對戰', '地圖', '圖鑑']) {
     await page.locator('nav').getByRole('button', { name: label, exact: true }).click();
     await page.waitForTimeout(100);
     console.log('Navigation OK:', label);
@@ -27,12 +27,12 @@ const assert = require('node:assert/strict');
   const captures = birds.slice(0, 2).map(bird => ({ speciesId: bird.id, count: 12, currentRarity: 'UR', capturedAt: new Date().toISOString(), firstCaptureDate: new Date().toISOString(), lastCaptureDate: new Date().toISOString(), location: { lat: 22.3, lng: 114.2 }, stats, bestStats: stats, allCatches: [stats] }));
   await page.evaluate(captures => { localStorage.removeItem('bd_collection_v3'); localStorage.setItem('bd_collection_v2', JSON.stringify({ captures, version: 2 })); }, captures);
   await page.reload();
-  await page.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
+  await page.getByRole('heading', { name: '鳥類圖鑑' }).waitFor();
   const migrated = await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')));
   assert.equal(migrated.version, 4);
   assert.equal(migrated.captures[0].no, String(migrated.captures[0].speciesId).padStart(4, '0'));
   assert.equal(migrated.captures[0].method, 'photo');
-  await page.getByRole('button', { name: '已捕捉', exact: true }).click();
+  await page.getByRole('button', { name: '已拍攝', exact: true }).click();
   await page.getByText(birds[0].name, { exact: true }).first().click();
   await page.waitForTimeout(100);
   console.log('Detail:', (await page.locator('body').innerText()).slice(0, 250));
@@ -58,21 +58,23 @@ const assert = require('node:assert/strict');
     };
   });
   await page.reload();
-  await page.locator('nav').getByRole('button', { name: '捕捉', exact: true }).click();
+  await page.locator('nav').getByRole('button', { name: '拍攝', exact: true }).click();
   const shutter = page.locator('button').filter({ has: page.locator('svg.lucide-camera') });
   await shutter.waitFor();
   await page.getByRole('button', { name: '2x', exact: true }).click();
-  // 影相 → 三問（零 AI：冇 /api/analyze、冇自動辨識）
+  // 影相 → 五問（零 AI：冇 /api/analyze、冇自動辨識）
   await shutter.click();
-  await page.getByRole('heading', { name: '答 3 條問題，對返你張相' }).waitFor({ timeout: 15000 });
+  await page.getByRole('heading', { name: '答 5 條問題，對返你張相' }).waitFor({ timeout: 15000 });
   assert.match(await page.locator('body').innerText(), /唔肯定？試下用 Merlin 影相認/);
   await page.locator('button').filter({ hasText: '白鴿咁大' }).click();   // size: 中 → 命中珠頸斑鳩
   await page.locator('button').filter({ hasText: '啡棕' }).first().click(); // main_color: 啡棕
   await page.locator('button').filter({ hasText: '尖' }).first().click();   // beak: 尖
+  await page.locator('button').filter({ hasText: '地面／林下' }).click();     // birdType: 陸鳥（鳩鴿科）
+  await page.locator('button').filter({ hasText: '唔長唔短' }).click();       // tail: 中尾
   await page.getByRole('button', { name: /彈出候選卡/ }).click();
   await page.getByRole('heading', { name: '邊隻最似你影嗰隻？' }).waitFor();
   await page.locator('button').filter({ hasText: birds[0].name }).first().click();
-  await page.locator('button').filter({ hasText: '精靈球捕捉 GO' }).click();
+  await page.locator('button').filter({ hasText: '快門一按' }).click();
   await page.getByRole('button', { name: '收入收藏冊', exact: true }).click({ timeout: 15000 });
   const saved = await page.evaluate(() => JSON.parse(localStorage.getItem('bd_collection_v3')));
   const caught = saved.captures.find(c => c.speciesId === birds[0].id);
@@ -84,17 +86,17 @@ const assert = require('node:assert/strict');
   assert.ok(caught.photo_original_url.startsWith('data:image/jpeg'));
   assert.ok(caught.photo_cel_url.startsWith('data:image/jpeg'));
   assert.ok(await page.evaluate(() => JSON.parse(localStorage.getItem('bd_profile_v1')).xp > 0));
-  console.log('PASS: mock camera -> three questions -> candidate compare -> cel card + original photo persisted; no AI recognition calls.');
+  console.log('PASS: mock camera -> five questions -> candidate compare -> cel card + original photo persisted; no AI recognition calls.');
   assert.deepEqual(errors, []);
   console.log('PASS: mobile navigation, search, v2 migration/persistence, detail IV/CP, populated album/battle/map, manifest; zero JS page errors.');
   const offlineContext = await browser.newContext();
   const offlinePage = await offlineContext.newPage();
   await offlinePage.goto(process.env.PREVIEW_URL || 'http://127.0.0.1:4173');
-  await offlinePage.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
+  await offlinePage.getByRole('heading', { name: '鳥類圖鑑' }).waitFor();
   await offlinePage.evaluate(() => navigator.serviceWorker.ready);
   await offlineContext.setOffline(true);
   await offlinePage.reload();
-  await offlinePage.getByRole('heading', { name: '鳥精靈圖鑑' }).waitFor();
+  await offlinePage.getByRole('heading', { name: '鳥類圖鑑' }).waitFor();
   console.log('PASS: real generated service worker installs and serves the app shell offline.');
   await browser.close();
 })().catch(error => { console.error(error); process.exit(1); });
