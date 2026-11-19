@@ -4,22 +4,22 @@ export type Rarity = 'UC' | 'C' | 'R' | 'SR' | 'SSR' | 'UR' | 'LR';
 export type BirdSize = '細' | '中' | '大';
 export type MainColor = '黑白' | '白' | '黑' | '啡棕' | '灰' | '綠藍' | '紅黃';
 export type BeakShape = '尖' | '長' | '闊' | '鉤';
-/** 舊版 Q4 鳥類學術語分類，只保留型別畀舊資料／深層連結相容；UI 已改用 SpotKind。 */
+/** 舊版 3 問嘅鳥類學術語分類，只保留型別畀舊資料相容；UI 已改用 ShapeKind。 */
 export type BirdType = '水鳥' | '海鳥' | '涉禽' | '猛禽' | '陸鳥' | '飛行鳥' | '鶲類' | '柳鶯' | '蘆鶯' | '雀鳥' | '鶇鶥' | '其他鳥';
 /** 舊版 Q5 尾形，同上：只留型別，唔再由 UI 提問。 */
 export type TailStyle = '叉尾' | '尖長尾' | '短圓尾' | '扇尾' | '中尾';
-/** 「你喺邊度見到佢？」— 影相時睇得到嘅情境，89 個科全部有歸屬。 */
-export type SpotKind = '水中游' | '水邊行' | '海面飛' | '天空飛' | '樹上' | '地面';
+/** 「身形係點？」— 張相一眼睇得到嘅外形，89 個科全部有歸屬。 */
+export type ShapeKind = '長頸長腳' | '游水肥矮' | '長翼海鳥' | '鉤嘴猛禽' | '細細粒' | '中等鳥身';
 
 /**
- * 小朋友答嘅問題。新版只需 3 題（大細／主色／喺邊度見到）就已經出候選，
- * 嘴形係選填（見到先答）；spot 係舊版答案，用嚟計分提示，唔會硬 filter。
+ * 小朋友答嘅問題。答夠 2 題就出候選（大細／主色／身形／嘴形），
+ * 嘴形係選填（見到先答）；全部格都係軟計分，唔會硬 filter。
  */
 export interface QuizAnswers {
   size?: BirdSize;
   main_color?: MainColor;
   beak?: BeakShape;
-  spot?: SpotKind;
+  shape?: ShapeKind;
 }
 
 /** 影完相、未答問題之前的暫存（張相只係證據，唔係俾 AI 睇） */

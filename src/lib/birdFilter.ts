@@ -16,7 +16,7 @@
 // ============================================================
 import type { BirdSpecies, QuizAnswers } from '../types';
 import { commonBirdRank } from '../data/commonBirds';
-import { getSpot, SPOT_OPTIONS } from '../data/quizTraits';
+import { getShape, isGenericShape, SHAPE_OPTIONS } from '../data/quizTraits';
 
 export const SIZE_OPTIONS = ['細', '中', '大'] as const;
 export const COLOR_OPTIONS = ['黑白', '白', '黑', '啡棕', '灰', '綠藍', '紅黃'] as const;
@@ -24,9 +24,13 @@ export const BEAK_OPTIONS = ['尖', '長', '闊', '鉤'] as const;
 
 /**
  * 每格分數。大細／顏色最影響輪廓，分最重；
- * 「喺邊度見到」用戶答得最肯定；嘴形最細最易睇錯，所以最輕。
+ * 身形係外形（一眼睇得到），分數同顏色接近；嘴形最細最易睇錯，所以最輕。
+ * 揀最籠統嘅身形（中等鳥身）等於冇答，只計一半。
  */
-export const QUIZ_WEIGHTS = { size: 40, main_color: 40, spot: 30, beak: 15 } as const;
+export const QUIZ_WEIGHTS = { size: 40, main_color: 40, shape: 32, beak: 15 } as const;
+
+/** 揀咗最籠統選項時嘅折扣。 */
+export const GENERIC_FACTOR = 0.5;
 
 type AnswerKey = keyof typeof QUIZ_WEIGHTS;
 
@@ -50,7 +54,7 @@ function traitMatch(bird: BirdSpecies, answers: QuizAnswers): Partial<Record<Ans
   const matches: Partial<Record<AnswerKey, boolean>> = {};
   if (answers.size) matches.size = bird.size === answers.size;
   if (answers.main_color) matches.main_color = bird.main_color === answers.main_color;
-  if (answers.spot) matches.spot = getSpot(bird) === answers.spot;
+  if (answers.shape) matches.shape = getShape(bird) === answers.shape;
   if (answers.beak) matches.beak = bird.beak === answers.beak;
   return matches;
 }
@@ -64,7 +68,9 @@ export function scoreCandidates(birds: BirdSpecies[], answers: QuizAnswers): Sco
       let hits = 0;
       for (const [key, hit] of Object.entries(matches) as Array<[AnswerKey, boolean]>) {
         if (hit) {
-          score += QUIZ_WEIGHTS[key];
+          // 身形揀「中等鳥身」= 冇指明外形，唔應該同「長頸長腳」同分
+          const factor = key === 'shape' && isGenericShape(answers.shape) ? GENERIC_FACTOR : 1;
+          score += Math.round(QUIZ_WEIGHTS[key] * factor);
           hits += 1;
         }
       }
@@ -143,7 +149,7 @@ export interface QuizWarning {
 const TRAIT_LABEL: Record<AnswerKey, string> = {
   size: '大細',
   main_color: '顏色',
-  spot: '「喺邊度見到」',
+  shape: '身形',
   beak: '嘴形',
 };
 
@@ -236,7 +242,7 @@ export function candidateResult(birds: BirdSpecies[], answers: QuizAnswers): Can
   } else if (exactPoolSize > BROAD_MATCH) {
     // 全中組太大：唔代表答錯，但用戶好可能係其中一格撳錯咗，
     // 提示「唔啱就轉呢格」，好過要佢自己估。
-    const key: AnswerKey = keys.includes('spot') ? 'spot' : keys.includes('beak') ? 'beak' : keys[0];
+    const key: AnswerKey = keys.includes('shape') ? 'shape' : keys.includes('beak') ? 'beak' : keys[0];
     warnings = [{
       kind: 'broad-match',
       key,
@@ -267,12 +273,12 @@ function suggestFix(
   const options: Record<AnswerKey, readonly string[]> = {
     size: SIZE_OPTIONS,
     main_color: COLOR_OPTIONS,
-    spot: SPOT_OPTIONS,
+    shape: SHAPE_OPTIONS,
     beak: BEAK_OPTIONS,
   };
   // 顏色同大細係用戶最肯定嘅（白色大鳥就係白色大鳥），唔會叫佢改；
-  // 只有「喺邊度見到」同嘴形係影相時最易睇錯，先值得建議。
-  const revisable: AnswerKey[] = (['spot', 'beak'] as AnswerKey[]).filter(key => keys.includes(key));
+  // 身形同嘴形先值得建議（身形嘅「細細粒／中等鳥身」好易撳錯）。
+  const revisable: AnswerKey[] = (['shape', 'beak'] as AnswerKey[]).filter(key => keys.includes(key));
 
   let best: { key: AnswerKey; value: string; pool: number } | null = null;
   for (const key of revisable) {

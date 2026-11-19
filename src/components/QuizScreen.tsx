@@ -3,14 +3,14 @@ import {
   ArrowLeft, Camera, ChevronRight, ExternalLink, HelpCircle, Image as ImageIcon,
   RotateCcw, Search, Sparkles, Target,
 } from 'lucide-react';
-import type { BeakShape, BirdSize, BirdSpecies, MainColor, QuizAnswers, QuizSession, SpotKind } from '../types';
+import type { BeakShape, BirdSize, BirdSpecies, MainColor, QuizAnswers, QuizSession, ShapeKind } from '../types';
 import { BIRD_SPECIES, getBirdById } from '../data/birdData';
 import { resolveBirdId } from '../data/nameAliases';
 import {
   BEAK_OPTIONS, COLOR_OPTIONS, INITIAL_PAGE, PAGE_SIZE, SIZE_OPTIONS,
   candidateResult, answerCount, MIN_ANSWERS,
 } from '../lib/birdFilter';
-import { SPOT_OPTIONS, getSpot } from '../data/quizTraits';
+import { SHAPE_OPTIONS, getShape } from '../data/quizTraits';
 import { birdNo } from '../lib/aviandex';
 
 interface QuizScreenProps {
@@ -42,14 +42,14 @@ const COLOR_DOT: Record<MainColor, string> = {
 
 const BEAK_EMOJI: Record<BeakShape, string> = { '尖': '📌', '長': '🥢', '闊': '🦆', '鉤': '🪝' };
 
-/** 情境用電筒／眼睇得到嘅描述，唔用鳥類學術語 */
-const SPOT_HINT: Record<SpotKind, { emoji: string; hint: string }> = {
-  '水中游': { emoji: '🦆', hint: '浮喺水面游' },
-  '水邊行': { emoji: '🦩', hint: '企喺水邊／泥灘' },
-  '海面飛': { emoji: '🌊', hint: '海上面飛' },
-  '天空飛': { emoji: '🕊️', hint: '半空飛過' },
-  '樹上': { emoji: '🌳', hint: '樹枝／樹叢' },
-  '地面': { emoji: '🌾', hint: '地上行／跳' },
+/** 身形：用剪影＋一句廣東話，全部係張相一眼睇得到嘅外形 */
+const SHAPE_HINT: Record<ShapeKind, { glyph: string; hint: string }> = {
+  '長頸長腳': { glyph: '🦩', hint: '長頸＋長腳企水邊' },
+  '游水肥矮': { glyph: '🦆', hint: '矮身浮喺水面' },
+  '長翼海鳥': { glyph: '🕊️', hint: '尖長翼飛海面' },
+  '鉤嘴猛禽': { glyph: '🦅', hint: '鉤嘴利爪盤旋' },
+  '細細粒': { glyph: '🐤', hint: '麻雀咁細粒' },
+  '中等鳥身': { glyph: '🐦', hint: '普通雀仔身形' },
 };
 
 /** 手動揀 NO.：編號 → 精確別名（Merlin 認完嘅學名/英文名）→ 名稱包含搜尋 */
@@ -85,9 +85,9 @@ function CandidateCard({
   const chips: Array<{ label: string; ok: boolean }> = [];
   if (answers.size) chips.push({ label: `📏 ${bird.size}`, ok: bird.size === answers.size });
   if (answers.main_color) chips.push({ label: `🎨 ${bird.main_color}`, ok: bird.main_color === answers.main_color });
-  if (answers.spot) {
-    const spot = getSpot(bird);
-    chips.push({ label: `📍 ${spot}`, ok: spot === answers.spot });
+  if (answers.shape) {
+    const shape = getShape(bird);
+    chips.push({ label: `${SHAPE_HINT[shape].glyph} ${shape}`, ok: shape === answers.shape });
   }
   if (answers.beak) chips.push({ label: `${BEAK_EMOJI[bird.beak]} ${bird.beak}`, ok: bird.beak === answers.beak });
 
@@ -174,7 +174,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
     window.open(MERLIN_URL, '_blank', 'noopener');
   };
 
-  const waterHint = answers.spot && answers.main_color === '白' && ['水中游', '水邊行', '海面飛'].includes(answers.spot);
+  const waterHint = answers.main_color === '白' && ['長頸長腳', '游水肥矮', '長翼海鳥'].includes(answers.shape ?? '');
 
   return (
     <div className="min-h-full bg-dex-bg pb-28 relative">
@@ -249,21 +249,21 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
           </div>
         </section>
 
-        {/* Q3 喺邊度見到（取代舊版「似邊一類」同「條尾點樣」） */}
+        {/* Q3 身形（外形；舊版「似邊一類」學術名詞同「條尾點樣」已退役） */}
         <section>
-          <h2 className="text-base font-black text-dex-text mb-1">你喺邊度見到佢？</h2>
-          <p className="text-[10px] text-dex-muted mb-2">呢題最幫到手 — 影相時一定知佢喺邊</p>
+          <h2 className="text-base font-black text-dex-text mb-1">成隻雀個身形係點？</h2>
+          <p className="text-[10px] text-dex-muted mb-2">睇輪廓就得，唔使睇顏色 — 唔肯定揀最後兩個</p>
           <div className="grid grid-cols-2 gap-2">
-            {SPOT_OPTIONS.map(spot => (
+            {SHAPE_OPTIONS.map(shape => (
               <button
-                key={spot}
-                onClick={() => setAnswer('spot', spot)}
+                key={shape}
+                onClick={() => setAnswer('shape', shape)}
                 className={`rounded-xl border-2 px-3 py-2 text-left transition ${
-                  answers.spot === spot ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
+                  answers.shape === shape ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
                 }`}
               >
-                <div className="text-sm font-black text-dex-text">{SPOT_HINT[spot].emoji} {spot}</div>
-                <div className="text-[10px] text-dex-muted">{SPOT_HINT[spot].hint}</div>
+                <div className="text-sm font-black text-dex-text">{SHAPE_HINT[shape].glyph} {shape}</div>
+                <div className="text-[10px] text-dex-muted">{SHAPE_HINT[shape].hint}</div>
               </button>
             ))}
           </div>

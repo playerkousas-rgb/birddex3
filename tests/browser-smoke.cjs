@@ -70,8 +70,8 @@ const assert = require('node:assert/strict');
   await page.locator('button').filter({ hasText: '白鴿咁大' }).click();   // size: 中 → 命中珠頸斑鳩
   await page.locator('button').filter({ hasText: '啡棕' }).first().click(); // main_color: 啡棕
   await page.locator('button').filter({ hasText: birds[0].name }).first().waitFor();
-  // 再加「地面」（鳩鴿科真係喺地面）→ 珠頸斑鳩應該排第一
-  await page.locator('button').filter({ hasText: '地上行／跳' }).click();
+  // 再加「中等鳥身」（鳩鴿科真係中等身形）→ 珠頸斑鳩應該排第一
+  await page.locator('button').filter({ hasText: '普通雀仔身形' }).click();
   await page.locator('button').filter({ hasText: birds[0].name }).first().click();
   await page.locator('button').filter({ hasText: '快門一按' }).click();
   await page.getByRole('button', { name: '收入收藏冊', exact: true }).click({ timeout: 15000 });

@@ -146,7 +146,7 @@ add('depokemon-icon', /雙筒望遠鏡/.test(iconSrc) &&
   exists('public/icon-512.png') && exists('public/icon-192.png') && exists('public/favicon.ico'),
 '雙筒望遠鏡圖示＋PNG/ICO 資產存在');
 
-/* 8. 對卡特徵：答 2 條即出候選，答錯一格唔會踢走正解 */
+/* 8. 對卡特徵：答 2 條即出候選，第 3 題問身形（外形），答錯一格唔會踢走正解 */
 const quizUi = read('src/components/QuizScreen.tsx');
 const quizLib = read('src/lib/birdFilter.ts');
 const quizTraits = read('src/data/quizTraits.ts');
@@ -155,8 +155,9 @@ add('quiz-answers', quizUi.includes('答幾條，對返你張相') &&
   /MIN_ANSWERS\s*=\s*2/.test(quizLib) &&
   /INITIAL_PAGE\s*=\s*12/.test(quizLib) &&
   /MAX_CANDIDATES\s*=\s*120/.test(quizLib) &&
-  quizUi.includes('SPOT_OPTIONS') && /SPOT_OPTIONS\s*=\s*\[/.test(quizTraits),
-'對卡特徵 · 答 2 條即出候選 · 6 個「喺邊度見到」情境 · 首頁 12 張、上限 120');
+  quizUi.includes('SHAPE_OPTIONS') && /SHAPE_OPTIONS\s*=\s*\[/.test(quizTraits) &&
+  quizUi.includes('成隻雀個身形係點？'),
+'對卡特徵 · 答 2 條即出候選 · 第 3 題問身形（外形） · 首頁 12 張、上限 120');
 
 /* 9. 專屬 ICON：進化／頭像／標誌全部 AI 貼紙，SVG 只做 fallback，唔用 emoji */
 const profileUi = read('src/components/ProfileScreen.tsx');
