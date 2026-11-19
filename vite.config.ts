@@ -24,6 +24,16 @@ export default defineConfig({
       workbox: {
         globPatterns: ['**/*.{js,css,html,svg,png,avif,ico,woff,woff2}'],
         maximumFileSizeToCacheInBytes: 15 * 1024 * 1024,
+        // R2 鳥卡由 App 內「下載離線圖卡」預載／上網時順便快取，離線由 SW 出。
+        runtimeCaching: [{
+          urlPattern: /^https:\/\/pub-[^/]+\.r2\.dev\/birdcards\/.*\.avif$/,
+          handler: 'CacheFirst',
+          options: {
+            cacheName: 'bd-birdcards-v1',
+            expiration: { maxEntries: 700, maxAgeSeconds: 60 * 60 * 24 * 180 },
+            cacheableResponse: { statuses: [0, 200] },
+          },
+        }],
       },
       devOptions: { enabled: false }
     }),

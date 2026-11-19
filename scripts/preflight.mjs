@@ -175,6 +175,13 @@ add('avatar-art-avif', avatarArt.length === 7 && levelBadges.length === 12 &&
   read('src/components/AvatarArt.tsx').includes('customAvatar'),
   `7 個 AI 頭像＋12 級標誌＋用戶照片上傳：${avatarArt.length}/7`);
 
+/* 10. 離線圖卡：Cache Storage + SW runtimeCaching，唔新增 localStorage key */
+add('offline-cards', exists('src/lib/offlineCards.ts') &&
+  profileUi.includes('下載離線圖卡') &&
+  read('vite.config.ts').includes('bd-birdcards-v1') &&
+  /caches\.open\(OFFLINE_CARDS_CACHE\)/.test(read('src/lib/offlineCards.ts')),
+'離線圖卡預載 · Cache Storage 快取 R2 鳥卡');
+
 const failed = checks.filter((c) => !c.ok);
 const result = { tool: 'preflight', repo: 'birddex3', ok: failed.length === 0,
   counts: { pass: checks.length - failed.length, fail: failed.length }, checks };

@@ -65,7 +65,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
   };
 
   const backgroundUrl = useMemo<string | null>(() => {
-    if (!failed && species?.photoUrl) return species.photoUrl;
+    if (!failed) return photoForSticker || species?.photoUrl || null;
     if (failed && failKind === 'escaped') {
       const pool = BIRD_SPECIES.filter((b) => b.photoUrl);
       if (pool.length === 0) return null;
@@ -73,7 +73,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
       return pick.photoUrl ?? null;
     }
     return null;
-  }, [failed, failKind, species]);
+  }, [failed, failKind, species, photoForSticker]);
 
   const ambientColor = rarityMeta?.color || '#00F0FF';
 
@@ -151,38 +151,39 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
         </div>
       )}
 
+      {phase === 'caught' && (
+        <motion.div key="shutter" initial={{ opacity: 0.85 }} animate={{ opacity: 0 }}
+          transition={{ duration: 0.35 }} className="absolute inset-0 bg-white z-20 pointer-events-none" />
+      )}
+
       <AnimatePresence>
         {(phase === 'throw' || phase === 'wiggle' || phase === 'caught' || phase === 'escaped') && (
           <motion.div className="absolute inset-0 flex items-center justify-center pointer-events-none" exit={{ opacity: 0, scale: 2 }}>
             {phase !== 'escaped' && phase !== 'caught' && (
               <motion.div
-                initial={phase === 'throw' ? { y: 300, scale: 2, rotate: -45 } : false}
-                animate={
-                  phase === 'throw' ? { y: 0, scale: 1, rotate: 0 } :
-                  phase === 'wiggle' ? { scale: [1, 0.92, 1], opacity: 1 } : { scale: 0, opacity: 0 }
-                }
-                transition={{ type: phase === 'throw' ? 'spring' : 'tween', bounce: 0.3, duration: phase === 'throw' ? 0.6 : 0.4 }}
-                className="relative w-24 h-24"
+                initial={phase === 'throw' ? { y: 280, rotate: -8, scale: 0.8, opacity: 0 } : false}
+                animate={phase === 'throw' ? { y: 0, rotate: 0, scale: 1, opacity: 1 } :
+                  { rotate: [0, -2, 2, 0], scale: [1, 0.98, 1] }}
+                transition={{ type: phase === 'throw' ? 'spring' : 'tween', bounce: 0.25, duration: phase === 'throw' ? 0.6 : 0.5 }}
+                className="bg-white p-2 rounded-2xl shadow-2xl w-40"
               >
-                <div className="absolute inset-0 bg-dex-surface rounded-3xl border-4 border-dex-border shadow-[0_0_30px_rgba(15,169,88,0.35)] flex items-center justify-center">
-                  <Camera size={44} className="text-dex-text" strokeWidth={1.8} aria-hidden="true" />
+                <div className="h-28 rounded-xl overflow-hidden bg-dex-border flex items-center justify-center">
+                  {photoForSticker ? (
+                    <img src={photoForSticker} alt="剛拍到的照片" className="w-full h-full object-cover" />
+                  ) : (
+                    <Camera size={40} className="text-dex-muted" strokeWidth={1.6} />
+                  )}
                 </div>
-                {phase === 'wiggle' && (
-                  <motion.div
-                    className="absolute -right-4 -top-4 w-10 h-10 rounded-full bg-white blur-[2px]"
-                    initial={{ opacity: 0, scale: 0.4 }}
-                    animate={{ opacity: [0, 0.9, 0], scale: [0.4, 1.5] }}
-                    transition={{ duration: failed ? 1.4 : 1.8 }}
-                  />
-                )}
+                <div className="pt-2 pb-1 text-[11px] font-black text-dex-ink text-center">
+                  {species?.name ?? '拍攝中'}
+                </div>
               </motion.div>
             )}
             {phase === 'caught' && (
-              <motion.div initial={{ scale: 0, opacity: 1 }} animate={{ scale: [0, 1.5, 2], opacity: [1, 1, 0] }} transition={{ duration: 0.8 }}
-                className="absolute inset-0 flex items-center justify-center">
-                <div className="w-32 h-32 rounded-full border-[10px] border-dex-neon shadow-[0_0_50px_#00F0FF]" />
-                <div className="absolute w-full text-center mt-32">
-                  <h2 className="text-3xl font-black text-white text-shadow-glow tracking-widest">拍到！</h2>
+              <motion.div initial={{ opacity: 0, scale: 1.25 }} animate={{ opacity: [0, 1, 0], scale: [1.25, 1, 1] }}
+                transition={{ duration: 0.9 }} className="absolute inset-0 flex items-center justify-center">
+                <div className="bg-dex-surface/90 border border-dex-neon/50 rounded-full px-5 py-2.5 text-sm font-black text-dex-text">
+                  拍到！
                 </div>
               </motion.div>
             )}
@@ -223,7 +224,7 @@ export function CaptureResultScreen({ result, onClose }: CaptureResultScreenProp
               captureStats.catchScore==='Excellent' ? 'text-amber-300' :
               captureStats.catchScore==='Great' ? 'text-emerald-300' : 'text-sky-300'
             }`}>
-              {captureStats.catchScore.toUpperCase()} THROW!
+              {captureStats.catchScore === 'Excellent' ? '拍得好' : captureStats.catchScore === 'Great' ? '拍得不錯' : '已記錄'}
             </div>
           )}
         </motion.div>
