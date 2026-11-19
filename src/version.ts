@@ -3,4 +3,4 @@
  * 三處同步，tests/version.test.mjs 守門：
  *   package.json "version" ↔ index.html <meta name="app-version"> ↔ 呢個常數
  */
-export const APP_VERSION = '3.2.0';
+export const APP_VERSION = '3.3.0';

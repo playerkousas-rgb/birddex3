@@ -89,6 +89,9 @@ def derive_size(zh, family, lengths):
         return "細"
     return "中"
 
+# 2026-11-19 修正：鷺科唔可以全科標白 —— 「黑鳽」撳白色、
+# 「綠鷺」撳白色、「紫背葦鳽」撳白色，令「白色＋大隻」呢組完全失真，
+# 真正嘅白鷺被一堆黑／綠／啡色嘅鷺科蓋住。其餘規則同 HEAD 一致。
 COLOR_RULES = [
     ("黑白", ("黑", "烏", "乌"), ("白",)),
     ("黑", ("黑", "烏", "乌"), ()),
@@ -100,11 +103,16 @@ COLOR_RULES = [
 ]
 COLOR_BY_FAMILY = {
     "Monarchidae": "黑白", "Corvidae": "黑白", "Picidae": "黑白",
-    "Ardeidae": "白", "Alcedinidae": "綠藍", "Laridae": "灰",
+    "Alcedinidae": "綠藍", "Laridae": "灰",
     "Accipitridae": "啡棕", "Falconidae": "啡棕", "Strigidae": "啡棕",
     "Tytonidae": "啡棕", "Rallidae": "啡棕", "Scolopacidae": "灰",
     "Charadriidae": "灰", "Motacillidae": "灰", "Pycnonotidae": "啡棕",
 }
+# 2026-11-19：鷺科唔可以全科標白。舊版 `"Ardeidae": "白"` 令「黑鳽 → 白」、
+# 「綠鷺 → 白」、「紫背葦鳽 → 白」，所以用戶答「白色＋大隻」嗰組完全失真，
+# 真正嘅大白鷺被一堆黑色／綠色／啡色嘅鷺科蓋住。依家只有名字本身真係白身
+# （白鷺／牛背鷺／池鷺／夜鷺／岩鷺／草鷺）先標白。
+WHITE_EGRETS = ("白鷺", "牛背鷺", "池鷺", "夜鷺", "岩鷺", "草鷺")
 
 def derive_color(zh, family):
     for label, need, need_more in COLOR_RULES:
@@ -114,6 +122,8 @@ def derive_color(zh, family):
             if label == "啡棕" and any(c in zh for c in ("黑", "烏", "乌")) and "褐" not in zh and "棕" not in zh:
                 continue
             return label
+    if family == "Ardeidae":
+        return "白" if any(k in zh for k in WHITE_EGRETS) else "啡棕"
     return COLOR_BY_FAMILY.get(family, "啡棕")
 
 BEAK_BY_FAMILY = {
@@ -231,7 +241,7 @@ def main():
             "diet": "未知",
             "features": "尚未解鎖生態檔案...",
             "funFact": "在 AvianDex 尋找更多關於這隻鳥的知識！",
-            "description": "開啟 AvianDex 圖鑑，探索這隻鳥精靈的完整生態資料與觀鳥熱點。",
+            "description": "開啟 AvianDex 圖鑑，探索這隻鳥的完整生態資料與觀鳥熱點。",
             "region": "香港",
             "season": "四季",
             "hotspots": [],

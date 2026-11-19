@@ -426,7 +426,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
               '即時偵測已關閉 · 對準鳥類拍攝'
             )}
             <br />
-            <span className="text-white/40">影完答 5 條問題自己對卡 · 雙指縮放</span>
+            <span className="text-white/40">影完答幾條特徵自己對卡 · 雙指縮放</span>
           </div>
           <button
             onClick={snap}

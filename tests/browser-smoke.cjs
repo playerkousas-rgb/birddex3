@@ -62,17 +62,16 @@ const assert = require('node:assert/strict');
   const shutter = page.locator('button').filter({ has: page.locator('svg.lucide-camera') });
   await shutter.waitFor();
   await page.getByRole('button', { name: '2x', exact: true }).click();
-  // 影相 → 五問（零 AI：冇 /api/analyze、冇自動辨識）
+  // 影相 → 答幾條特徵（零 AI：冇 /api/analyze、冇自動辨識）
   await shutter.click();
-  await page.getByRole('heading', { name: '答 5 條問題，對返你張相' }).waitFor({ timeout: 15000 });
+  await page.getByRole('heading', { name: '答幾條，對返你張相' }).waitFor({ timeout: 15000 });
   assert.match(await page.locator('body').innerText(), /唔肯定？試下用 Merlin 影相認/);
+  // 答夠兩條就要即刻有候選卡（唔使等五條）
   await page.locator('button').filter({ hasText: '白鴿咁大' }).click();   // size: 中 → 命中珠頸斑鳩
   await page.locator('button').filter({ hasText: '啡棕' }).first().click(); // main_color: 啡棕
-  await page.locator('button').filter({ hasText: '尖' }).first().click();   // beak: 尖
-  await page.locator('button').filter({ hasText: '地面／林下' }).click();     // birdType: 陸鳥（鳩鴿科）
-  await page.locator('button').filter({ hasText: '唔長唔短' }).click();       // tail: 中尾
-  await page.getByRole('button', { name: /彈出候選卡/ }).click();
-  await page.getByRole('heading', { name: '邊隻最似你影嗰隻？' }).waitFor();
+  await page.locator('button').filter({ hasText: birds[0].name }).first().waitFor();
+  // 再加「地面」（鳩鴿科真係喺地面）→ 珠頸斑鳩應該排第一
+  await page.locator('button').filter({ hasText: '地上行／跳' }).click();
   await page.locator('button').filter({ hasText: birds[0].name }).first().click();
   await page.locator('button').filter({ hasText: '快門一按' }).click();
   await page.getByRole('button', { name: '收入收藏冊', exact: true }).click({ timeout: 15000 });
