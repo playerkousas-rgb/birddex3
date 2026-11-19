@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
 import { getLevelProgress, RARITY_ORDER, RARITY_META } from '../lib/theme';
@@ -14,6 +14,7 @@ import { EVOLUTION_STAGES } from '../lib/trainerTier';
 import { EvolutionArt } from './EvolutionArt';
 import { type AvatarKind } from './PlayerAvatarIcon';
 import { AvatarArt } from './AvatarArt';
+import { cachedCardCount, clearOfflineCards, downloadOfflineCards, offlineCardsSupported, type OfflineProgress } from '../lib/offlineCards';
 
 const AVATARS: { kind: AvatarKind; legacy: string; unlockLevel: number; desc: string }[] = [
   { kind: 'boots',     legacy: '🥾', unlockLevel: 1,  desc: '見習裝備' },
@@ -51,6 +52,12 @@ export function ProfileScreen() {
   const [showShareCard, setShowShareCard] = useState(false);
   const shareCardRef = useRef<HTMLDivElement>(null);
   const avatarFileRef = useRef<HTMLInputElement>(null);
+  const [offlineCached, setOfflineCached] = useState(0);
+  const [offlineRunning, setOfflineRunning] = useState(false);
+  const [offlineProgress, setOfflineProgress] = useState<OfflineProgress | null>(null);
+  const offlineCancelRef = useRef(false);
+
+  useEffect(() => { void cachedCardCount().then(setOfflineCached); }, []);
 
   // Admin backdoor counter
   // 50 連點才觸發創世神模式，避免誤觸
@@ -238,6 +245,62 @@ export function ProfileScreen() {
               <Share2 size={14} /> 快速分享
             </button>
           </div>
+        </div>
+      </div>
+
+      {/* 離線圖卡 */}
+      <div className="px-4 pt-2 pb-4">
+        <div className="bg-dex-surface border border-dex-border rounded-xl p-4">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <h3 className="text-sm font-black text-dex-text">離線圖卡</h3>
+            <span className="text-[11px] text-dex-muted">{offlineCached} / {BIRD_SPECIES.length}</span>
+          </div>
+          {!offlineCardsSupported() ? (
+            <p className="text-[11px] text-dex-muted">此瀏覽器不支援離線快取。</p>
+          ) : offlineRunning && offlineProgress ? (
+            <>
+              <div className="h-1.5 rounded-full bg-dex-border overflow-hidden mb-2">
+                <div className="h-full bg-dex-neon transition-all"
+                  style={{ width: `${Math.round(offlineProgress.done / Math.max(1, offlineProgress.total) * 100)}%` }} />
+              </div>
+              <p className="text-[11px] text-dex-muted mb-3">
+                {offlineProgress.done} / {offlineProgress.total}
+                {offlineProgress.failed ? ` · 失敗 ${offlineProgress.failed}` : ''}
+              </p>
+              <button onClick={() => { offlineCancelRef.current = true; }}
+                className="px-3 py-2 rounded-lg bg-dex-bg text-dex-text text-xs font-bold border border-dex-border">
+                取消
+              </button>
+            </>
+          ) : (
+            <div className="flex gap-2 flex-wrap">
+              <button
+                onClick={async () => {
+                  offlineCancelRef.current = false;
+                  setOfflineRunning(true);
+                  setOfflineProgress({ done: 0, total: BIRD_SPECIES.length, failed: 0 });
+                  try {
+                    await downloadOfflineCards(setOfflineProgress, () => offlineCancelRef.current);
+                  } finally {
+                    setOfflineRunning(false);
+                    setOfflineCached(await cachedCardCount());
+                    setOfflineProgress(null);
+                  }
+                }}
+                className="px-3 py-2 rounded-lg bg-dex-neon text-dex-ink text-xs font-black"
+              >
+                下載離線圖卡
+              </button>
+              {offlineCached > 0 && (
+                <button
+                  onClick={async () => { await clearOfflineCards(); setOfflineCached(0); }}
+                  className="px-3 py-2 rounded-lg bg-dex-bg text-dex-text text-xs font-bold border border-dex-border"
+                >
+                  清除
+                </button>
+              )}
+            </div>
+          )}
         </div>
       </div>
 
