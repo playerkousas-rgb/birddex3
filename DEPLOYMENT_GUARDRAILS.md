@@ -106,7 +106,7 @@ PLAYWRIGHT_MODULE=/tmp/birddex-qa/node_modules/playwright node tests/browser-smo
 | 真理倉規則 | 本 repo 狀態 |
 |---|---|
 | **docs/46 PWA I1–I8／UP1–UP5**（安裝要有掣、更新要問過人） | ✅ 已做：`registerType: 'prompt'`（唔准 autoUpdate 背景偷換版）；安裝入口（圖鑑 header＋觀鳥達人頁，standalone 自動隱藏）；iOS 三步教學卡；更新 banner 立即更新／稍後（稍後記住 worker）；SKIP_WAITING＋2.5s timeout fallback；visibility／online／30 分鐘三掛勾。守門 `tests/pwa.test.mjs`。**I7 真機未驗**（README 已知限制） |
-| **docs/13 雙版號 V1–V6** | ✅ `package.json` ↔ `index.html` `<meta name="app-version">` ↔ `src/version.ts` ↔ 觀鳥達人頁尾可見 `v3.2.0` 四處同步；守門 `tests/version.test.mjs`。SPA 冇檔名版號，以 meta＋title＋頁尾代替 |
+| **docs/13 雙版號 V1–V6** | ✅ `package.json` ↔ `index.html` `<meta name="app-version">` ↔ `src/version.ts` ↔ 觀鳥達人頁尾可見 `v3.4.0` 四處同步；守門 `tests/version.test.mjs`。SPA 冇檔名版號，以 meta＋title＋頁尾代替 |
 | **docs/12 版權 W1／W2** | ✅ W1：`<meta name="copyright">` ＋ 觀鳥達人頁尾可見 ©（`tests/copyright.test.mjs`）。⚠️ W2 生成圖 DCT 隱形水印**未做**（README 已列限制） |
 | **docs/47 README 寫作紀律** | ✅ README 每句「已修」有檢查兜底、「未做」入「已知限制」、冇「理論上應該 work」字樣 |
 | **docs/44 雙語 L1–L6** | `EXCEPTION: L1 — 現有 repo 唔追溯（真理倉 2026-11-08 定案）— 維持粵語單語` |
