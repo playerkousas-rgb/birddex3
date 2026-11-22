@@ -12,7 +12,7 @@ import { CaptureResultScreen } from './components/CaptureResultScreen';
 import { BirdDetailScreen } from './components/BirdDetailScreen';
 import { downloadBackup } from './lib/storage';
 import { generateCaptureStats } from './lib/birdStats';
-import { celShadeImage } from './lib/celShade';
+import { celShadeImage, CEL_SHADE_VERSION } from './lib/celShade';
 import { PwaChrome } from './components/PwaChrome';
 import { StoreSupportButton } from './components/StoreSupportButton';
 import { parseIncomingSpecies } from './lib/aviandex';
@@ -54,7 +54,7 @@ function AppRouter() {
   // 賽璐璐卡預生成：影完相即刻後台跑，小朋友答五問期間完成 — 揀中即刻入投球動畫
   const celPromiseRef = useRef<Promise<string | null> | null>(null);
 
-  // Scanner → 五問流程（相只係證據，冇 AI 辨識）
+  // Scanner → 對相揀鳥流程（相只係證據，冇 AI 辨識）
   const handlePhotoTaken = (session: QuizSession) => {
     setQuizSession(session);
     setView('quiz');
@@ -78,6 +78,7 @@ function AppRouter() {
       const result = captureBird(speciesId, {
         photo_original_url: quizSession.photoDataUrl,
         photo_cel_url: celUrl,
+        photo_cel_version: celUrl ? CEL_SHADE_VERSION : undefined,
         location: quizSession.location ?? null,
         stats,
       });
@@ -119,7 +120,7 @@ function AppRouter() {
 
   return (
     <div className="app-shell w-screen bg-dex-bg text-dex-text overflow-hidden flex flex-col relative">
-      <StoreSupportButton />
+      {view !== 'profile' && <StoreSupportButton />}
       {storageError && (
         <div role="alert" className="shrink-0 bg-amber-950 text-amber-100 px-3 py-2 text-xs z-[60]">
           <p>儲存空間不足或瀏覽器禁止儲存。新資料暫存於此頁，請勿關閉；照片與既有存檔未被刪除。</p>

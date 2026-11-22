@@ -1,6 +1,6 @@
 export type Rarity = 'UC' | 'C' | 'R' | 'SR' | 'SSR' | 'UR' | 'LR';
 
-// ---- 快門版：五問對卡特徵（由 scripts/sync_from_aviandex.py 推導，全表必填）----
+// ---- 快門版：觀鳥線索特徵（由 birds.json 提供）----
 export type BirdSize = '細' | '中' | '大';
 export type MainColor = '黑白' | '白' | '黑' | '啡棕' | '灰' | '綠藍' | '紅黃';
 export type BeakShape = '尖' | '長' | '闊' | '鉤';
@@ -12,14 +12,17 @@ export type TailStyle = '叉尾' | '尖長尾' | '短圓尾' | '扇尾' | '中�
 export type ShapeKind = '長頸長腳' | '游水肥矮' | '長翼海鳥' | '鉤嘴猛禽' | '細細粒' | '中等鳥身';
 
 /**
- * 小朋友答嘅問題。答夠 2 題就出候選（大細／主色／身形／嘴形），
- * 嘴形係選填（見到先答）；全部格都係軟計分，唔會硬 filter。
+ * 小朋友可以選擇回答嘅觀察線索（大細／主色／身形／嘴形）；全部可跳過，
+ * 零答案都會先顯示常見鳥卡；有答先用軟計分重排，唔會硬 filter。
  */
 export interface QuizAnswers {
   size?: BirdSize;
   main_color?: MainColor;
   beak?: BeakShape;
   shape?: ShapeKind;
+  plumagePattern?: string;
+  tailShape?: string;
+  wingShape?: string;
 }
 
 /** 影完相、未答問題之前的暫存（張相只係證據，唔係俾 AI 睇） */
@@ -132,6 +135,7 @@ export interface CaptureRecord {
   location?: { lat: number; lng: number } | null;
   photo_original_url?: string | null; // 原相 = 證據（小朋友自己影嘅真相，唔會改）
   photo_cel_url?: string | null;      // 賽璐璐版 = 精靈卡（前端 Canvas 即時生成，預設顯示）
+  photo_cel_version?: number;          // 濾鏡版本；舊版會背景重生，原相永遠保留
 
   // v3 CatchCat
   stats?: CaptureStats; // 最新一次拍攝的個體數值

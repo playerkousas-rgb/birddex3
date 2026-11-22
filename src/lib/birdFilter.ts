@@ -1,22 +1,15 @@
 // ============================================================
-// 五問對卡過濾器 —— 唔使 AI，純資料計分
+// 候選鳥排序器 —— 唔使 AI，純資料計分
 // ------------------------------------------------------------
-// 影完相，小朋友答 2–5 個特徵（大細／主色／嘴形／喺邊度見到），
-// 由 583 隻計分排隊，最後邊隻最似由小朋友自己對相揀。
-//
-// 舊版死穴（2026-11-19 修正）：
-//   1. 5 題全部要答完先准睇結果；Q4「鶲類／柳鶯」係鳥類學術語，冇人識答，
-//      所以用戶永遠卡死喺答案未齊，感覺「5 條問題完全冇用」。
-//   2. Q4/Q5 係硬 filter：答錯一格（例如大白鷺明明企水邊，卻撳咗「水中游」／
-//      「叉尾」）就直接將正確答案踢出名單，即使大細＋顏色＋嘴都全中。
-//   3. 排序用 id 唔用吻合度。
-//
-// 新版分數：大細 40／主色 40／喺邊度 30／嘴 15，按吻合度排隊，
-// 唔再硬過濾；即使答錯一格，正確嗰隻仍然排最前。
+// 影完相先列香港常見鳥卡；小朋友可以即刻對相，唔使先答問題。
+// 大小／主色／身形／嘴形全部係自願線索，用軟計分排次序，唔會硬 filter。
+// UI 一次只顯示一頁；新手唔肯定就唔使估，可以自行逐頁看或加線索縮窄。
 // ============================================================
 import type { BirdSpecies, QuizAnswers } from '../types';
 import { commonBirdRank } from '../data/commonBirds';
 import { getShape, isGenericShape, SHAPE_OPTIONS } from '../data/quizTraits';
+import { FOLLOWUP_QUESTIONS, getFollowupValue } from '../data/quizObservations';
+import type { FollowupKey } from '../data/quizObservations';
 
 export const SIZE_OPTIONS = ['細', '中', '大'] as const;
 export const COLOR_OPTIONS = ['黑白', '白', '黑', '啡棕', '灰', '綠藍', '紅黃'] as const;
@@ -27,7 +20,14 @@ export const BEAK_OPTIONS = ['尖', '長', '闊', '鉤'] as const;
  * 身形係外形（一眼睇得到），分數同顏色接近；嘴形最細最易睇錯，所以最輕。
  * 揀最籠統嘅身形（中等鳥身）等於冇答，只計一半。
  */
-export const QUIZ_WEIGHTS = { size: 40, main_color: 40, shape: 32, beak: 15 } as const;
+export const QUIZ_WEIGHTS = {
+  size: 40, main_color: 40, shape: 32, beak: 15,
+  plumagePattern: 22, tailShape: 18, wingShape: 18,
+} as const;
+
+/** 候選超過門檻時，先完成／跳過四項基本線索，再逐題加問可見外貌。 */
+export const FOLLOWUP_THRESHOLD = 16;
+const BASE_KEYS = ['size', 'main_color', 'shape', 'beak'] as const;
 
 /** 揀咗最籠統選項時嘅折扣。 */
 export const GENERIC_FACTOR = 0.5;
@@ -56,6 +56,14 @@ function traitMatch(bird: BirdSpecies, answers: QuizAnswers): Partial<Record<Ans
   if (answers.main_color) matches.main_color = bird.main_color === answers.main_color;
   if (answers.shape) matches.shape = getShape(bird) === answers.shape;
   if (answers.beak) matches.beak = bird.beak === answers.beak;
+  for (const question of FOLLOWUP_QUESTIONS) {
+    const answer = answers[question.key];
+    if (answer) {
+      const observed = getFollowupValue(bird, question.key);
+      // 描述未提及唔代表雀冇呢個特徵；未知資料要保留，避免錯誤踢走正解。
+      matches[question.key] = observed === '未能確認' || observed === answer;
+    }
+  }
   return matches;
 }
 
@@ -106,14 +114,10 @@ export function candidatePool(birds: BirdSpecies[], answers: QuizAnswers): BirdS
  * 上限存在係為咗唔會一次過 render 幾百張卡，但唔可以細到「有雀中特徵都見唔到」——
  * 中／啡棕／尖／樹上 一組就有 89 隻，舊版截 36 隻等於永遠有 53 隻搵唔到。
  */
-export const MAX_CANDIDATES = 120;
+export const MAX_CANDIDATES = 64;
 
-/** 第一版顯示幾多張；之後每次「顯示更多」加幾多。 */
-export const PAGE_SIZE = 12;
-export const INITIAL_PAGE = 12;
-
-/** 最少答幾多格先准出候選：大細／顏色／喺邊度，任兩格。 */
-export const MIN_ANSWERS = 2;
+/** 單次最多展示幾張候選，避免初學者一口氣面對大量相似鳥卡。 */
+export const SHORTLIST_SIZE = 8;
 
 /** 想最少有幾多張相可以對。 */
 export const MIN_LISTED = 12;
@@ -151,6 +155,9 @@ const TRAIT_LABEL: Record<AnswerKey, string> = {
   main_color: '顏色',
   shape: '身形',
   beak: '嘴形',
+  plumagePattern: '羽毛花紋',
+  tailShape: '尾巴輪廓',
+  wingShape: '翅膀輪廓',
 };
 
 /**
@@ -163,11 +170,22 @@ const TRAIT_LABEL: Record<AnswerKey, string> = {
 export function candidateResult(birds: BirdSpecies[], answers: QuizAnswers): CandidateResult {
   const usable = birds.filter(b => b.size && b.main_color && b.beak);
   const keys = keysOf(answers);
-  if (usable.length === 0 || keys.length < MIN_ANSWERS) {
+  if (usable.length === 0) {
     return { birds: [], exact: false, poolSize: 0, warnings: [], lowestHits: 0, totalAnswered: keys.length };
   }
 
   const ranked = scoreCandidates(usable, answers);
+  if (keys.length === 0) {
+    return {
+      birds: ranked.slice(0, MAX_CANDIDATES).map(candidate => candidate.bird),
+      exact: false,
+      poolSize: 0,
+      warnings: [],
+      lowestHits: 0,
+      totalAnswered: 0,
+    };
+  }
+
   const bands = new Map<number, ScoredCandidate[]>();
   for (const candidate of ranked) {
     const list = bands.get(candidate.hits) ?? [];
@@ -208,15 +226,22 @@ export function candidateResult(birds: BirdSpecies[], answers: QuizAnswers): Can
     take(exactBand, MAX_CANDIDATES);
     if (listed.length < MIN_LISTED) take(nearBand, MIN_LISTED - listed.length);
   } else {
-    // 全中太少（答錯一格就係咁）：全中同「差一格」梅花間竹，
-    // 保證嗰隻正解唔會被幾十隻中兩格嘅雀遮住。
+    // 全中少於 12 隻時保留全中；四項都已答就唔補不符合的近似鳥，避免正確答案反而要翻多頁。
     take(exactBand, MAX_CANDIDATES);
-    // 近似層（差一格）只補到上限為止 —— 否則「大＋白」一類答案會拉出幾百隻
-    // 全表最相似嘅雀，反而更難搵。
+    if (keys.length >= BASE_KEYS.length) {
+      const exactPoolSize = exactBand.length;
+      return {
+        birds: listed.map(c => c.bird), exact: true, poolSize: exactPoolSize,
+        warnings: [], lowestHits: keys.length, totalAnswered: keys.length,
+      };
+    }
+    // 部分答案時才用「差一格」補位；短名單上限 64，鼓勵再加一項觀察而非面對大清單。
     let nearBudget = nearBand.length ? NEAR_MISS_LIMIT : 0;
     for (let hits = keys.length - 1; hits >= 0 && listed.length < MAX_CANDIDATES; hits -= 1) {
       const band = bands.get(hits) ?? [];
-      const budget = hits === keys.length - 1 ? Math.min(nearBudget, MAX_CANDIDATES - listed.length) : MAX_CANDIDATES - listed.length;
+      const budget = hits === keys.length - 1
+        ? Math.min(nearBudget, MAX_CANDIDATES - listed.length)
+        : MIN_LISTED - listed.length;
       nearBudget -= take(band, budget);
     }
     if (listed.length > MIN_LISTED) {
@@ -243,10 +268,13 @@ export function candidateResult(birds: BirdSpecies[], answers: QuizAnswers): Can
     // 全中組太大：唔代表答錯，但用戶好可能係其中一格撳錯咗，
     // 提示「唔啱就轉呢格」，好過要佢自己估。
     const key: AnswerKey = keys.includes('shape') ? 'shape' : keys.includes('beak') ? 'beak' : keys[0];
+    const truncated = exactPoolSize > MAX_CANDIDATES;
     warnings = [{
       kind: 'broad-match',
       key,
-      message: `有 ${exactPoolSize} 隻都符合。如果冇你嗰隻，試下轉${TRAIT_LABEL[key]}。`,
+      message: truncated
+        ? `有 ${exactPoolSize} 隻都符合；暫時列出排序最前 ${MAX_CANDIDATES} 隻。再揀一項外貌線索縮窄，避免漏看。`
+        : `有 ${exactPoolSize} 隻都符合；唔似就再揀一項外貌線索縮窄。`,
     }];
   }
   return {
@@ -257,6 +285,46 @@ export function candidateResult(birds: BirdSpecies[], answers: QuizAnswers): Can
     totalAnswered: keys.length,
     warnings,
   };
+}
+
+/** 超過 16 隻時，逐題選能把目前候選群切得最細的、尚未問過的外貌線索。 */
+export function chooseNextFollowupQuestion(
+  birds: BirdSpecies[],
+  answers: QuizAnswers,
+  skipped: readonly FollowupKey[] = [],
+): FollowupKey | null {
+  const result = candidateResult(birds, answers);
+  const count = result.exact ? result.poolSize : result.birds.length;
+  if (count <= FOLLOWUP_THRESHOLD) return null;
+
+  const ranked = scoreCandidates(birds, answers);
+  const current = result.exact
+    ? ranked.filter(candidate => candidate.hits === result.totalAnswered).map(candidate => candidate.bird)
+    : result.birds;
+  const completed = new Set<FollowupKey>([
+    ...skipped,
+    ...FOLLOWUP_QUESTIONS.filter(question => !!answers[question.key]).map(question => question.key),
+  ]);
+
+  let best: { key: FollowupKey; largestGroup: number } | null = null;
+  for (const question of FOLLOWUP_QUESTIONS) {
+    if (completed.has(question.key)) continue;
+    const buckets = new Map<string, number>();
+    let unknownCount = 0;
+    for (const bird of current) {
+      const value = getFollowupValue(bird, question.key);
+      if (value === '未能確認') {
+        unknownCount += 1;
+        continue;
+      }
+      buckets.set(value, (buckets.get(value) ?? 0) + 1);
+    }
+    // 未知描述會留喺任何一個答案組，因此只當已知值可以分流時先加問。
+    const largestGroup = Math.max(0, ...[...buckets.values()].map(count => count + unknownCount));
+    if (buckets.size < 2 || largestGroup >= current.length) continue;
+    if (!best || largestGroup < best.largestGroup) best = { key: question.key, largestGroup };
+  }
+  return best?.key ?? null;
 }
 
 /**
@@ -275,6 +343,9 @@ function suggestFix(
     main_color: COLOR_OPTIONS,
     shape: SHAPE_OPTIONS,
     beak: BEAK_OPTIONS,
+    plumagePattern: FOLLOWUP_QUESTIONS[0].options,
+    tailShape: FOLLOWUP_QUESTIONS[1].options,
+    wingShape: FOLLOWUP_QUESTIONS[2].options,
   };
   // 顏色同大細係用戶最肯定嘅（白色大鳥就係白色大鳥），唔會叫佢改；
   // 身形同嘴形先值得建議（身形嘅「細細粒／中等鳥身」好易撳錯）。

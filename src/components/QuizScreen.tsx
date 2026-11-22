@@ -1,16 +1,18 @@
 import { useMemo, useState } from 'react';
 import {
-  ArrowLeft, Camera, ChevronRight, ExternalLink, HelpCircle, Image as ImageIcon,
-  RotateCcw, Search, Sparkles, Target,
+  ArrowLeft, Camera, ChevronRight, ExternalLink, HelpCircle,
+  RotateCcw, Search,
 } from 'lucide-react';
 import type { BeakShape, BirdSize, BirdSpecies, MainColor, QuizAnswers, QuizSession, ShapeKind } from '../types';
 import { BIRD_SPECIES, getBirdById } from '../data/birdData';
 import { resolveBirdId } from '../data/nameAliases';
 import {
-  BEAK_OPTIONS, COLOR_OPTIONS, INITIAL_PAGE, PAGE_SIZE, SIZE_OPTIONS,
-  candidateResult, answerCount, MIN_ANSWERS,
+  BEAK_OPTIONS, COLOR_OPTIONS, SIZE_OPTIONS, SHORTLIST_SIZE,
+  candidateResult, answerCount, chooseNextFollowupQuestion, FOLLOWUP_THRESHOLD,
 } from '../lib/birdFilter';
 import { SHAPE_OPTIONS, getShape } from '../data/quizTraits';
+import { getFollowupQuestion } from '../data/quizObservations';
+import type { FollowupKey } from '../data/quizObservations';
 import { birdNo } from '../lib/aviandex';
 
 interface QuizScreenProps {
@@ -23,6 +25,8 @@ interface QuizScreenProps {
 }
 
 const MERLIN_URL = 'https://merlin.allaboutbirds.org';
+type BaseAnswerKey = 'size' | 'main_color' | 'shape' | 'beak';
+const BASE_ANSWER_KEYS = new Set<BaseAnswerKey>(['size', 'main_color', 'shape', 'beak']);
 
 const SIZE_HINT: Record<BirdSize, { emoji: string; hint: string }> = {
   '細': { emoji: '🐦', hint: '麻雀咁細' },
@@ -40,7 +44,15 @@ const COLOR_DOT: Record<MainColor, string> = {
   '紅黃': 'linear-gradient(135deg, #dc2626, #f59e0b)',
 };
 
+const COLOR_HINT: Record<MainColor, string> = {
+  '黑白': '斑紋', '白': '白／淺色', '黑': '黑／深色', '啡棕': '啡／棕',
+  '灰': '灰／藍灰', '綠藍': '綠／藍／頸光', '紅黃': '紅／橙／黃',
+};
+
 const BEAK_EMOJI: Record<BeakShape, string> = { '尖': '📌', '長': '🥢', '闊': '🦆', '鉤': '🪝' };
+const BEAK_HINT: Record<BeakShape, string> = {
+  '尖': '細尖直嘴', '長': '長嘴', '闊': '扁闊嘴', '鉤': '鉤嘴／猛禽利爪',
+};
 
 /** 身形：用剪影＋一句廣東話，全部係張相一眼睇得到嘅外形 */
 const SHAPE_HINT: Record<ShapeKind, { glyph: string; hint: string }> = {
@@ -82,13 +94,12 @@ function CandidateCard({
   onSelect: () => void;
 }) {
   const [imgFailed, setImgFailed] = useState(false);
-  const chips: Array<{ label: string; ok: boolean }> = [];
-  if (answers.size) chips.push({ label: `📏 ${bird.size}`, ok: bird.size === answers.size });
-  if (answers.main_color) chips.push({ label: `🎨 ${bird.main_color}`, ok: bird.main_color === answers.main_color });
-  if (answers.shape) {
-    const shape = getShape(bird);
-    chips.push({ label: `${SHAPE_HINT[shape].glyph} ${shape}`, ok: shape === answers.shape });
-  }
+  const shape = getShape(bird);
+  const chips: Array<{ label: string; ok?: boolean }> = [
+    { label: `📏 ${bird.size}`, ok: answers.size ? bird.size === answers.size : undefined },
+    { label: `🎨 ${bird.main_color}`, ok: answers.main_color ? bird.main_color === answers.main_color : undefined },
+    { label: `${SHAPE_HINT[shape].glyph} ${shape}`, ok: answers.shape ? shape === answers.shape : undefined },
+  ];
   if (answers.beak) chips.push({ label: `${BEAK_EMOJI[bird.beak]} ${bird.beak}`, ok: bird.beak === answers.beak });
 
   return (
@@ -127,12 +138,14 @@ function CandidateCard({
             <span
               key={chip.label}
               className={`px-1 py-0.5 rounded text-[9px] font-bold border ${
-                chip.ok
+                chip.ok === true
                   ? 'bg-emerald-500/10 border-emerald-500/40 text-emerald-700'
-                  : 'bg-dex-bg border-dex-border text-dex-muted'
+                  : chip.ok === false
+                    ? 'bg-dex-bg border-dex-border text-dex-muted'
+                    : 'bg-dex-bg/70 border-dex-border/70 text-dex-muted'
               }`}
             >
-              {chip.ok ? '✓ ' : '· '}{chip.label}
+              {chip.ok === true ? '✓ ' : chip.ok === false ? '· ' : ''}{chip.label}
             </span>
           ))}
         </div>
@@ -146,27 +159,43 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [merlinOpen, setMerlinOpen] = useState(false);
   const [query, setQuery] = useState('');
-  const [visibleCount, setVisibleCount] = useState(INITIAL_PAGE);
+  const [candidatePage, setCandidatePage] = useState(0);
+  const [baseQuestionsTouched, setBaseQuestionsTouched] = useState<Set<BaseAnswerKey>>(new Set());
+  const [skippedFollowups, setSkippedFollowups] = useState<FollowupKey[]>([]);
 
   const answered = answerCount(answers);
-  const ready = answered >= MIN_ANSWERS;
-  const result = useMemo(
-    () => (ready ? candidateResult(BIRD_SPECIES, answers) : null),
-    [ready, answers],
-  );
+  const result = useMemo(() => candidateResult(BIRD_SPECIES, answers), [answers]);
   const candidates = result?.birds ?? [];
+  const filteredCount = result?.exact ? result.poolSize : candidates.length;
+  const nextFollowupKey = useMemo(() => baseQuestionsTouched.size === BASE_ANSWER_KEYS.size
+    ? chooseNextFollowupQuestion(BIRD_SPECIES, answers, skippedFollowups)
+    : null, [answers, baseQuestionsTouched, skippedFollowups]);
+  const nextFollowup = nextFollowupKey ? getFollowupQuestion(nextFollowupKey) : null;
+  const pageCount = Math.max(1, Math.ceil(candidates.length / SHORTLIST_SIZE));
+  const visibleCandidates = candidates.slice(candidatePage * SHORTLIST_SIZE, (candidatePage + 1) * SHORTLIST_SIZE);
   const queryResults = useMemo(() => resolveManualQuery(query), [query]);
 
-  const setAnswer = <K extends keyof QuizAnswers>(key: K, value: QuizAnswers[K]) => {
+  const setAnswer = <K extends keyof QuizAnswers>(key: K, value: QuizAnswers[K] | undefined) => {
     setSelectedId(null);
-    setVisibleCount(INITIAL_PAGE);
+    setCandidatePage(0);
+    if (BASE_ANSWER_KEYS.has(key as BaseAnswerKey)) {
+      setBaseQuestionsTouched(prev => new Set([...prev, key as BaseAnswerKey]));
+      setSkippedFollowups([]);
+    }
     setAnswers(prev => (prev[key] === value ? prev : { ...prev, [key]: value }));
+  };
+
+  const skipFollowup = (key: FollowupKey) => {
+    setSkippedFollowups(prev => prev.includes(key) ? prev : [...prev, key]);
+    setCandidatePage(0);
   };
 
   const restart = () => {
     setAnswers({});
     setSelectedId(null);
-    setVisibleCount(INITIAL_PAGE);
+    setCandidatePage(0);
+    setBaseQuestionsTouched(new Set());
+    setSkippedFollowups([]);
   };
 
   const openMerlin = () => {
@@ -174,7 +203,6 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
     window.open(MERLIN_URL, '_blank', 'noopener');
   };
 
-  const waterHint = answers.main_color === '白' && ['長頸長腳', '游水肥矮', '長翼海鳥'].includes(answers.shape ?? '');
 
   return (
     <div className="min-h-full bg-dex-bg pb-28 relative">
@@ -189,12 +217,8 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
             <ArrowLeft size={20} />
           </button>
           <div className="min-w-0">
-            <h1 className="text-lg font-black text-dex-text leading-tight">答幾條，對返你張相</h1>
-            <p className="text-[11px] text-dex-muted">
-              {ready
-                ? `答咗 ${answered} 條 · 答案一改，下面即刻重新排`
-                : `答夠 ${MIN_ANSWERS} 條就出候選卡（最少要 2 條）`}
-            </p>
+            <h1 className="text-lg font-black text-dex-text leading-tight">揀一張最似你相中嘅雀</h1>
+            <p className="text-[11px] text-dex-muted">唔使識雀名；線索可選，唔肯定就跳過</p>
           </div>
         </div>
       </div>
@@ -210,104 +234,158 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
       </div>
 
       <div className="px-4 pt-4 space-y-5">
-        {/* Q1 大小 */}
-        <section>
-          <h2 className="text-base font-black text-dex-text mb-2.5">佢有幾大？</h2>
-          <div className="grid grid-cols-3 gap-2">
-            {SIZE_OPTIONS.map(size => (
-              <button
-                key={size}
-                onClick={() => setAnswer('size', size)}
-                className={`rounded-xl border-2 p-3 text-center transition ${
-                  answers.size === size ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
-                }`}
-              >
-                <div className="text-2xl">{SIZE_HINT[size].emoji}</div>
-                <div className="text-sm font-black text-dex-text mt-1">{size}</div>
-                <div className="text-[10px] text-dex-muted">{SIZE_HINT[size].hint}</div>
-              </button>
-            ))}
+        {/* 用引導觀察代替考鳥名：問題先出，答案只用來縮短候選 */}
+        <section className="rounded-2xl border border-dex-border bg-dex-surface px-3 py-4 space-y-5" aria-labelledby="clue-heading">
+          <div>
+            <h2 id="clue-heading" className="text-base font-black text-dex-text">回想一下：剛才看到的鳥有咩外貌？</h2>
+            <p className="mt-1 text-[11px] text-dex-muted leading-relaxed">
+              依次留意體型、顏色、嘴和腳。唔使識雀名；睇得出幾多就揀幾多，唔肯定可以跳過。
+            </p>
           </div>
+
+            {/* Q1 大小 */}
+            <section>
+              <h3 className="text-sm font-black text-dex-text mb-2">大概同邊隻熟悉雀一樣大？</h3>
+              <div className="grid grid-cols-3 gap-2">
+                {SIZE_OPTIONS.map(size => (
+                  <button
+                    key={size}
+                    onClick={() => setAnswer('size', size)}
+                    aria-pressed={answers.size === size}
+                    className={`rounded-xl border-2 p-2.5 text-center transition ${
+                      answers.size === size ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-bg'
+                    }`}
+                  >
+                    <div className="text-2xl">{SIZE_HINT[size].emoji}</div>
+                    <div className="text-xs font-black text-dex-text mt-1">{SIZE_HINT[size].hint}</div>
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setAnswer('size', undefined)} className="mt-2 min-h-9 px-3 rounded-lg text-[11px] font-bold text-dex-muted border border-dex-border">
+                唔肯定，跳過
+              </button>
+            </section>
+
+            {/* Q2 顏色 */}
+            <section>
+              <h3 className="text-sm font-black text-dex-text mb-1">最搶眼係咩顏色？</h3>
+              <p className="text-[10px] text-dex-muted mb-2">揀大概就得；混色、反光或者睇唔清都可以跳過。</p>
+              <div className="grid grid-cols-4 gap-2">
+                {COLOR_OPTIONS.map(color => (
+                  <button
+                    key={color}
+                    onClick={() => setAnswer('main_color', color)}
+                    aria-pressed={answers.main_color === color}
+                    className={`min-h-[76px] rounded-xl border-2 p-2 flex flex-col items-center justify-center gap-1.5 transition ${
+                      answers.main_color === color ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-bg'
+                    }`}
+                  >
+                    <span className="w-6 h-6 rounded-full border border-white/30" style={{ background: COLOR_DOT[color] }} />
+                    <span className="text-[11px] font-black text-dex-text">{color}</span>
+                    <span className="text-[9px] leading-tight text-dex-muted">{COLOR_HINT[color]}</span>
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setAnswer('main_color', undefined)} className="mt-2 min-h-9 px-3 rounded-lg text-[11px] font-bold text-dex-muted border border-dex-border">
+                顏色難分，跳過
+              </button>
+            </section>
+
+            {/* Q3 身形：特徵唔明顯就跳過 */}
+            <section>
+              <h3 className="text-sm font-black text-dex-text mb-1">佢的腳／身形有冇明顯特點？</h3>
+              <p className="text-[10px] text-dex-muted mb-2">例如長腳企水邊、浮水，或者猛禽利爪；睇唔清就跳過。</p>
+              <div className="grid grid-cols-2 gap-2">
+                {SHAPE_OPTIONS.map(shape => (
+                  <button
+                    key={shape}
+                    onClick={() => setAnswer('shape', shape)}
+                    aria-pressed={answers.shape === shape}
+                    className={`rounded-xl border-2 px-3 py-2 text-left transition ${
+                      answers.shape === shape ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-bg'
+                    }`}
+                  >
+                    <div className="text-xs font-black text-dex-text">{SHAPE_HINT[shape].glyph} {shape}</div>
+                    <div className="text-[10px] text-dex-muted">{SHAPE_HINT[shape].hint}</div>
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setAnswer('shape', undefined)} className="mt-2 min-h-9 px-3 rounded-lg text-[11px] font-bold text-dex-muted border border-dex-border">
+                睇唔出，跳過
+              </button>
+            </section>
+
+            {/* 嘴形：進階可選線索 */}
+            <section>
+              <h3 className="text-sm font-black text-dex-text mb-1">最後睇嘴：似尖嘴、長嘴、扁嘴，定鉤嘴？</h3>
+              <div className="grid grid-cols-4 gap-2">
+                {BEAK_OPTIONS.map(beak => (
+                  <button
+                    key={beak}
+                    onClick={() => setAnswer('beak', beak)}
+                    aria-pressed={answers.beak === beak}
+                    className={`rounded-xl border-2 p-2 flex flex-col items-center gap-1 transition ${
+                      answers.beak === beak ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-bg'
+                    }`}
+                  >
+                    <span className="text-xl">{BEAK_EMOJI[beak]}</span>
+                    <span className="text-xs font-black text-dex-text">{beak}</span>
+                    <span className="text-[9px] text-dex-muted">{BEAK_HINT[beak]}</span>
+                  </button>
+                ))}
+              </div>
+              <button onClick={() => setAnswer('beak', undefined)} className="mt-2 min-h-9 px-3 rounded-lg text-[11px] font-bold text-dex-muted border border-dex-border">
+                睇唔清，跳過
+              </button>
+            </section>
+
+            {nextFollowup && (
+              <section aria-label="自動加問的外貌線索" className="rounded-xl border border-dex-neon/40 bg-dex-neon/5 p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-sm font-black text-dex-text">{nextFollowup.title}</h3>
+                    <p className="mt-1 text-[10px] leading-relaxed text-dex-muted">
+                      仲有 {filteredCount} 隻符合；超過 {FOLLOWUP_THRESHOLD} 隻，所以加問一項。{nextFollowup.hint}
+                    </p>
+                  </div>
+                  <span className="shrink-0 rounded-full bg-dex-neon/15 px-2 py-1 text-[9px] font-bold text-dex-text">加問</span>
+                </div>
+                <div className="mt-2 grid grid-cols-2 gap-2">
+                  {nextFollowup.options.map(option => (
+                    <button
+                      key={option}
+                      type="button"
+                      aria-pressed={answers[nextFollowup.key] === option}
+                      onClick={() => setAnswer(nextFollowup.key, option)}
+                      className={`min-h-10 rounded-lg border px-2 py-2 text-left text-xs font-bold transition ${
+                        answers[nextFollowup.key] === option
+                          ? 'border-dex-neon bg-dex-neon/10 text-dex-text'
+                          : 'border-dex-border bg-dex-bg text-dex-text'
+                      }`}
+                    >{option}</button>
+                  ))}
+                </div>
+                <button
+                  type="button"
+                  onClick={() => skipFollowup(nextFollowup.key)}
+                  className="mt-2 min-h-9 rounded-lg border border-dex-border px-3 text-[11px] font-bold text-dex-muted"
+                >睇唔清，跳過呢題</button>
+              </section>
+            )}
         </section>
 
-        {/* Q2 主色 */}
-        <section>
-          <h2 className="text-base font-black text-dex-text mb-2.5">佢咩色為主？</h2>
-          <div className="grid grid-cols-4 gap-2">
-            {COLOR_OPTIONS.map(color => (
-              <button
-                key={color}
-                onClick={() => setAnswer('main_color', color)}
-                className={`rounded-xl border-2 p-2.5 flex flex-col items-center gap-1.5 transition ${
-                  answers.main_color === color ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
-                }`}
-              >
-                <span className="w-7 h-7 rounded-full border border-white/30" style={{ background: COLOR_DOT[color] }} />
-                <span className="text-xs font-black text-dex-text">{color}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Q3 身形（外形；舊版「似邊一類」學術名詞同「條尾點樣」已退役） */}
-        <section>
-          <h2 className="text-base font-black text-dex-text mb-1">成隻雀個身形係點？</h2>
-          <p className="text-[10px] text-dex-muted mb-2">睇輪廓就得，唔使睇顏色 — 唔肯定揀最後兩個</p>
-          <div className="grid grid-cols-2 gap-2">
-            {SHAPE_OPTIONS.map(shape => (
-              <button
-                key={shape}
-                onClick={() => setAnswer('shape', shape)}
-                className={`rounded-xl border-2 px-3 py-2 text-left transition ${
-                  answers.shape === shape ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
-                }`}
-              >
-                <div className="text-sm font-black text-dex-text">{SHAPE_HINT[shape].glyph} {shape}</div>
-                <div className="text-[10px] text-dex-muted">{SHAPE_HINT[shape].hint}</div>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* Q4 嘴形（選填） */}
-        <section>
-          <h2 className="text-base font-black text-dex-text mb-1">佢個嘴係點？<span className="text-dex-muted text-xs font-bold ml-1">唔知可以唔答</span></h2>
-          <div className="grid grid-cols-4 gap-2">
-            {BEAK_OPTIONS.map(beak => (
-              <button
-                key={beak}
-                onClick={() => setAnswer('beak', answers.beak === beak ? undefined : beak)}
-                className={`rounded-xl border-2 p-3 flex flex-col items-center gap-1 transition ${
-                  answers.beak === beak ? 'border-dex-neon bg-dex-neon/10' : 'border-dex-border bg-dex-surface'
-                }`}
-              >
-                <span className="text-2xl">{BEAK_EMOJI[beak]}</span>
-                <span className="text-sm font-black text-dex-text">{beak}</span>
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* 候選卡：答夠 2 條即出，唔使等答完 */}
+        {/* 只交出短名單；唔似就再觀察一項特徵，而非翻百幾張卡 */}
         {result && (
-          <section>
-            <div className="flex items-start gap-2 mb-3 text-[11px] text-dex-muted">
-              <Target size={13} className="text-dex-neon shrink-0 mt-0.5" />
-              <span>
-                {!result.exact ? (
-                  <>冇雀 {answered} 個特徵全中 — 以下係最接近嘅 {candidates.length} 隻</>
-                ) : result.lowestHits < result.totalAnswered ? (
-                  <>
-                    有 <b className="text-dex-text">{result.poolSize}</b> 隻全中；後面補埋差一格嘅近似雀
-                    {waterHint ? '（白鷺一家都喺名單）' : ''}
-                  </>
-                ) : (
-                  <>
-                    有 <b className="text-dex-text">{result.poolSize}</b> 隻符合你答嘅 {answered} 個特徵
-                    {waterHint ? '（白鷺一家都喺名單）' : ''}
-                  </>
-                )}
-              </span>
+          <section aria-labelledby="candidate-heading">
+            <div className="mb-3">
+              <h2 id="candidate-heading" className="text-base font-black text-dex-text">
+                {answered === 0 ? '常見鳥先睇幾張' : `按 ${answered} 個外貌線索排出的短名單`}
+              </h2>
+              <p className="mt-1 text-[11px] leading-relaxed text-dex-muted">
+                {answered === 0
+                  ? '先回想外貌線索，再對照下面最多 8 張；唔需要翻完整圖鑑。'
+                  : `每次只看 8 張。呢組共有 ${candidates.length} 隻候選；可以加線索縮窄，或逐頁看完，唔會靜靜漏走符合答案的鳥。`}
+              </p>
             </div>
 
             {result.warnings.map(warning => (
@@ -316,8 +394,14 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
               </div>
             ))}
 
+            {!nextFollowup && baseQuestionsTouched.size === BASE_ANSWER_KEYS.size && filteredCount > FOLLOWUP_THRESHOLD && (
+              <p className="mb-3 rounded-xl border border-amber-500/30 bg-amber-500/5 px-3 py-2 text-[11px] leading-relaxed text-dex-muted">
+                呢組資料暫時冇另一項可靠外貌線索可以再分；每次仍只顯示 8 隻，可以逐組查看，亦可以用上方已觀察到的特徵調整。
+              </p>
+            )}
+
             <div className="grid grid-cols-2 gap-3">
-              {candidates.slice(0, visibleCount).map(bird => (
+              {visibleCandidates.map(bird => (
                 <CandidateCard
                   key={bird.id}
                   bird={bird}
@@ -328,24 +412,35 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
               ))}
             </div>
 
-            {visibleCount < candidates.length && (
-              <button
-                onClick={() => setVisibleCount(v => v + PAGE_SIZE)}
-                className="w-full py-3 mt-3 rounded-xl border border-dex-border bg-dex-surface text-dex-text text-xs font-bold flex items-center justify-center gap-1.5"
-              >
-                <ImageIcon size={13} /> 顯示更多（仲有 {candidates.length - visibleCount} 隻）
-              </button>
+            {pageCount > 1 && (
+              <nav aria-label="候選鳥分頁" className="mt-3 flex items-center justify-between gap-3 rounded-xl border border-dex-neon/20 bg-dex-neon/5 p-2">
+                <button
+                  type="button"
+                  onClick={() => { setCandidatePage(page => Math.max(0, page - 1)); setSelectedId(null); }}
+                  disabled={candidatePage === 0}
+                  className="min-h-10 rounded-lg border border-dex-border px-3 text-xs font-bold text-dex-text disabled:opacity-40"
+                >上一組</button>
+                <span aria-live="polite" className="text-center text-[11px] text-dex-muted">
+                  第 {candidatePage + 1} / {pageCount} 組 · 每組最多 8 隻
+                </span>
+                <button
+                  type="button"
+                  onClick={() => { setCandidatePage(page => Math.min(pageCount - 1, page + 1)); setSelectedId(null); }}
+                  disabled={candidatePage >= pageCount - 1}
+                  className="min-h-10 rounded-lg border border-dex-neon/40 px-3 text-xs font-bold text-dex-text disabled:opacity-40"
+                >下一組</button>
+              </nav>
             )}
 
             {candidates.length === 0 && (
-              <p className="text-center text-xs text-dex-muted py-6">未有雀夾到，試下改上面任何一格。</p>
+              <p className="text-center text-xs text-dex-muted py-6">暫時未有相似的雀，試下清除一個線索再看。</p>
             )}
-
-            <div className="flex items-center justify-center gap-2 my-4 text-[10px] text-dex-muted">
-              <span>轉答案就會即時重排；搵唔到先用下面「重答」或 Merlin／NO. 編號</span>
-            </div>
           </section>
         )}
+
+        <div className="rounded-xl bg-dex-neon/5 border border-dex-neon/15 px-3 py-2 text-[11px] leading-relaxed text-dex-muted">
+          🐦 觀鳥由留意一個細節開始：體型、顏色或輪廓都得；唔識雀名，一樣玩得到、學得到。
+        </div>
 
         {/* Merlin 後備（細掣，唔係主流） */}
         <div className="pt-1">
@@ -401,19 +496,10 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
           </button>
         )}
 
-        {!ready && (
-          <div className="sticky bottom-20 z-20">
-            <div className="w-full py-4 rounded-2xl font-black tracking-wide flex items-center justify-center gap-2 bg-dex-surface text-dex-muted border border-dex-border">
-              <Sparkles size={16} />
-              再答多 {MIN_ANSWERS - answered} 條就出候選卡
-            </div>
-          </div>
-        )}
       </div>
 
       {/* 揀中 → 拍到 */}
-      {ready && (
-        <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-dex-bg border-t border-dex-border">
+      <div className="sticky bottom-0 z-30 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] bg-dex-bg border-t border-dex-border">
           <button
             type="button"
             disabled={selectedId === null || picking}
@@ -431,8 +517,7 @@ export function QuizScreen({ session, onBack, onPick, picking = false }: QuizScr
               </>
             ) : selectedId !== null ? '就係呢隻！快門一按 📸' : '先揀一張最似嘅卡'}
           </button>
-        </div>
-      )}
+      </div>
     </div>
   );
 }

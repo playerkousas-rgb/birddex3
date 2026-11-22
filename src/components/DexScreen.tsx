@@ -35,7 +35,7 @@ export function DexScreen({ onSelectSpecies }: DexScreenProps) {
     <div className="min-h-full bg-dex-bg pb-24">
       {/* Header */}
       <div className="sticky top-0 z-30 bg-dex-bg/90 backdrop-blur-md border-b border-dex-border px-4 pt-4 pb-3">
-        <div className="flex items-center justify-between gap-2 mb-3">
+        <div className="flex items-center justify-between gap-2 mb-3 pr-12 min-[560px]:pr-[150px]">
           <AppLogo size={38} />
           <div className="min-w-0 flex-1">
             <h1 className="text-xl font-black text-dex-text tracking-wide">鳥類圖鑑</h1>

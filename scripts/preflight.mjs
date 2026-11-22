@@ -146,18 +146,24 @@ add('depokemon-icon', /雙筒望遠鏡/.test(iconSrc) &&
   exists('public/icon-512.png') && exists('public/icon-192.png') && exists('public/favicon.ico'),
 '雙筒望遠鏡圖示＋PNG/ICO 資產存在');
 
-/* 8. 對卡特徵：答 2 條即出候選，第 3 題問身形（外形），答錯一格唔會踢走正解 */
+/* 8. 引導觀察外貌，不用考鳥名；結果只顯示短名單，鼓勵加線索縮窄 */
 const quizUi = read('src/components/QuizScreen.tsx');
 const quizLib = read('src/lib/birdFilter.ts');
 const quizTraits = read('src/data/quizTraits.ts');
-add('quiz-answers', quizUi.includes('答幾條，對返你張相') &&
+const quizObservationTraits = read('src/data/quizObservationTraits.json');
+add('quiz-answers', quizUi.includes('回想一下：剛才看到的鳥有咩外貌？') &&
   quizUi.includes('candidateResult') &&
-  /MIN_ANSWERS\s*=\s*2/.test(quizLib) &&
-  /INITIAL_PAGE\s*=\s*12/.test(quizLib) &&
-  /MAX_CANDIDATES\s*=\s*120/.test(quizLib) &&
-  quizUi.includes('SHAPE_OPTIONS') && /SHAPE_OPTIONS\s*=\s*\[/.test(quizTraits) &&
-  quizUi.includes('成隻雀個身形係點？'),
-'對卡特徵 · 答 2 條即出候選 · 第 3 題問身形（外形） · 首頁 12 張、上限 120');
+  /SHORTLIST_SIZE\s*=\s*8/.test(quizLib) &&
+  /MAX_CANDIDATES\s*=\s*64/.test(quizLib) &&
+  /FOLLOWUP_THRESHOLD\s*=\s*16/.test(quizLib) &&
+  quizLib.includes('chooseNextFollowupQuestion') &&
+  quizObservationTraits.includes('"583"') &&
+  quizUi.includes('baseQuestionsTouched') && quizUi.includes('skipFollowup') &&
+  quizUi.includes('體型、顏色、嘴和腳') && quizUi.includes('唔肯定，跳過') &&
+  quizUi.includes('visibleCandidates.map(') &&
+  quizUi.includes('候選鳥分頁') &&
+  quizUi.includes('SHAPE_OPTIONS') && /SHAPE_OPTIONS\s*=\s*\[/.test(quizTraits),
+'四項基本線索後超過 16 隻逐題加問 · 每次最多 8 張 · 缺資料時可跳過');
 
 /* 9. 專屬 ICON：進化／頭像／標誌全部 AI 貼紙，SVG 只做 fallback，唔用 emoji */
 const profileUi = read('src/components/ProfileScreen.tsx');

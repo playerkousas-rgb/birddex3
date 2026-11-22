@@ -2,13 +2,14 @@ import { useState, useRef, useEffect } from 'react';
 import { useCollectionContext } from '../context/CollectionContext';
 import { BIRD_SPECIES } from '../data/birdData';
 import { getLevelProgress, RARITY_ORDER, RARITY_META } from '../lib/theme';
-import { User, Edit3, Award, Feather, Target, Trash2, Check, X, Sparkles, ImageOff, Wand2, Share2, QrCode } from 'lucide-react';
+import { User, Edit3, Award, Feather, Target, Trash2, Check, X, Sparkles, ImageOff, Wand2, Share2, QrCode, Flag } from 'lucide-react';
 import type { AltArtMode } from '../hooks/useCollection';
 import { QRCodeSVG } from 'qrcode.react';
 import { toPng } from 'html-to-image';
 import { COPYRIGHT_FULL, COPYRIGHT_SHORT } from '../lib/copyright';
 import { APP_VERSION } from '../version';
 import { InstallButton } from './PwaChrome';
+import { StoreSupportButton } from './StoreSupportButton';
 import { TrainerTierBadge } from './TrainerTierBadge';
 import { EVOLUTION_STAGES } from '../lib/trainerTier';
 import { EvolutionArt } from './EvolutionArt';
@@ -363,6 +364,20 @@ export function ProfileScreen() {
       <div className="px-4 pb-8 space-y-3">
         {/* I1 加入主畫面入口（standalone 自動隱藏） */}
         <InstallButton />
+        <div className="grid grid-cols-2 gap-2" aria-label="支援與回饋">
+          <a
+            href="https://github.com/playerkousas-rgb/birddex3/issues/new"
+            target="_blank"
+            rel="noopener"
+            className="flex min-h-11 items-center justify-center gap-2 rounded-xl border border-dex-border bg-dex-surface px-3 py-2 text-xs font-bold text-dex-text transition hover:border-dex-neon/40"
+            aria-label="前往 GitHub 回報問題（開新分頁）"
+            title="前往 GitHub 回報問題（開新分頁）"
+          >
+            <Flag size={14} aria-hidden="true" />
+            回報問題
+          </a>
+          <StoreSupportButton variant="profile" />
+        </div>
         {/* W1 可見頁尾 ＋ V2 用家可見版號 */}
         <div className="text-center text-[10px] text-dex-muted leading-relaxed">
           {COPYRIGHT_FULL} · BIRD-DEX 3 <strong className="text-dex-text/70">v{APP_VERSION}</strong>
