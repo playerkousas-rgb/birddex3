@@ -4,7 +4,7 @@ import { BIRD_SPECIES } from '../data/birdData';
 import { readJSON, saveJSON, savedDataForBackup } from '../lib/storage';
 import { getRarityFromCount, xpForCapture, getLevelFromXp } from '../lib/theme';
 import { birdNo } from '../lib/aviandex';
-import { celShadeImage } from '../lib/celShade';
+import { celShadeImage, CEL_SHADE_VERSION } from '../lib/celShade';
 
 const STORAGE_KEY = 'bd_collection_v3';
 const PROFILE_KEY = 'bd_profile_v1';
@@ -63,12 +63,14 @@ function migrateRecord(raw: unknown): CaptureRecord | null {
     : null;
   const original = typeof record.photo_original_url === 'string' ? record.photo_original_url : legacyPhoto;
   const cel = typeof record.photo_cel_url === 'string' ? record.photo_cel_url : null;
+  const celVersion = typeof record.photo_cel_version === 'number' ? record.photo_cel_version : 0;
   return {
     ...record,
     no: typeof record.no === 'string' && record.no ? record.no : birdNo(record.speciesId),
     method: 'photo',
     photo_original_url: original,
     photo_cel_url: cel,
+    photo_cel_version: cel ? celVersion : undefined,
   };
 }
 
@@ -118,12 +120,12 @@ export function useCollection() {
   useEffect(() => { persist(SETTINGS_KEY, settings); }, [settings, persist]);
   useEffect(() => { persist(ALTART_KEY, altArt); }, [altArt, persist]);
 
-  // 賽璐璐版補生成：v3 舊存檔只有原相 → 每次一隻、背景慢慢補齊。
-  // 失敗唔重試無限循環（attemptedRef 記住），照舊顯示原相。
+  // 賽璐璐版補生成／升級：逐隻背景處理舊存檔及舊濾鏡；原相始終保留。
+  // 失敗唔重試無限循環（attemptedRef 記住），明確記錄原因，照舊顯示原相。
   const celAttempted = useRef<Set<number>>(new Set());
   useEffect(() => {
     const pending = captures.find(c =>
-      !!c.photo_original_url && !c.photo_cel_url && !celAttempted.current.has(c.speciesId));
+      !!c.photo_original_url && c.photo_cel_version !== CEL_SHADE_VERSION && !celAttempted.current.has(c.speciesId));
     if (!pending?.photo_original_url) return;
     const speciesId = pending.speciesId;
     celAttempted.current.add(speciesId);
@@ -132,9 +134,13 @@ export function useCollection() {
       .then(cel => {
         if (cancelled) return;
         setCaptures(prev => prev.map(c =>
-          c.speciesId === speciesId && !c.photo_cel_url ? { ...c, photo_cel_url: cel } : c));
+          c.speciesId === speciesId && c.photo_original_url
+            ? { ...c, photo_cel_url: cel, photo_cel_version: CEL_SHADE_VERSION }
+            : c));
       })
-      .catch(() => { /* 原相永遠優先保留；轉換失敗就算數 */ });
+      .catch(error => {
+        console.warn(`[BIRD-DEX] 賽璐璐轉換失敗（NO.${speciesId}），保留原相：`, error);
+      });
     return () => { cancelled = true; };
   }, [captures]);
   const storageError = Object.values(storageErrors).some(Boolean);
@@ -224,6 +230,7 @@ export function useCollection() {
     opts?: {
       photo_original_url?: string | null; // 原相＝證據
       photo_cel_url?: string | null;      // 賽璐璐版＝精靈卡
+      photo_cel_version?: number;
       location?: { lat: number; lng: number } | null;
       stats?: CaptureStats;
     }
@@ -259,6 +266,7 @@ export function useCollection() {
         lastCaptureDate: now,
         photo_original_url: opts?.photo_original_url ?? existing.photo_original_url ?? null,
         photo_cel_url: opts?.photo_cel_url ?? existing.photo_cel_url ?? null,
+        photo_cel_version: opts?.photo_cel_url ? (opts.photo_cel_version ?? CEL_SHADE_VERSION) : existing.photo_cel_version,
         location: opts?.location ?? existing.location,
         stats: stats ?? existing.stats,
         bestStats,
@@ -277,6 +285,7 @@ export function useCollection() {
         location: opts?.location ?? null,
         photo_original_url: opts?.photo_original_url ?? null,
         photo_cel_url: opts?.photo_cel_url ?? null,
+        photo_cel_version: opts?.photo_cel_url ? (opts.photo_cel_version ?? CEL_SHADE_VERSION) : undefined,
         stats,
         bestStats,
         allCatches: stats ? [stats] : [],

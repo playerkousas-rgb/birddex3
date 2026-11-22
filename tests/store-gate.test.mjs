@@ -236,6 +236,14 @@ test('SG18：getAppStoreUrl 用 slug 組主站詳情卡，唔寫死喺 app 碼',
   assert.match(css, /\[hidden\]\{display:none\}/);
   assert.match(css, /\.support-btn\[hidden\]\{display:none\}/);
   assert.match(css, /@media print[\s\S]*#storeSupportTop/);
+  assert.match(css, /@media \(max-width: 559px\)[\s\S]*\.support-btn-label \{ display: none; \}/);
+  const dex = read('src/components/DexScreen.tsx');
+  assert.match(dex, /pr-12 min-\[560px\]:pr-\[150px\]/, '圖鑑 header 為右上角固定讚好掣預留空間');
+  const profile = read('src/components/ProfileScreen.tsx');
+  assert.match(profile, /https:\/\/github\.com\/playerkousas-rgb\/birddex3\/issues\/new/);
+  assert.match(profile, /<StoreSupportButton variant="profile" \/>/);
+  assert.match(read('src/App.tsx'), /view !== 'profile' && <StoreSupportButton \/>/,
+    '觀鳥員頁改用頁尾讚好入口，避免浮動掣遮住右上方形象圖');
   for (const f of ['src/App.tsx', 'src/components/StoreSupportButton.tsx', 'index.html']) {
     const txt = read(f);
     assert.ok(!/bump_hearts|bump_stars|supabase\.co/.test(txt), `${f} 唔准直連主站 Supabase`);

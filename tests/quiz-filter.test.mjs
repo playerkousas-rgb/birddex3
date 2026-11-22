@@ -5,7 +5,10 @@ import { loadTs } from './load-ts.mjs';
 
 const filter = loadTs('src/lib/birdFilter.ts');
 const traits = loadTs('src/data/quizTraits.ts');
+const observations = loadTs('src/data/quizObservations.ts');
 const birds = JSON.parse(readFileSync(new URL('../src/data/birds.json', import.meta.url), 'utf8'));
+const extraTraitsData = JSON.parse(readFileSync(new URL('../src/data/quizObservationTraits.json', import.meta.url), 'utf8'));
+const quizUi = readFileSync(new URL('../src/components/QuizScreen.tsx', import.meta.url), 'utf8');
 const EGRET = 242;
 
 function bird(id, size, main_color, beak, extra = {}) {
@@ -29,19 +32,43 @@ const rankIn = (answers, id) => {
 };
 
 test('權重：大細／顏色最重，身形次之，嘴形最輕', () => {
-  assert.deepEqual({ ...filter.QUIZ_WEIGHTS }, { size: 40, main_color: 40, shape: 32, beak: 15 });
+  assert.deepEqual({ ...filter.QUIZ_WEIGHTS }, {
+    size: 40, main_color: 40, shape: 32, beak: 15,
+    plumagePattern: 22, tailShape: 18, wingShape: 18,
+  });
   assert.deepEqual([...filter.SIZE_OPTIONS], ['細', '中', '大']);
   assert.deepEqual([...filter.BEAK_OPTIONS], ['尖', '長', '闊', '鉤']);
   assert.equal(filter.COLOR_OPTIONS.length, 7);
   assert.deepEqual([...traits.SHAPE_OPTIONS], ['長頸長腳', '游水肥矮', '長翼海鳥', '鉤嘴猛禽', '細細粒', '中等鳥身']);
 });
 
-test('Answered 2 格就出結果 —— 唔使等 5 條問題答完', () => {
-  assert.equal(filter.MIN_ANSWERS, 2);
-  assert.equal(filter.candidateResult(birds, { size: '大' }).birds.length, 0, '一格都未夠唔應該出結果');
-  const two = filter.candidateResult(birds, { size: '大', main_color: '白' });
-  assert.ok(two.birds.length >= 12, '答兩格就要有相睇');
-  assert.ok(two.birds.length <= filter.MAX_CANDIDATES);
+test('新手可自選外貌線索：常見鳥排前，介面只交出 8 張短名單', () => {
+  const starter = filter.candidateResult(birds, {});
+  assert.equal(starter.birds.length, filter.MAX_CANDIDATES, '排序器有內部候選，但介面只交出短名單');
+  assert.equal(starter.birds[0].id, 1, '香港常見珠頸斑鳩排前，方便直接對相');
+  assert.equal(starter.totalAnswered, 0);
+  assert.equal(starter.warnings.length, 0, '未答問題唔應該被判斷為答錯');
+  assert.equal(filter.SHORTLIST_SIZE, 8);
+  assert.match(quizUi, /visibleCandidates\.map\(/, '畫面只渲染目前一頁候選');
+  assert.match(quizUi, /candidates\.slice\(candidatePage \* SHORTLIST_SIZE/, '候選以 8 張一頁分批顯示');
+  assert.match(quizUi, /aria-label="候選鳥分頁"/, '要有可理解的分頁控制');
+
+  const oneClue = filter.candidateResult(birds, { size: '中' });
+  assert.ok(oneClue.birds.length >= 12, '一個簡單線索即可重排候選');
+  assert.ok(oneClue.birds.length <= filter.MAX_CANDIDATES);
+});
+
+test('原鴿按可見外貌提示縮窄後，仍會喺 8 張短名單內', () => {
+  const pigeon = birds.find(b => b.name === '原鴿');
+  assert.ok(pigeon, 'birds.json 應有原鴿');
+  const result = filter.candidateResult(birds, {
+    size: pigeon.size,
+    main_color: pigeon.main_color,
+    shape: traits.getShape(pigeon),
+    beak: pigeon.beak,
+  });
+  const rank = result.birds.findIndex(b => b.id === pigeon.id) + 1;
+  assert.ok(rank > 0 && rank <= filter.SHORTLIST_SIZE, `原鴿排第 ${rank}，應該留喺短名單內`);
 });
 
 test('大白鷺（用戶原話：白色、大隻、水鳥）一答就喺榜首', () => {
@@ -79,15 +106,15 @@ test('全中組大過一頁都唔會截走（用戶可以「顯示更多」搵�
   assert.equal(result.warnings[0]?.kind, 'broad-match');
   assert.ok(result.warnings[0].message.includes(`${result.poolSize} 隻`), '要講實際數目，唔好講死一個數');
   assert.equal(result.birds.length, Math.min(result.poolSize, filter.MAX_CANDIDATES));
-  assert.ok(result.birds.length > filter.INITIAL_PAGE, '過一頁都要列出嚟，唔可以只出 12 隻');
+  assert.ok(result.birds.length > filter.SHORTLIST_SIZE, '引擎要保留多個排序候選供加線索後重排');
 });
 
 test('畫面文案嘅依據：poolSize／lowestHits 要老實反映「全中」同「近似」', () => {
-  // 全中 11 隻、之後補近似雀：poolSize 只算全中，lowestHits 話畀 UI 知有近似雀
+  // 四項都答完而全中組少於 12 隻時，只顯示真正吻合者，不用近似雀湊數。
   const manyExact = filter.candidateResult(birds, { size: '大', main_color: '白', shape: '長頸長腳', beak: '長' });
   assert.equal(manyExact.exact, true);
-  assert.ok(manyExact.poolSize < manyExact.birds.length, '近似雀唔應該計入全中數');
-  assert.ok(manyExact.lowestHits < manyExact.totalAnswered, 'UI 要知有近似雀');
+  assert.equal(manyExact.poolSize, manyExact.birds.length, '全中組不應混入近似鳥');
+  assert.equal(manyExact.lowestHits, manyExact.totalAnswered);
 
   // 全部名單都係全中：poolSize === birds.length，lowestHits === 已答格數
   const allExact = filter.candidateResult(birds, { size: '大', main_color: '白', shape: '長頸長腳' });
@@ -151,6 +178,152 @@ test('每隻雀答自己嘅特徵，一定入到候選名單', () => {
     if (rankIn(answers, target.id) === 0) missing.push(`${target.name}(NO.${target.id})`);
   }
   assert.deepEqual(missing, [], `答中自己特徵都唔喺名單：${missing.join('、')}`);
+});
+
+test('窮舉 583 隻鳥各自的四項答案：所有答案組合均完整覆蓋、每頁不超過 8 張', () => {
+  assert.equal(birds.length, 583, '測試必須涵蓋完整鳥種資料');
+  const answerGroups = new Map();
+  let maxExactGroup = 0;
+  let maxPool = 0;
+  let maxRank = 0;
+  const rankOutsideFirstEight = [];
+
+  for (const target of birds) {
+    const answers = {
+      size: target.size,
+      main_color: target.main_color,
+      shape: traits.getShape(target),
+      beak: target.beak,
+    };
+    const key = [answers.size, answers.main_color, answers.shape, answers.beak].join('|');
+    if (!answerGroups.has(key)) answerGroups.set(key, answers);
+    const result = filter.candidateResult(birds, answers);
+    const rank = result.birds.findIndex(b => b.id === target.id) + 1;
+    assert.ok(rank > 0, `${target.name} 完全按實際特徵回答後未被候選池涵蓋`);
+    maxExactGroup = Math.max(maxExactGroup, result.poolSize);
+    maxPool = Math.max(maxPool, result.birds.length);
+    maxRank = Math.max(maxRank, rank);
+    if (rank > filter.SHORTLIST_SIZE) rankOutsideFirstEight.push(target.id);
+    assert.ok(Math.ceil(rank / filter.SHORTLIST_SIZE) <= Math.ceil(result.birds.length / filter.SHORTLIST_SIZE));
+  }
+
+  // 同一四項外貌答案的每種實際組合均需保留完整，分頁只控制同時看到幾張，唔截斷名單。
+  assert.equal(answerGroups.size, 104, '實際有鳥種落入的四線索組合數');
+  let testedOptionCombinations = 0;
+  let maxAnyOptionPool = 0;
+  for (const size of filter.SIZE_OPTIONS) {
+    for (const main_color of filter.COLOR_OPTIONS) {
+      for (const shape of traits.SHAPE_OPTIONS) {
+        for (const beak of filter.BEAK_OPTIONS) {
+          const answers = { size, main_color, shape, beak };
+          const matching = birds.filter(b => b.size === size && b.main_color === main_color
+            && traits.getShape(b) === shape && b.beak === beak);
+          const result = filter.candidateResult(birds, answers);
+          testedOptionCombinations++;
+          maxAnyOptionPool = Math.max(maxAnyOptionPool, result.birds.length);
+          assert.ok(result.birds.length <= filter.MAX_CANDIDATES, `${JSON.stringify(answers)} 候選超過上限`);
+          for (const target of matching) {
+            assert.ok(result.birds.some(b => b.id === target.id), `${target.name} 被截出四線索組合 ${JSON.stringify(answers)}`);
+          }
+        }
+      }
+    }
+  }
+  assert.equal(testedOptionCombinations, 504, '窮舉所有體型×主色×身形×嘴形選項');
+  assert.ok(maxAnyOptionPool <= filter.MAX_CANDIDATES);
+  assert.equal(maxExactGroup, 54, '最大完全符合群組應維持在 54 隻');
+  assert.ok(maxPool <= filter.MAX_CANDIDATES);
+  assert.equal(Math.ceil(maxPool / filter.SHORTLIST_SIZE), 7, '最多分 7 組，每組至多 8 張');
+  assert.ok(maxRank <= maxPool);
+  assert.ok(rankOutsideFirstEight.length > 0, '測試需捕捉首頁 8 張未涵蓋所有鳥的情況');
+  assert.equal(maxPool, 54, '四線索完全符合名單最大 54 隻；唔補錯答案的近似鳥');
+  assert.equal(rankOutsideFirstEight.length, 215, '固定只看首頁仍會漏掉 215 隻，必須保留逐頁查看');
+});
+
+test('窮舉所有 1–4 項線索選項（含跳過）：候選有上限，截斷時明確提示再縮窄', () => {
+  const optionSets = [
+    [undefined, ...filter.SIZE_OPTIONS],
+    [undefined, ...filter.COLOR_OPTIONS],
+    [undefined, ...traits.SHAPE_OPTIONS],
+    [undefined, ...filter.BEAK_OPTIONS],
+  ];
+  const maxima = [0, 0, 0, 0, 0];
+  let combinations = 0;
+
+  for (const size of optionSets[0]) {
+    for (const main_color of optionSets[1]) {
+      for (const shape of optionSets[2]) {
+        for (const beak of optionSets[3]) {
+          const answers = { size, main_color, shape, beak };
+          const answered = [size, main_color, shape, beak].filter(Boolean).length;
+          if (!answered) continue;
+          combinations++;
+          const result = filter.candidateResult(birds, answers);
+          assert.ok(result.birds.length <= filter.MAX_CANDIDATES, `${JSON.stringify(answers)} 候選超過 64`);
+          assert.equal(new Set(result.birds.map(b => b.id)).size, result.birds.length);
+          maxima[answered] = Math.max(maxima[answered], result.poolSize);
+
+          if (result.exact && result.poolSize > filter.MAX_CANDIDATES) {
+            assert.equal(result.birds.length, filter.MAX_CANDIDATES);
+            assert.match(result.warnings[0]?.message ?? '', /暫時列出排序最前 64 隻.*再揀一項/,
+              '截斷候選必須明示並引導加線索');
+          } else if (result.exact) {
+            for (const target of birds.filter(b => (!size || b.size === size) && (!main_color || b.main_color === main_color)
+              && (!shape || traits.getShape(b) === shape) && (!beak || b.beak === beak))) {
+              assert.ok(result.birds.some(b => b.id === target.id), `${target.name} 完全符合 ${JSON.stringify(answers)} 卻未列出`);
+            }
+          }
+        }
+      }
+    }
+  }
+  assert.equal(combinations, 1119, '窮舉 1 至 4 項所有選項及 skip 組合');
+  assert.deepEqual(maxima, [0, 380, 241, 109, 54], '線索越多，最大完全符合群組依序由 380 縮至 54');
+});
+
+test('候選超過 16 隻時逐題加問可見線索；資料可用時所有 583 隻仍保留', () => {
+  const ui = readFileSync(new URL('../src/components/QuizScreen.tsx', import.meta.url), 'utf8');
+  assert.equal(filter.FOLLOWUP_THRESHOLD, 16);
+  assert.equal(Object.keys(extraTraitsData.birds).length, 583, '每隻鳥都必須有明確線索或「未能確認」標記');
+  assert.match(ui, /baseQuestionsTouched\.size === BASE_ANSWER_KEYS\.size/, '先完成／跳過四項基本線索才加問');
+  assert.match(ui, /skipFollowup\(nextFollowup\.key\)/, '加問題目必須可跳過');
+
+  let askedAtLeastOnce = 0;
+  let maxAsked = 0;
+  let largestRemainingExactGroup = 0;
+  for (const target of birds) {
+    const answers = {
+      size: target.size,
+      main_color: target.main_color,
+      shape: traits.getShape(target),
+      beak: target.beak,
+    };
+    let result = filter.candidateResult(birds, answers);
+    const asked = [];
+    while (result.exact && result.poolSize > filter.FOLLOWUP_THRESHOLD && asked.length < observations.FOLLOWUP_QUESTIONS.length) {
+      const key = filter.chooseNextFollowupQuestion(birds, answers, []);
+      if (!key) break;
+      asked.push(key);
+      answers[key] = observations.getFollowupValue(target, key);
+      result = filter.candidateResult(birds, answers);
+      assert.ok(result.birds.some(b => b.id === target.id), `${target.name} 因追加 ${key} 線索而消失`);
+    }
+    if (asked.length) askedAtLeastOnce++;
+    maxAsked = Math.max(maxAsked, asked.length);
+    largestRemainingExactGroup = Math.max(largestRemainingExactGroup, result.poolSize);
+    assert.ok(result.birds.some(b => b.id === target.id), `${target.name} 必須仍可找到`);
+    assert.ok(asked.length <= 3);
+  }
+  assert.ok(askedAtLeastOnce > 0, '寬候選組必須觸發追加觀察題');
+  assert.ok(maxAsked > 0 && maxAsked <= 3);
+  assert.ok(largestRemainingExactGroup <= 54);
+
+  const answers = { size: '細', main_color: '啡棕', shape: '細細粒', beak: '尖' };
+  const first = filter.chooseNextFollowupQuestion(birds, answers);
+  if (first) {
+    const next = filter.chooseNextFollowupQuestion(birds, answers, [first]);
+    assert.notEqual(next, first, '跳過後不能重複出同一條問題');
+  }
 });
 
 test('每個科都有「身形」歸屬，冇雀默默跌落 fallback', () => {

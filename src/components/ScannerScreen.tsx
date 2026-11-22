@@ -6,7 +6,7 @@ import { useLiveBirdDetector } from '../lib/liveDetect';
 import { makeDemoPhoto } from '../lib/demoPhoto';
 
 interface ScannerScreenProps {
-  /** 影完相 → 交俾五問流程（相只係證據，唔經 AI 辨識） */
+  /** 影完相 → 交俾對相揀鳥流程（相只係證據，唔經 AI 辨識） */
   onPhotoTaken: (session: QuizSession) => void;
   onBusyChange: (busy: boolean) => void;
 }
@@ -196,7 +196,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
       await zoomQueue.current;
       if (!current()) return;
       const photoZoom = { ...effectiveZoom.current };
-      // 三連拍取最Sharp一張：張相只係「證據」，唔經 AI 辨識，直接入五問流程。
+      // 三連拍取最Sharp一張：張相只係「證據」，唔經 AI 辨識，直接入對相揀鳥流程。
       const probe = document.createElement('canvas'); probe.width = 64; probe.height = 64;
       const probeContext = probe.getContext('2d');
       const best = document.createElement('canvas');
@@ -304,7 +304,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
         </div>
       )}
 
-      {/* 拍攝中（三連拍，約 0.2s）—— 唔使 AI，影完即入五問 */}
+      {/* 拍攝中（三連拍，約 0.2s）—— 唔使 AI，影完即刻可以對相揀鳥 */}
       {phase === 'snapping' && (
         <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] flex flex-col items-center justify-center z-20">
           <div className="w-16 h-16 rounded-full border-4 border-dex-neon/30 border-t-dex-neon animate-spin" style={{ animationDuration: '0.8s' }} />
@@ -330,7 +330,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
             }}
             className="mt-3 px-5 py-2.5 rounded-xl bg-dex-surface border border-dex-border text-dex-text font-bold text-sm hover:border-dex-neon transition"
           >
-            冇相機？用示範相睇五問
+            冇相機？用示範相試下對鳥卡
           </button>
         </div>
       )}
@@ -426,7 +426,7 @@ export function ScannerScreen({ onPhotoTaken, onBusyChange }: ScannerScreenProps
               '即時偵測已關閉 · 對準鳥類拍攝'
             )}
             <br />
-            <span className="text-white/40">影完答幾條特徵自己對卡 · 雙指縮放</span>
+            <span className="text-white/40">影完即刻看常見鳥卡 · 線索可跳過 · 雙指縮放</span>
           </div>
           <button
             onClick={snap}
