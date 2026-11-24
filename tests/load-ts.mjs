@@ -21,7 +21,12 @@ export function loadTs(file, overrides = {}, cache = new Map()) {
     return localRequire(specifier);
   };
   const { outputText } = ts.transpileModule(readFileSync(path, 'utf8'), {
-    compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2020, esModuleInterop: true },
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2020,
+      esModuleInterop: true,
+      ...(path.endsWith('.tsx') ? { jsx: ts.JsxEmit.ReactJSX } : {}),
+    },
     fileName: path,
   });
   new Function('require', 'module', 'exports', outputText)(require, module, module.exports);
