@@ -42,6 +42,35 @@ body {
   transform: perspective(1000px) rotateY(8deg) rotateX(4deg) scale(1.02);
 }
 
+/* 3D 雙面鳥卡反轉（正面：已解鎖插圖 ↔ 反面：自己拍的照片／貼圖） */
+.card-flip-scene {
+  perspective: 1200px;
+}
+
+.card-flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.55s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-flip-inner[data-flipped='true'] {
+  transform: rotateY(180deg);
+}
+
+.card-flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform: rotateY(0deg) translateZ(1px);
+}
+
+.card-flip-back {
+  transform: rotateY(180deg) translateZ(1px);
+}
+
 /* Shimmer foil effect for SSR/UR/LR */
 .foil-shimmer {
   background: linear-gradient(

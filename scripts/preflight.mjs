@@ -194,6 +194,20 @@ add('offline-cards', exists('src/lib/offlineCards.ts') &&
   /caches\.open\(OFFLINE_CARDS_CACHE\)/.test(read('src/lib/offlineCards.ts')),
 '離線圖卡預載 · Cache Storage 快取 R2 鳥卡');
 
+/* 11. 雙面鳥卡：拍到照即解鎖正面插圖，反轉切換成自己拍的照片及生成貼圖 */
+const cardUi = read('src/components/BirdCard.tsx');
+const detailUi = read('src/components/BirdDetailScreen.tsx');
+add('card-flip-illustration', exists('src/lib/cardFace.ts') &&
+  cardUi.includes('faces.frontIllustrationUrl') &&
+  cardUi.includes('card-flip-back') &&
+  cardUi.includes('反轉照片') &&
+  cardUi.includes('生成貼圖') &&
+  detailUi.includes('faces.frontIllustrationUrl') &&
+  detailUi.includes('card-flip-back') &&
+  detailUi.includes('反轉照片') &&
+  detailUi.includes('生成貼圖'),
+'拍到照解鎖正面插圖 · 3D 反轉看自己拍的照片 · 生成透明貼圖');
+
 const failed = checks.filter((c) => !c.ok);
 const result = { tool: 'preflight', repo: 'birddex3', ok: failed.length === 0,
   counts: { pass: checks.length - failed.length, fail: failed.length }, checks };
